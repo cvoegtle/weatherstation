@@ -1,0 +1,48 @@
+.working {
+}
+
+.caption {
+    font-weight: bold;
+    height: 25px;
+}
+
+.row {
+    height: 22px;
+}
+
+.column {
+    margin-left: 5px;
+    float: left;
+}
+
+.value {
+    padding-left: 5px;
+}
+
+.time {
+    width: 40px;
+}
+
+.location {
+    width: 80px;
+    font-weight: bold;
+}
+
+.temperature {
+    width: 80px;
+}
+
+.humidity {
+    width: 110px;
+}
+
+.rain {
+    width: 70px;
+}
+
+.rain_today {
+    width: 90px;
+}
+
+
+

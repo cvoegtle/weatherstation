@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the     -->
+<!-- browser's rendering engine into                -->
+<!-- "Standards Mode". Replacing this declaration   -->
+<!-- with a "Quirks Mode" doctype is not supported. -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <title>Wetterdaten aus der Ochsengasse 4</title>
+    
+    <link href="http://www.voegtle.org/~christian/styles.css" rel="stylesheet" type="text/css">    
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="weatherstation/weatherstation.nocache.js"></script>
+  </head>
+
+  <!--                                           -->
+  <!-- The body can have arbitrary html, or      -->
+  <!-- you can leave the body empty if you want  -->
+  <!-- to create a completely dynamic UI.        -->
+  <!--                                           -->
+  <body class="cv_standard">
+    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+    <noscript>
+      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+        Your web browser must have JavaScript enabled
+        in order for this application to display correctly.
+      </div>
+    </noscript>
+    <h1 class="cv_h1">Wetterdaten aus der Ochsengasse 4</h1>
+    <table>
+      <tr>
+        <td id="time"></td>
+        <td id="problem" style="color: red;"></td>
+      </tr>
+      <tr>
+        <td>Temperatur:</td>
+        <td id="temperature"></td>
+        <td id="insideTemp"></td>
+      </tr>
+      <tr>
+        <td>Luftfeuchtigkeit:</td>
+        <td id="humidity"></td>
+        <td id="insideHumidity"></td>
+      </tr>
+      <tr>
+        <td>Wind:</td>
+        <td id="wind"></td>
+      </tr>      
+      <tr>
+        <td id="rainLabel"></td>
+        <td id="rain"></td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>query</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.OutgoingServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>query</servlet-name>
+    <url-pattern>/weatherstation/query</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>service</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.WeatherServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>service</servlet-name>
+    <url-pattern>/weatherstation/service</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>repair</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.RepairServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>repair</servlet-name>
+    <url-pattern>/weatherstation/repair</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>incoming</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.IncomingServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>incoming</servlet-name>
+    <url-pattern>/weatherstation/incoming</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>Weatherstation.html</welcome-file>
+  </welcome-file-list>
+
+  <servlet>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+    <init-param>
+      <param-name>services</param-name>
+      <param-value/>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SystemServiceServlet</servlet-name>
+    <url-pattern>/_ah/spi/*</url-pattern>
+  </servlet-mapping>
+
+</web-app>

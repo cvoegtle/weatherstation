@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="AppEngine API">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/user" />
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/opt/user/appengine-endpoints/v1" />
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/opt/user/jsr107/v1" />
+      <root url="jar://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/user/orm/geronimo-jpa_3.0_spec-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/opt/user/appengine-endpoints/v1" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/opt/user/jsr107/v1" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1/lib/user" recursive="false" />
+  </library>
+</component>
