@@ -1,48 +1,4 @@
 
-var testdaten = [
-
-    {
-        "timestamp": "Fri Apr 18 20:28:11 UTC 2014",
-        "wind": 0,
-        "humidity": 85,
-        "raining": false,
-        "location": "Paderborn",
-        "rain_today": 5.015,
-        "rain": 2.065,
-        "temperature": 5.3
-    },
-    {
-        "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
-        "wind": 0,
-        "humidity": 76,
-        "raining": false,
-        "location": "Bonn",
-        "rain_today": 1.475,
-        "rain": "",
-        "temperature": 8.6
-    },
-    {
-        "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
-        "wind": 0,
-        "humidity": 84,
-        "raining": false,
-        "location": "Freiburg",
-        "rain_today": 2.065,
-        "rain": "",
-        "temperature": 4.6
-    }
-
-];
-
-function getTimeFractionAsString(dateAsString) {
-    var date = new Date(dateAsString);
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-
-    return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
-}
-
-
 
 var WorkingArea = function() {
     this.area = document.getElementById("working_area");
@@ -116,8 +72,8 @@ WorkingArea.prototype.updateColumns = function () {
         this.columns.location.value[i] = new Location(this.weatherData[i]);
         this.columns.temperature.value[i] = this.weatherData[i].temperature + " °C";
         this.columns.humidity.value[i] = this.weatherData[i].humidity + " %";
-        this.columns.rain.value[i] = this.getOptionalNumber(this.weatherData[i].rain, " l");
-        this.columns.rain_today.value[i] = this.getOptionalNumber(this.weatherData[i].rain_today, " l");
+        this.columns.rain.value[i] = getOptionalNumber(this.weatherData[i].rain, "l");
+        this.columns.rain_today.value[i] = getOptionalNumber(this.weatherData[i].rain_today, "l");
     }
 
     for (i in this.columns) {
@@ -135,14 +91,6 @@ WorkingArea.prototype.detectFilledColumn = function (value) {
         }
     }
     return filled;
-};
-
-WorkingArea.prototype.getOptionalNumber = function (value, unit) {
-    if (value !== "") {
-        return value.toFixed(1) + unit;
-    } else {
-        return "";
-    }
 };
 
 WorkingArea.prototype.createCaption = function () {
@@ -203,40 +151,26 @@ WorkingArea.prototype.createWeatherSpan = function (value, style) {
     return element;
 };
 
-function handleClickOnLink() {
-
-}
-
-function updateWeatherView(weatherData) {
-    workingArea.clear();
-    workingArea.update(weatherData);
-}
-
-function fetchWeatherData() {
-    var ajaxRequest = new XMLHttpRequest();
-    ajaxRequest.onload = function () {
-        var weatherData = JSON.parse(ajaxRequest.responseText);
-        updateWeatherView(weatherData);
-
-
-    };
-    ajaxRequest.open("get", "/weatherstation/query?type=all&ext", true);
-    ajaxRequest.send();
-
-//    updateWeatherView(testdaten);
-
-};
-
 var Location = function(weatherDataset) {
     this.description = weatherDataset.location;
     this.forecast = weatherDataset.forecast;
-}
+};
+
 
 
 function init() {
-    workingArea = new WorkingArea();
+    function updateWeatherView(weatherData) {
+        workingArea.clear();
+        workingArea.update(weatherData);
+    }
 
-    fetchWeatherData();
-    window.setInterval(fetchWeatherData, 3 * 60 * 1000);
-};
+    function reportConnectionProblem() {
+
+    }
+
+    var workingArea = new WorkingArea();
+
+    fetchWeatherData(updateWeatherView, reportConnectionProblem, "all");
+    window.setInterval(fetchWeatherData, 3 * 60 * 1000, updateWeatherView, reportConnectionProblem, "all");
+}
 
