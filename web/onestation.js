@@ -14,7 +14,7 @@ WeatherArea.prototype.update = function (weatherData) {
   this.updateLabel(this.labelTemperature, weatherData.temperature + " °C");
   this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
   this.updateLabel(this.labelWind, weatherData.wind + " km/h");
-  if (rainToday != "") {
+  if (weatherData.rain_today != "") {
     this.updateLabel(this.labelRainText, "Regen:")
     this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
   }
