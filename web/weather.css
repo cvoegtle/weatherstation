@@ -22,7 +22,6 @@
 }
 
 .value {
-    padding-left: 0px;
 }
 
 .time {
@@ -30,7 +29,7 @@
 }
 
 .location {
-    width: 80px;
+    width: 75px;
     font-weight: bold;
 }
 

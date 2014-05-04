@@ -15,25 +15,27 @@ WeatherArea.prototype.update = function (weatherData) {
   this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
   this.updateLabel(this.labelWind, weatherData.wind + " km/h");
   if (weatherData.rain_today != "") {
-    this.updateLabel(this.labelRainText, "Regen:")
+    this.updateLabel(this.labelRainText, "Regen:");
     this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
   }
-}
+};
 
 WeatherArea.prototype.setup = function (weatherData) {
   this.updateLabel(this.labelLocation, weatherData.location);
   this.update(weatherData);
-}
+};
 
 WeatherArea.prototype.reportProblem = function(problem) {
   this.updateLabel(this.labelProblem, problem);
-}
+};
 
 WeatherArea.prototype.clear = function () {
   for (var label in this) {
-    var myType = typeof this[label];
-    if (myType != 'function' && label != 'labelLocation') {
-      this.updateLabel(this[label], "");
+    if (this.hasOwnProperty(label)) {
+      var myType = typeof this[label];
+      if (myType != 'function' && label != 'labelLocation') {
+        this.updateLabel(this[label], "");
+      }
     }
   }
 };

@@ -59,7 +59,7 @@ WorkingArea.prototype.clear = function () {
   }
 };
 
-WorkingArea.prototype.reportProblem = function(problemDescription) {
+WorkingArea.prototype.reportProblem = function (problemDescription) {
   var errorLine = document.getElementById("errorLine");
   if (errorLine != undefined) {
     errorLine.innerHTML = problemDescription;
@@ -72,31 +72,39 @@ WorkingArea.prototype.reportProblem = function(problemDescription) {
 
 WorkingArea.prototype.updateColumns = function () {
   for (var i in this.columns) {
-    this.columns[i].visible = false;
-    this.columns[i].value = [];
+    if (this.columns.hasOwnProperty(i)) {
+      this.columns[i].visible = false;
+      this.columns[i].value = [];
+    }
   }
 
   for (i in this.weatherData) {
-    this.columns.timestamp.value[i] = getTimeFractionAsString(this.weatherData[i].timestamp);
-    this.columns.location.value[i] = new Location(this.weatherData[i]);
-    this.columns.temperature.value[i] = this.weatherData[i].temperature + " °C";
-    this.columns.humidity.value[i] = this.weatherData[i].humidity + " %";
-    this.columns.rain.value[i] = getOptionalNumber(this.weatherData[i].rain, "l");
-    this.columns.rain_today.value[i] = getOptionalNumber(this.weatherData[i].rain_today, "l");
+    if (this.weatherData.hasOwnProperty(i)) {
+      this.columns.timestamp.value[i] = getTimeFractionAsString(this.weatherData[i].timestamp);
+      this.columns.location.value[i] = new Location(this.weatherData[i]);
+      this.columns.temperature.value[i] = this.weatherData[i].temperature + " °C";
+      this.columns.humidity.value[i] = this.weatherData[i].humidity + " %";
+      this.columns.rain.value[i] = getOptionalNumber(this.weatherData[i].rain, "l");
+      this.columns.rain_today.value[i] = getOptionalNumber(this.weatherData[i].rain_today, "l");
+    }
   }
 
   for (i in this.columns) {
-    this.columns[i].visible = this.detectFilledColumn(this.columns[i].value);
+    if (this.columns.hasOwnProperty(i)) {
+      this.columns[i].visible = this.detectFilledColumn(this.columns[i].value);
+    }
   }
 };
 
 WorkingArea.prototype.detectFilledColumn = function (value) {
   var filled = false;
   for (var i in value) {
-    if (value[i] !== "") {
-      filled = true;
-    } else {
-      value[i] = "&nbsp;"
+    if (value.hasOwnProperty(i)) {
+      if (value[i] !== "") {
+        filled = true;
+      } else {
+        value[i] = "&nbsp;"
+      }
     }
   }
   return filled;
@@ -115,8 +123,10 @@ WorkingArea.prototype.createCaption = function () {
   caption.className = "caption";
 
   for (var i in this.columns) {
-    var element = this.createWeatherElement(this.columns[i].caption, this.columns[i].style);
-    this.appendChild(caption, this.columns[i].visible, element);
+    if (this.columns.hasOwnProperty(i)) {
+      var element = this.createWeatherElement(this.columns[i].caption, this.columns[i].style);
+      this.appendChild(caption, this.columns[i].visible, element);
+    }
   }
 
   return caption;
@@ -127,8 +137,10 @@ WorkingArea.prototype.createRow = function (rowNumber) {
   row.className = "row";
 
   for (var i in this.columns) {
-    var element = this.createWeatherSpan(this.columns[i].value[rowNumber], this.columns[i].style);
-    this.appendChild(row, this.columns[i].visible, element);
+    if (this.columns.hasOwnProperty(i)) {
+      var element = this.createWeatherSpan(this.columns[i].value[rowNumber], this.columns[i].style);
+      this.appendChild(row, this.columns[i].visible, element);
+    }
   }
   return row;
 };
