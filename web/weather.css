@@ -6,6 +6,12 @@
     height: 25px;
 }
 
+.error {
+    font-weight: bold;
+    height: 15px;
+    color: red;
+}
+
 .row {
     height: 22px;
 }
@@ -16,7 +22,7 @@
 }
 
 .value {
-    padding-left: 5px;
+    padding-left: 0px;
 }
 
 .time {
@@ -29,11 +35,11 @@
 }
 
 .temperature {
-    width: 80px;
+    width: 55px;
 }
 
 .humidity {
-    width: 110px;
+    width: 50px;
 }
 
 .rain {
@@ -41,7 +47,7 @@
 }
 
 .rain_today {
-    width: 90px;
+    width: 60px;
 }
 
 
