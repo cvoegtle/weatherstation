@@ -1,21 +1,14 @@
 package org.voegtle.weatherstation.server.logic;
 
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import org.voegtle.weatherstation.client.dto.UnformattedWeatherDTO;
-import org.voegtle.weatherstation.client.dto.WeatherDTO;
+import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.util.DateUtil;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import java.util.Date;
+import java.util.List;
 
 public class WeatherDataFetcher {
   private PersistenceManager pm;
@@ -66,48 +59,6 @@ public class WeatherDataFetcher {
       }
     }
 
-    return dto;
-  }
-
-  public WeatherDTO getLatestWeatherData() {
-    WeatherDataSet latest = pm.fetchYoungestDataSet();
-    SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
-
-    WeatherDTO dto = createWeatherDTO(latest, oneHourBefore);
-    return dto;
-  }
-
-  private WeatherDTO createWeatherDTO(WeatherDataSet latest, SmoothedWeatherDataSet oneHourBefore) {
-    WeatherDTO dto = new WeatherDTO();
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd. MMMM - HH:mm");
-    dto.setTime(dateFormat.format(DateUtil.fromGMTtoCEST(latest.getTimestamp())));
-
-    NumberFormat numberFormat = NumberFormat.getInstance(Locale.GERMANY);
-    numberFormat.setMaximumFractionDigits(1);
-    dto.setTemperature(numberFormat.format(latest.getOutsideTemperature()) + "°C");
-    dto.setHumidity(numberFormat.format(latest.getOutsideHumidity()) + "%");
-    dto.setWindspeed(latest.getWindSpeed() + " km/h");
-
-    if (oneHourBefore != null && oneHourBefore.getRainCounter() != null) {
-      Integer rainCount = latest.getRainCounter() - oneHourBefore.getRainCounter();
-      if (rainCount > 0) {
-        double rainAmount = 0.295 * rainCount;
-        dto.setRainLastHour(numberFormat.format(rainAmount) + "l");
-      }
-    }
-
-    UserService us = UserServiceFactory.getUserService();
-    if (us.isUserLoggedIn() && us.isUserAdmin()) {
-      if (latest.getInsideTemperature() != null) {
-        dto.setInsideTemperature(numberFormat.format(latest.getInsideTemperature()) + "°C");
-      }
-      if (latest.getInsideHumidity() != null) {
-        dto.setInsideHumidity(numberFormat.format(latest.getInsideHumidity()) + "%");
-      }
-    }
-
-    dto.setRaining(latest.isRaining());
     return dto;
   }
 

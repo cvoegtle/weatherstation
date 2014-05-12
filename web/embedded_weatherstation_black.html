@@ -1,9 +1,4 @@
 <!doctype html>
-<!-- The DOCTYPE declaration above will set the     -->
-<!-- browser's rendering engine into                -->
-<!-- "Standards Mode". Replacing this declaration   -->
-<!-- with a "Quirks Mode" doctype is not supported. -->
-
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -11,28 +6,17 @@
 
     <link href="http://www.voegtle.org/styles.css" rel="stylesheet" type="text/css">
 
-    <title>Wetterdaten aus der Ochsengasse</title>
-    
-    <!--                                           -->
-    <!-- This script loads your compiled module.   -->
-    <!-- If you add any GWT meta tags, they must   -->
-    <!-- be added before this line.                -->
-    <!--                                           -->
-    <script type="text/javascript" language="javascript" src="weatherstation/weatherstation.nocache.js"></script>
+      <title>Wetter in</title>
+
+      <script type="text/javascript" language="javascript" src="services.js"></script>
+      <script type="text/javascript" language="javascript" src="onestation.js"></script>
   </head>
 
-  <!--                                           -->
-  <!-- The body can have arbitrary html, or      -->
-  <!-- you can leave the body empty if you want  -->
-  <!-- to create a completely dynamic UI.        -->
-  <!--                                           -->
-  <body class="voegtle_page voegtle_standard">
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+  <body class="voegtle_page voegtle_standard" onload="init()">
     <noscript>
-      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-        Your web browser must have JavaScript enabled
-        in order for this application to display correctly.
-      </div>
+        <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+            Bitte Javascript aktivieren, damit die Wetterdaten abgerufen werden können.
+        </div>
     </noscript>
     <table>
       <tr>
@@ -54,7 +38,7 @@
         <td>Wind:</td>
         <td id="wind"></td>
         <td width="20px"><td>
-        <td id="rainLabel"></td>
+        <td id="rainText"></td>
         <td id="rain"></td>
       </tr>      
     </table>

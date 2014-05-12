@@ -10,17 +10,7 @@
     <servlet-name>query</servlet-name>
     <url-pattern>/weatherstation/query</url-pattern>
   </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>service</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.WeatherServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>service</servlet-name>
-    <url-pattern>/weatherstation/service</url-pattern>
-  </servlet-mapping>
-  
+
   <servlet>
     <servlet-name>repair</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.RepairServlet</servlet-class>

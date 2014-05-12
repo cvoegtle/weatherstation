@@ -1,12 +1,12 @@
 package org.voegtle.weatherstation.server.persistence;
 
-import org.voegtle.weatherstation.client.util.StringUtil;
+import com.google.appengine.api.datastore.Key;
+import org.voegtle.weatherstation.server.util.StringUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import com.google.appengine.api.datastore.Key;
 
 @Entity
 public class LocationProperties {

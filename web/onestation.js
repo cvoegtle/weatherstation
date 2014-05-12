@@ -41,7 +41,9 @@ WeatherArea.prototype.clear = function () {
 };
 
 WeatherArea.prototype.updateLabel = function (label, text) {
-  label.innerHTML = text;
+  if (label != null) {
+    label.innerHTML = text;
+  }
 };
 
 WeatherArea.prototype.combineRainValues = function (rain, rainToday) {

@@ -1,20 +1,16 @@
 package org.voegtle.weatherstation.server;
 
-import java.io.IOException;
+import org.voegtle.weatherstation.server.logic.WeatherDataSmoother;
+import org.voegtle.weatherstation.server.parser.DataLine;
+import org.voegtle.weatherstation.server.parser.DataParser;
+import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
+import org.voegtle.weatherstation.server.request.IncomingUrlParameter;
+import org.voegtle.weatherstation.server.request.ResponseCode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.voegtle.weatherstation.client.util.StringUtil;
-import org.voegtle.weatherstation.server.logic.WeatherDataSmoother;
-import org.voegtle.weatherstation.server.parser.DataLine;
-import org.voegtle.weatherstation.server.parser.DataParser;
-import org.voegtle.weatherstation.server.persistence.LocationProperties;
-import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
-import org.voegtle.weatherstation.server.request.IncomingUrlParameter;
-import org.voegtle.weatherstation.server.request.ResponseCode;
-import org.voegtle.weatherstation.server.util.HashService;
+import java.io.IOException;
 
 public class IncomingServlet extends AbstractServlet {
   private static final long serialVersionUID = 1L;

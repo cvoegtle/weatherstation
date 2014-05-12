@@ -1,34 +1,29 @@
 package org.voegtle.weatherstation.server;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.voegtle.weatherstation.client.util.StringUtil;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.HashService;
+import org.voegtle.weatherstation.server.util.StringUtil;
 import org.voegtle.weatherstation.server.util.WeatherJSONObject;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   public static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
-  public static final String FORMAT_DATE = "yyyy-MM-dd";
 
   private static final String MIME_TYPE_APPLICATION_JSON = "application/json";
 
@@ -45,21 +40,21 @@ public abstract class AbstractServlet extends HttpServlet {
     locationProperties = pm.fetchLocationProperties();
   }
 
-  private LocationProperties createLocationProperties() {
-    LocationProperties lp = new LocationProperties();
-    lp.setLocation("forstweg17");
-    lp.setAddress("Forstweg 17");
-    lp.setCity("Bonn");
-    lp.setWeatherForecast("");
-    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
-    return lp;
-  }
+//  private LocationProperties createLocationProperties() {
+//    LocationProperties lp = new LocationProperties();
+//    lp.setLocation("forstweg17");
+//    lp.setAddress("Forstweg 17");
+//    lp.setCity("Bonn");
+//    lp.setWeatherForecast("");
+//    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
+//    return lp;
+//  }
 
   protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list) {
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);
 
     Integer previousRainCounter = null;
-    ArrayList<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+    ArrayList<JSONObject> jsonObjects = new ArrayList<>();
     for (SmoothedWeatherDataSet wds : list) {
       JSONObject json = new WeatherJSONObject();
       try {
