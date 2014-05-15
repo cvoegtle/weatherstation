@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server;
 
 import org.json.JSONObject;
+import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.logic.WeatherDataAggregator;
 import org.voegtle.weatherstation.server.logic.WeatherDataFetcher;
@@ -25,11 +26,11 @@ public class OutgoingServlet extends AbstractServlet {
   private static final long serialVersionUID = 1L;
   private JSONConverter jsonConverter;
 
-  public OutgoingServlet() {
-    super();
+  @Override
+  public void init() throws ServletException {
+    super.init();
     jsonConverter = new JSONConverter(locationProperties);
   }
-
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +48,9 @@ public class OutgoingServlet extends AbstractServlet {
     } else if (param.getType() == DataType.CURRENT) {
       UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted();
       returnCurrentWeatherData(response, currentWeatherData, param.isExtended());
+    } else if (param.getType() == DataType.RAIN) {
+      RainDTO rainData = weatherDataFetcher.fetchRainData();
+      writeResponse(response, jsonConverter.toJson(rainData));
     } else if (param.getType() == DataType.ALL) {
       try {
         ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
@@ -68,7 +72,7 @@ public class OutgoingServlet extends AbstractServlet {
 
         writeResponse(response, collectedWeatherData);
 
-      } catch (Exception ex) {
+      } catch (Exception ignored) {
       }
 
     } else if (param.getBegin() != null) {

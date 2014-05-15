@@ -2,6 +2,7 @@ package org.voegtle.weatherstation.server.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
@@ -34,10 +35,24 @@ public class JSONConverter {
       if (extended) {
         json.put("forecast", locationProperties.getWeatherForecast());
       }
-    } catch (JSONException e) {
+    } catch (JSONException ignored) {
     }
     return json;
   }
+
+  public JSONObject toJson(RainDTO rain) {
+    JSONObject json = new WeatherJSONObject();
+    try {
+      json.put("lastHour", rain.getLastHour());
+      json.put("today", rain.getToday());
+      json.put("yesterday", rain.getYesterday());
+      json.put("lastWeek", rain.getLastWeek());
+      json.put("last30days", rain.getLast30Days());
+    } catch (JSONException ignored) {
+    }
+    return json;
+  }
+
 
   public ArrayList<JSONObject> toJson(List<AggregatedWeatherDataSet> list) {
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
@@ -57,7 +72,7 @@ public class JSONConverter {
         json.put("windMax", wds.getWindspeedMax());
         double rain = 0.295 * (wds.getRainCounter());
         json.put("rain", Math.max(rain, 0));
-      } catch (JSONException e) {
+      } catch (JSONException ignored) {
       }
       jsonObjects.add(json);
     }

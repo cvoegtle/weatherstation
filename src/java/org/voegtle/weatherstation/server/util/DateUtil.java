@@ -61,12 +61,12 @@ public class DateUtil {
 
   /**
    * 
-   * @param year
+   * @param year year YYYY
    * @param month
    *          1 -12
    * @param day
    *          1 -31
-   * @return
+   * @return date as object
    */
   public static Date getDate(int year, int month, int day) {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
@@ -116,8 +116,19 @@ public class DateUtil {
     return cal.getTime();
   }
 
+
+
   private static int getTimeOffset(Date date) {
     return timezone.getOffset(date.getTime()) / 3600000;
   }
 
+
+  public static Date daysEarlier(Date date, int daysBefore) {
+    Calendar cal = Calendar.getInstance(Locale.GERMANY);
+
+    cal.setTime(date);
+    cal.add(Calendar.DAY_OF_YEAR, -daysBefore);
+
+    return cal.getTime();
+  }
 }

@@ -34,21 +34,21 @@ public abstract class AbstractServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
 
-//    LocationProperties lp = createLocationProperties();
+//   LocationProperties lp = createLocationProperties();
 //    pm.makePersistant(lp);
 
     locationProperties = pm.fetchLocationProperties();
   }
 
-//  private LocationProperties createLocationProperties() {
-//    LocationProperties lp = new LocationProperties();
-//    lp.setLocation("forstweg17");
-//    lp.setAddress("Forstweg 17");
-//    lp.setCity("Bonn");
-//    lp.setWeatherForecast("");
-//    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
-//    return lp;
-//  }
+  private LocationProperties createLocationProperties() {
+    LocationProperties lp = new LocationProperties();
+    lp.setLocation("forstweg17");
+    lp.setAddress("Forstweg 17");
+    lp.setCity("Bonn");
+    lp.setWeatherForecast("");
+    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
+    return lp;
+  }
 
   protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list) {
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);

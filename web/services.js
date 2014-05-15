@@ -52,9 +52,8 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
 
 
   };
-  ajaxRequest.onerror = function() {
-    reportConnectionProblem();
-  };
+  ajaxRequest.onerror = reportConnectionProblem;
+
   ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&ext", true);
   ajaxRequest.send();
 
@@ -64,7 +63,9 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
 
 function getOptionalNumber(value, unit) {
   if (value !== "") {
-    return value.toFixed(1) + " " + unit;
+    var result = value.toFixed(1);
+    return result.replace(".", ",") + " " + unit;
+
   } else {
     return "";
   }

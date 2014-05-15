@@ -7,17 +7,20 @@ function WeatherArea() {
   this.labelWind = document.getElementById("wind");
   this.labelRain = document.getElementById("rain");
   this.labelRainText = document.getElementById("rainText");
+
+  this.rainInfoButton = this.createMoreInfoButton();
 }
 
 WeatherArea.prototype.update = function (weatherData) {
   this.updateLabel(this.labelTime, getTimeFractionAsString(weatherData.timestamp));
-  this.updateLabel(this.labelTemperature, weatherData.temperature + " °C");
+  this.updateLabel(this.labelTemperature, getOptionalNumber(weatherData.temperature, "°C"));
   this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
-  this.updateLabel(this.labelWind, weatherData.wind + " km/h");
+  this.updateLabel(this.labelWind, getOptionalNumber(weatherData.wind , "km/h"));
+  this.updateLabel(this.labelRainText, "Regen:");
   if (weatherData.rain_today != "") {
-    this.updateLabel(this.labelRainText, "Regen:");
     this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
   }
+  this.labelRain.appendChild(this.rainInfoButton);
 };
 
 WeatherArea.prototype.setup = function (weatherData) {
@@ -25,7 +28,7 @@ WeatherArea.prototype.setup = function (weatherData) {
   this.update(weatherData);
 };
 
-WeatherArea.prototype.reportProblem = function(problem) {
+WeatherArea.prototype.reportProblem = function (problem) {
   this.updateLabel(this.labelProblem, problem);
 };
 
@@ -33,7 +36,7 @@ WeatherArea.prototype.clear = function () {
   for (var label in this) {
     if (this.hasOwnProperty(label)) {
       var myType = typeof this[label];
-      if (myType != 'function' && label != 'labelLocation') {
+      if (myType != 'function' && label != 'labelLocation' && label != 'rainInfoButton') {
         this.updateLabel(this[label], "");
       }
     }
@@ -47,12 +50,85 @@ WeatherArea.prototype.updateLabel = function (label, text) {
 };
 
 WeatherArea.prototype.combineRainValues = function (rain, rainToday) {
-  var result = getOptionalNumber(rainToday, " l");
-  if (rain != "") {
-    result += " / " + getOptionalNumber(rain, " l");
+  var result = "";
+
+  if (rainToday != "") {
+    result = getOptionalNumber(rainToday, " l");
+    if (rain != "") {
+      result += " / " + getOptionalNumber(rain, " l");
+    }
   }
   return result;
 };
+
+WeatherArea.prototype.createMoreInfoButton = function () {
+  var button = document.createElement("button");
+
+  button.innerHTML = "?";
+  button.className = "rain_button";
+  button.id = "rain_button";
+  button.onclick = function () {
+    this.disabled = true;
+    showMoreRain();
+  };
+
+  return button;
+};
+
+function RainArea() {
+  this.div = document.createElement("div");
+  this.div.className = "rain_div";
+  this.div.id = "rain_div";
+  this.div.onclick = function () {
+    var root = document.getElementById("content");
+    root.removeChild(this);
+    var rainInfoButton = document.getElementById("rain_button");
+    rainInfoButton.disabled = false;
+  };
+
+  var caption = document.createElement("div");
+  caption.className = "caption";
+  caption.innerHTML = "Regen";
+  this.div.appendChild(caption);
+
+  var root = document.getElementById("content");
+  root.appendChild(this.div);
+
+}
+
+
+RainArea.prototype.setup = function (rainData) {
+  this.addRow("letzte Stunde:", rainData.lastHour);
+  this.addRow("heute:", rainData.today);
+  this.addRow("gestern:", rainData.yesterday);
+  this.addRow("letzte Woche:", rainData.lastWeek);
+  this.addRow("letzte 30 Tage:", rainData.last30days);
+};
+
+RainArea.prototype.addRow = function (labelText, value) {
+  var labelDiv = document.createElement("div");
+  labelDiv.className = "rain_label";
+  labelDiv.innerHTML = labelText;
+  this.div.appendChild(labelDiv);
+
+
+  var valueDiv = document.createElement("div");
+  valueDiv.className = "rain_value";
+  valueDiv.innerHTML = getOptionalNumber(value, " l");
+  this.div.appendChild(valueDiv);
+};
+
+
+function showMoreRain() {
+  var rainArea = new RainArea();
+
+  function showRain(rainData) {
+    rainArea.setup(rainData);
+  }
+
+  fetchWeatherData(showRain, null, "rain");
+
+}
 
 function init() {
   var weatherArea = new WeatherArea();

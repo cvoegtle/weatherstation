@@ -1,14 +1,9 @@
 package org.voegtle.weatherstation.server.persistence;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 public class PersistenceManager {
   private static final String PERSISTENCE_UNIT_NAME = "transactions-optional";
@@ -133,16 +128,23 @@ public class PersistenceManager {
     return (List<SmoothedWeatherDataSet>) (q.getResultList());
   }
 
+
   @SuppressWarnings("unchecked")
+
   public List<AggregatedWeatherDataSet> fetchAggregatedWeatherDataInRange(Date begin, Date end) {
+    return fetchAggregatedWeatherDataInRange(begin, end, true);
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<AggregatedWeatherDataSet> fetchAggregatedWeatherDataInRange(Date begin, Date end, boolean ascending) {
     EntityManager em = factory.createEntityManager();
     Query q;
     if (end != null) {
-      q = em.createQuery("SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin and wds.date <= :end ORDER by wds.date");
+      q = em.createQuery("SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin and wds.date <= :end ORDER by wds.date " + (ascending ? "" : "DESC"));
       q.setParameter("begin", begin, TemporalType.DATE);
       q.setParameter("end", end, TemporalType.DATE);
     } else {
-      q = em.createQuery("SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin ORDER by wds.date");
+      q = em.createQuery("SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin ORDER by wds.date" + (ascending ? "" : "DESC"));
       q.setParameter("begin", begin, TemporalType.DATE);
     }
 
@@ -194,7 +196,7 @@ public class PersistenceManager {
     EntityManager em = factory.createEntityManager();
     Query q = em.createQuery("SELECT lp FROM LocationProperties lp");
     q.setMaxResults(1);
-    LocationProperties result = (LocationProperties)q.getSingleResult();
+    LocationProperties result = (LocationProperties) q.getSingleResult();
 
     em.close();
     return result;
@@ -216,8 +218,7 @@ public class PersistenceManager {
 
   private WeatherDataSet selectFirstResult(Query q) {
     q.setMaxResults(1);
-    WeatherDataSet result = (WeatherDataSet) q.getSingleResult();
-    return result;
+    return (WeatherDataSet) q.getSingleResult();
   }
 
   private SmoothedWeatherDataSet selectFirstSmoothedResult(Query q) {

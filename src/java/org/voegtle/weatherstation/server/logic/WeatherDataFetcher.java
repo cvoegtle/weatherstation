@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.logic;
 
+import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
@@ -44,22 +45,69 @@ public class WeatherDataFetcher {
     dto.setWindspeed(latest.getWindSpeed());
 
     if (oneHourBefore != null && oneHourBefore.getRainCounter() != null) {
-      Integer rainCount = latest.getRainCounter() - oneHourBefore.getRainCounter();
-      if (rainCount > 0) {
-        float rainAmount = (float) (0.295 * rainCount);
-        dto.setRainLastHour(rainAmount);
-      }
+      dto.setRainLastHour(calculateRain(latest.getRainCounter(), oneHourBefore.getRainCounter()));
     }
 
     if (today != null && today.getRainCounter() != null) {
-      Integer rainCount = latest.getRainCounter() - today.getRainCounter();
-      if (rainCount > 0) {
-        float rainAmount = (float) (0.295 * rainCount);
-        dto.setRainToday(rainAmount);
-      }
+      dto.setRainToday(calculateRain(latest.getRainCounter(), today.getRainCounter()));
     }
 
     return dto;
   }
 
+  public RainDTO fetchRainData() {
+    RainDTO rainDTO = new RainDTO();
+
+    SmoothedWeatherDataSet today = getFirstDataSetOfToday();
+    WeatherDataSet latest = pm.fetchYoungestDataSet();
+    SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
+
+    rainDTO.setLastHour(calculateRain(latest.getRainCounter(), oneHourBefore.getRainCounter()));
+    Float rainToday = calculateRain(latest.getRainCounter(), today.getRainCounter());
+    rainDTO.setToday(rainToday);
+
+    Date yesterday = DateUtil.getYesterday();
+    List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(DateUtil.daysEarlier(yesterday, 29), yesterday, false);
+    AggregatedWeatherDataSet yesterDaysData =  dataSets.get(0);
+    if (yesterDaysData != null) {
+      rainDTO.setYesterday(calculateRain(yesterDaysData.getRainCounter(), 0));
+    }
+
+    int days = 0;
+    int rainCountWeek = 0;
+    int rainCount30days = 0;
+    for (AggregatedWeatherDataSet ads : dataSets) {
+      if (days < 6) {
+        rainCountWeek += ads.getRainCounter();
+      }
+      rainCount30days += ads.getRainCounter();
+      days++;
+    }
+
+    float rainWeek =(float)(rainCountWeek * 0.295);
+    float rain30days = (float)(rainCount30days * 0.295);
+
+    if (rainToday != null) {
+      rainWeek += rainToday;
+      rain30days += rainToday;
+    }
+
+    if (rainWeek > 0.1) {
+      rainDTO.setLastWeek(rainWeek);
+    }
+
+    if (rain30days > 0.1) {
+      rainDTO.setLast30Days(rain30days);
+    }
+
+    return rainDTO;
+  }
+
+  private Float calculateRain(int youngerCount, int olderCount) {
+    int rainCount = youngerCount - olderCount;
+    if (rainCount > 0) {
+      return (float) (0.295 * rainCount);
+    }
+    return null;
+  }
 }

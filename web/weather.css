@@ -49,5 +49,40 @@
     width: 60px;
 }
 
+.rain_button {
+    margin-left: 3px;
+    border-color: gray;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.rain_div {
+    width: 151px;
+    height: 103px;
+    padding: 5px;
+    border: solid 1px;
+    border-radius: 4px;
+    color: black;
+    background-color: lightcyan;
+    position: relative;
+    top: -100px;
+    left: 20px;
+}
+
+.rain_label {
+    width: 100px;
+    float: left;
+}
+
+.rain_value {
+    width: 45px;
+    float: left;
+}
+
 
 
