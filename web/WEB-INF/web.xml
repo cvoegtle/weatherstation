@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
   <!-- Servlets -->
   <servlet>
     <servlet-name>query</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.OutgoingServlet</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>query</servlet-name>
     <url-pattern>/weatherstation/query</url-pattern>
@@ -15,22 +17,32 @@
     <servlet-name>repair</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.RepairServlet</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>repair</servlet-name>
     <url-pattern>/weatherstation/repair</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet>
+    <servlet-name>upload</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.UploadServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>upload</servlet-name>
+    <url-pattern>/weatherstation/upload</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>incoming</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.IncomingServlet</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
     <servlet-name>incoming</servlet-name>
     <url-pattern>/weatherstation/incoming</url-pattern>
   </servlet-mapping>
-  
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

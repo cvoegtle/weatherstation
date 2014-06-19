@@ -1,9 +1,7 @@
 package org.voegtle.weatherstation.server;
 
-import org.voegtle.weatherstation.server.logic.WeatherDataSmoother;
+import org.voegtle.weatherstation.server.logic.WeatherDataImporter;
 import org.voegtle.weatherstation.server.parser.DataLine;
-import org.voegtle.weatherstation.server.parser.DataParser;
-import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.request.IncomingUrlParameter;
 import org.voegtle.weatherstation.server.request.ResponseCode;
 
@@ -23,15 +21,8 @@ public class IncomingServlet extends AbstractServlet {
     if (isSecretValid(param.getSecret())) {
       if (isCorrectLocation(param.getLocation())) {
         if (param.getData() != null) {
-          DataLine dataLine = new DataLine(param.getData());
-          DataParser parser = new DataParser();
-          WeatherDataSet dataSet = parser.parse(dataLine);
-          boolean persisted = pm.makePersitant(dataSet);
-          if (persisted) {
-            new WeatherDataSmoother(pm).smoothWeatherData();
-          }
-
-          result = persisted ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
+          WeatherDataImporter importer = new WeatherDataImporter(pm);
+          result = importer.doImport(new DataLine(param.getData()));
         } else {
           result = ResponseCode.EMPTY;
         }

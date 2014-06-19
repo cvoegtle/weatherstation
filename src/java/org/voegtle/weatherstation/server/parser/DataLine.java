@@ -16,6 +16,9 @@ public class DataLine {
   }
 
   public String get(int index) {
+    if (index >= values.size()) {
+      return null;
+    }
     return values.get(index);
   }
 }
