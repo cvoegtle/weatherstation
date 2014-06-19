@@ -19,9 +19,11 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractServlet extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+  protected static final Logger log = Logger.getLogger("ServletLogger");
 
   public static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
 
@@ -71,7 +73,7 @@ public abstract class AbstractServlet extends HttpServlet {
         json.put("wind", wds.getWindspeed());
         json.put("windMax", wds.getWindspeedMax());
       } catch (JSONException e) {
-        e.printStackTrace();
+        log.log(Level.SEVERE, "failed to create JSONObject", e);
       }
       jsonObjects.add(json);
     }
@@ -86,6 +88,7 @@ public abstract class AbstractServlet extends HttpServlet {
       out.write(jsonObject.toString());
       out.close();
     } catch (IOException e) {
+      log.severe("Could not write response.");
     }
   }
 
@@ -97,6 +100,7 @@ public abstract class AbstractServlet extends HttpServlet {
       out.write(jsonArray.toString());
       out.close();
     } catch (IOException e) {
+      log.severe("Could not write response.");
     }
   }
 
@@ -108,10 +112,11 @@ public abstract class AbstractServlet extends HttpServlet {
       out.println(result);
       out.close();
     } catch (IOException e) {
+      log.severe("Could not write response.");
     }
   }
 
-  protected  boolean isCorrectLocation(String location) {
+  protected boolean isCorrectLocation(String location) {
     return StringUtil.isNotEmpty(location) && location.equals(locationProperties.getLocation());
   }
 

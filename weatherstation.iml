@@ -14,7 +14,7 @@
     </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$USER_HOME$/Google Developer/appengine-java-sdk-1.9.1</sdk-home-path>
+        <sdk-home-path>$USER_HOME$/Google Developer/appengine-java-sdk-1.9.5</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src" />
@@ -29,7 +29,7 @@
         <datasource-mapping>
           <factory-entry name="transactions-optional" />
         </datasource-mapping>
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/resources/META-INF/persistence.xml" />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/web/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>

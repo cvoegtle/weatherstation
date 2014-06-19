@@ -1,11 +1,11 @@
 package org.voegtle.weatherstation.server.logic;
 
-import java.util.*;
-
 import com.google.appengine.api.datastore.Key;
 import org.voegtle.weatherstation.server.logic.data.RepairJob;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+
+import java.util.*;
 
 public class WeatherDataRepair {
 
@@ -17,7 +17,7 @@ public class WeatherDataRepair {
   }
 
   public List<SmoothedWeatherDataSet> repair(Date begin, Date end) {
-    ArrayList<SmoothedWeatherDataSet> repaired = new ArrayList<SmoothedWeatherDataSet>();
+    ArrayList<SmoothedWeatherDataSet> repaired = new ArrayList<>();
     WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
     datasets = weatherDataFetcher.fetchSmoothedWeatherData(begin, end);
 
@@ -25,10 +25,11 @@ public class WeatherDataRepair {
 
     datasets = weatherDataFetcher.fetchSmoothedWeatherData(begin, end);
 
-    RepairJob next;
-    while (!(next = getNextRepairJob()).isEmpty()) {
+    RepairJob next = getNextRepairJob();
+    while (next.containsData()) {
       repair(next);
       repaired.addAll(next.getDefectDataSets());
+      next = getNextRepairJob();
     }
 
     return repaired;
@@ -65,7 +66,7 @@ public class WeatherDataRepair {
       if (!dataset.isValid()) {
         repairJob.setFirst(previousDataset);
         repairJob.addDefectDataSet(dataset);
-      } else if (!repairJob.isEmpty()) {
+      } else if (repairJob.containsData()) {
         repairJob.setLast(dataset);
         break;
       } else {

@@ -1,19 +1,15 @@
 package org.voegtle.weatherstation.server;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import org.voegtle.weatherstation.server.logic.WeatherDataRepair;
+import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+import org.voegtle.weatherstation.server.request.RepairUrlParameter;
+import org.voegtle.weatherstation.server.request.ResponseCode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.voegtle.weatherstation.server.logic.WeatherDataRepair;
-import org.voegtle.weatherstation.server.persistence.PersistenceManager;
-import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
-import org.voegtle.weatherstation.server.request.RepairUrlParameter;
-import org.voegtle.weatherstation.server.request.ResponseCode;
-import org.voegtle.weatherstation.server.request.UrlParameter;
+import java.io.IOException;
+import java.util.List;
 
 public class RepairServlet extends AbstractServlet {
   private static final long serialVersionUID = 1L;

@@ -51,27 +51,36 @@
 
 .rain_button {
     margin-left: 3px;
-    border-color: gray;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-left-width: 1px;
-    border-bottom-width: 1px;
+    border: 1px gray;
     border-radius: 10px;
     width: 20px;
     height: 20px;
 }
 
+
 .rain_div {
     width: 151px;
-    height: 103px;
+    height: 92px;
     padding: 5px;
     border: solid 1px;
     border-radius: 4px;
     color: black;
     background-color: lightcyan;
-    position: relative;
-    top: -100px;
-    left: 20px;
+    position: absolute;
+    top: 5px;
+    left: 40px;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.transition {
+    transition: opacity 1.2s;
+}
+
+.rain_caption {
+    font-weight: bold;
 }
 
 .rain_label {

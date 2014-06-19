@@ -1,9 +1,9 @@
 package org.voegtle.weatherstation.server.logic.data;
 
+import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 
 public class RepairJob {
 
@@ -18,7 +18,7 @@ public class RepairJob {
 
   private SmoothedWeatherDataSet first;
   private SmoothedWeatherDataSet last;
-  private List<SmoothedWeatherDataSet> defectDataSets = new ArrayList<SmoothedWeatherDataSet>();
+  private List<SmoothedWeatherDataSet> defectDataSets = new ArrayList<>();
   private RepairStep step = new RepairStep();
 
   public RepairJob() {
@@ -48,8 +48,8 @@ public class RepairJob {
     defectDataSets.add(dataset);
   }
 
-  public boolean isEmpty() {
-    return defectDataSets.size() == 0;
+  public boolean containsData() {
+    return defectDataSets.size() > 0;
   }
 
   public void calculateStep() {

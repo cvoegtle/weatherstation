@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server.request;
 
 import org.voegtle.weatherstation.server.util.DateUtil;
+import org.voegtle.weatherstation.server.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -31,16 +32,17 @@ abstract class AbstractUrlParameter {
 
   protected Date getUrlParameterDate(String paramName) {
     String param = request.getParameter(paramName);
-    if ("".equals(param) || param == null) {
+    if (StringUtil.isEmpty(param)) {
       return null;
     }
 
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP);
-    Date result = null;
+    Date result;
     try {
       result = sdf.parse(param);
       result = DateUtil.fromCESTtoGMT(result);
     } catch (ParseException e) {
+      result = null;
     }
 
     return result;

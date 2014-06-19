@@ -77,7 +77,7 @@ WeatherArea.prototype.createMoreInfoButton = function () {
 
 function RainArea() {
   this.div = document.createElement("div");
-  this.div.className = "rain_div";
+  this.div.className = "rain_div hidden";
   this.div.id = "rain_div";
   this.div.onclick = function () {
     var root = document.getElementById("content");
@@ -87,15 +87,16 @@ function RainArea() {
   };
 
   var caption = document.createElement("div");
-  caption.className = "caption";
+  caption.className = "rain_caption";
   caption.innerHTML = "Regen";
   this.div.appendChild(caption);
 
   var root = document.getElementById("content");
   root.appendChild(this.div);
 
-}
+  window.setTimeout(makeVisible, 20, this.div);
 
+}
 
 RainArea.prototype.setup = function (rainData) {
   this.addRow("letzte Stunde:", rainData.lastHour);
@@ -118,6 +119,9 @@ RainArea.prototype.addRow = function (labelText, value) {
   this.div.appendChild(valueDiv);
 };
 
+function makeVisible (div) {
+  div.className = "rain_div transition";
+}
 
 function showMoreRain() {
   var rainArea = new RainArea();
