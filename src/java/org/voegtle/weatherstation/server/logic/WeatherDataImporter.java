@@ -8,8 +8,12 @@ import org.voegtle.weatherstation.server.request.ResponseCode;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WeatherDataImporter {
+  protected static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
+
   private PersistenceManager pm;
 
   public WeatherDataImporter(PersistenceManager pm) {
@@ -39,6 +43,7 @@ public class WeatherDataImporter {
       }
       result = persisted ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
     } catch (ParseException ex) {
+      log.log(Level.SEVERE, "parsing failed", ex);
       result = ResponseCode.PARSE_ERROR;
     }
     return result;

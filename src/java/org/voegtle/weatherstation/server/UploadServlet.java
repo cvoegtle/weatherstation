@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class UploadServlet extends AbstractServlet {
 
@@ -22,9 +23,13 @@ public class UploadServlet extends AbstractServlet {
 
     IncomingUrlParameter param = new IncomingUrlParameter(request);
     if (isSecretValid(param.getSecret())) {
-      ArrayList<DataLine> lines = readInputLines(request.getInputStream());
-      WeatherDataImporter importer = new WeatherDataImporter(pm);
-      result = importer.doImport(lines);
+      if (isCorrectLocation(param.getLocation())) {
+        ArrayList<DataLine> lines = readInputLines(getContentStream(request));
+        WeatherDataImporter importer = new WeatherDataImporter(pm);
+        result = importer.doImport(lines);
+      } else {
+        result = ResponseCode.WRONG_LOCATION;
+      }
     } else {
       result = ResponseCode.NOT_AUTHORIZED;
     }
@@ -32,13 +37,28 @@ public class UploadServlet extends AbstractServlet {
     returnResult(response, result);
   }
 
-  private ArrayList<DataLine> readInputLines(InputStream inputStream) {
+  private BufferedReader getContentStream(HttpServletRequest request) throws IOException {
+    Enumeration parameterNames = request.getParameterNames();
+    while (parameterNames.hasMoreElements()) {
+      String val = (String) parameterNames.nextElement();
+      if (val.startsWith("$1")) {
+        return new BufferedReader(new StringReader(val));
+      }
+    }
+    return new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
+
+  }
+
+  private ArrayList<DataLine> readInputLines(BufferedReader reader) {
     ArrayList<DataLine> lines = new ArrayList<>();
     try {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
       String line;
       while ((line = reader.readLine()) != null) {
         lines.add(new DataLine(line));
+      }
+
+      for (DataLine dl : lines) {
+        log.severe(dl.toString());
       }
     } catch (IOException ex) {
       log.severe("failed to read POST input stream");

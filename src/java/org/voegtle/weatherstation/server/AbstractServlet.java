@@ -36,8 +36,8 @@ public abstract class AbstractServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
 
-    LocationProperties lp = createLocationProperties();
-    pm.makePersistant(lp);
+//    LocationProperties lp = createLocationProperties();
+//    pm.makePersistant(lp);
 
     locationProperties = pm.fetchLocationProperties();
   }

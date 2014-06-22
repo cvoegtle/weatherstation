@@ -7,6 +7,7 @@ public class DataLine {
   ArrayList<String> values = new ArrayList<>();
 
   public DataLine(String data) {
+    data = data.replace(" ", "+");
     data = data.replace(";;", "; ;");
     data = data.replace(";;", "; ;");
     StringTokenizer tokenizer = new StringTokenizer(data, ";\n");
@@ -20,5 +21,18 @@ public class DataLine {
       return null;
     }
     return values.get(index);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    int i = 0;
+    for (String val : values) {
+      sb.append(i++);
+      sb.append("=<");
+      sb.append(val);
+      sb.append("> ");
+    }
+    return sb.toString();
   }
 }
