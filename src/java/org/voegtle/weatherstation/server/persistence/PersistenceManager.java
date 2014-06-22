@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PersistenceManager {
   private static final String PERSISTENCE_UNIT_NAME = "transactions-optional";
-  private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+  private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
   public PersistenceManager() {
   }

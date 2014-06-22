@@ -8,9 +8,9 @@ public class IncomingUrlParameter extends AbstractUrlParameter {
   private static final String PARAM_SECRET = "secret";
 
 
-  private String data;
-  private String location;
-  private String secret;
+  private final String data;
+  private final String location;
+  private final String secret;
 
   public IncomingUrlParameter(final HttpServletRequest request) {
     super(request);

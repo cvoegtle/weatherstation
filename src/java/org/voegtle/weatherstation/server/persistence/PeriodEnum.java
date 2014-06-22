@@ -3,7 +3,7 @@ package org.voegtle.weatherstation.server.persistence;
 public enum PeriodEnum {
   DAY("day"), WEEK("week"), MONTH("month"), YEAR("year");
 
-  private String name;
+  private final String name;
 
   private PeriodEnum(String name) {
     this.name = name;

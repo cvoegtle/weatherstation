@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutgoingServlet extends AbstractServlet {
-  private static final long serialVersionUID = 1L;
   private JSONConverter jsonConverter;
 
   @Override

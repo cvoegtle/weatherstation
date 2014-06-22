@@ -4,15 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UnformattedWeatherDTO implements Serializable {
-  private static final long serialVersionUID = 1L;
-
   private Date time;
-  Float temperature;
-  Float humidity;
+  private Float temperature;
+  private Float humidity;
   boolean raining;
-  Float rainLastHour;
-  Float rainToday;
-  Float windspeed;
+  private Float rainLastHour;
+  private Float rainToday;
+  private Float windspeed;
 
   public UnformattedWeatherDTO() {
   }

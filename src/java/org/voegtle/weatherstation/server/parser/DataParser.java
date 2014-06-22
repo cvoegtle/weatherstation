@@ -12,14 +12,14 @@ import java.util.Locale;
 public class DataParser {
 // 1;1;;;;;;;;;;;;;;;;;;15,1;78;0,0;616;0;0
 
-  public static int INDEX_INSIDE_TEMPERATURE = 7;
-  public static int INDEX_INSIDE_HUMIDITY = 15;
-  public static int INDEX_OUTSIDE_TEMPERATURE = 19;
-  public static int INDEX_OUTSIDE_HUMIDITY = 20;
-  public static int INDEX_WIND_SPEED = 21;
-  public static int INDEX_RAINCOUNTER = 22;
-  public static int INDEX_RAINING = 23;
-  public static int INDEX_DATE = 25;
+  private static final int INDEX_INSIDE_TEMPERATURE = 7;
+  private static final int INDEX_INSIDE_HUMIDITY = 15;
+  private static final int INDEX_OUTSIDE_TEMPERATURE = 19;
+  private static final int INDEX_OUTSIDE_HUMIDITY = 20;
+  private static final int INDEX_WIND_SPEED = 21;
+  private static final int INDEX_RAINCOUNTER = 22;
+  private static final int INDEX_RAINING = 23;
+  private static final int INDEX_DATE = 25;
 
   public DataParser() {
 

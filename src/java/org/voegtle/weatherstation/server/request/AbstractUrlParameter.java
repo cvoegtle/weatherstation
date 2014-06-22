@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 abstract class AbstractUrlParameter {
-  protected static final String FORMAT_TIMESTAMP = "yyyy-MM-dd-HH:mm:ss";
+  private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd-HH:mm:ss";
 
   final private HttpServletRequest request;
 

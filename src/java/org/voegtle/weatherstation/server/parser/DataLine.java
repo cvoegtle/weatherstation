@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class DataLine {
-  ArrayList<String> values = new ArrayList<>();
+  private final ArrayList<String> values = new ArrayList<>();
 
   public DataLine(String data) {
     data = data.replace(" ", "+");

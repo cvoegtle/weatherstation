@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateUtil {
-  private static TimeZone timezone = TimeZone.getTimeZone("Europe/Berlin");
+  private static final TimeZone timezone = TimeZone.getTimeZone("Europe/Berlin");
 
   public static Date fromCESTtoGMT(Date date) {
     Calendar cal = Calendar.getInstance(Locale.UK);
@@ -60,12 +60,9 @@ public class DateUtil {
   }
 
   /**
-   * 
-   * @param year year YYYY
-   * @param month
-   *          1 -12
-   * @param day
-   *          1 -31
+   * @param year  year YYYY
+   * @param month 1 -12
+   * @param day   1 -31
    * @return date as object
    */
   public static Date getDate(int year, int month, int day) {

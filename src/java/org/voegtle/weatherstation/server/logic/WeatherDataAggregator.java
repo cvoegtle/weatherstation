@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class WeatherDataAggregator {
-  private PersistenceManager pm;
+  private final PersistenceManager pm;
 
   public WeatherDataAggregator(PersistenceManager pm) {
     this.pm = pm;
@@ -60,7 +60,7 @@ public class WeatherDataAggregator {
   private Date fetchDateOfLastAggregation() {
     AggregatedWeatherDataSet lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY);
 
-    return lastAggregatedDay == null ? DateUtil.getDate(2014, 1, 1) : lastAggregatedDay.getDate();
+    return lastAggregatedDay == null ? DateUtil.getDate(2014, 6, 1) : lastAggregatedDay.getDate();
   }
 
   private AggregatedWeatherDataSet createNewDay(Date lastDay) {

@@ -4,15 +4,16 @@ import java.security.MessageDigest;
 import java.util.logging.Logger;
 
 public class HashService {
-  protected static final Logger log = Logger.getLogger(HashService.class.getName());
+  private static final Logger log = Logger.getLogger(HashService.class.getName());
 
-  private static String SALT = "AgentCoplien";
+  private static final String SALT = "AgentCoplien";
   private static MessageDigest md;
 
   static {
     try {
       md = MessageDigest.getInstance("SHA-256");
     } catch (Exception ex) {
+      md = null;
       log.severe("Instantiation of MessageDigest('SHA-256') failed");
     }
   }

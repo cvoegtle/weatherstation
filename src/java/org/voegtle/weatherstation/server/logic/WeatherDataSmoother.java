@@ -1,19 +1,19 @@
 package org.voegtle.weatherstation.server.logic;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.TimeRange;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 public class WeatherDataSmoother {
 
-  private PersistenceManager pm;
+  private final PersistenceManager pm;
 
   public WeatherDataSmoother(PersistenceManager pm) {
     this.pm = pm;

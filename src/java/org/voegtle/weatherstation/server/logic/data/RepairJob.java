@@ -18,8 +18,8 @@ public class RepairJob {
 
   private SmoothedWeatherDataSet first;
   private SmoothedWeatherDataSet last;
-  private List<SmoothedWeatherDataSet> defectDataSets = new ArrayList<>();
-  private RepairStep step = new RepairStep();
+  private final List<SmoothedWeatherDataSet> defectDataSets = new ArrayList<>();
+  private final RepairStep step = new RepairStep();
 
   public RepairJob() {
   }
@@ -30,10 +30,6 @@ public class RepairJob {
 
   public void setFirst(SmoothedWeatherDataSet first) {
     this.first = first;
-  }
-
-  public SmoothedWeatherDataSet getLast() {
-    return last;
   }
 
   public void setLast(SmoothedWeatherDataSet last) {

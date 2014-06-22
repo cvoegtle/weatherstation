@@ -12,9 +12,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WeatherDataImporter {
-  protected static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
+  private static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
 
-  private PersistenceManager pm;
+  private final PersistenceManager pm;
 
   public WeatherDataImporter(PersistenceManager pm) {
     this.pm = pm;

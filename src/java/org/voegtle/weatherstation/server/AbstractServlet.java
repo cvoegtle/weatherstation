@@ -25,11 +25,11 @@ import java.util.logging.Logger;
 public abstract class AbstractServlet extends HttpServlet {
   protected static final Logger log = Logger.getLogger("ServletLogger");
 
-  public static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
+  private static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
 
   private static final String MIME_TYPE_APPLICATION_JSON = "application/json";
 
-  protected PersistenceManager pm = new PersistenceManager();
+  protected final PersistenceManager pm = new PersistenceManager();
   protected LocationProperties locationProperties;
 
   @Override

@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class WeatherDataFetcher {
-  private PersistenceManager pm;
+  private final PersistenceManager pm;
 
   public WeatherDataFetcher(PersistenceManager pm) {
     this.pm = pm;
@@ -68,7 +68,7 @@ public class WeatherDataFetcher {
 
     Date yesterday = DateUtil.getYesterday();
     List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(DateUtil.daysEarlier(yesterday, 29), yesterday, false);
-    AggregatedWeatherDataSet yesterDaysData =  dataSets.get(0);
+    AggregatedWeatherDataSet yesterDaysData = dataSets.get(0);
     if (yesterDaysData != null) {
       rainDTO.setYesterday(calculateRain(yesterDaysData.getRainCounter(), 0));
     }
@@ -84,8 +84,8 @@ public class WeatherDataFetcher {
       days++;
     }
 
-    float rainWeek =(float)(rainCountWeek * 0.295);
-    float rain30days = (float)(rainCount30days * 0.295);
+    float rainWeek = (float) (rainCountWeek * 0.295);
+    float rain30days = (float) (rainCount30days * 0.295);
 
     if (rainToday != null) {
       rainWeek += rainToday;
