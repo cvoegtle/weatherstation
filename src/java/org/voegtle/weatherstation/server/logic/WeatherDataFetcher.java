@@ -62,15 +62,15 @@ public class WeatherDataFetcher {
     WeatherDataSet latest = pm.fetchYoungestDataSet();
     SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
 
-    rainDTO.setLastHour(calculateRain(latest.getRainCounter(), oneHourBefore.getRainCounter()));
-    Float rainToday = calculateRain(latest.getRainCounter(), today.getRainCounter());
+    rainDTO.setLastHour(calculateRain(latest, oneHourBefore));
+    Float rainToday = calculateRain(latest, today);
     rainDTO.setToday(rainToday);
 
     Date yesterday = DateUtil.getYesterday();
     List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(DateUtil.daysEarlier(yesterday, 29), yesterday, false);
-    AggregatedWeatherDataSet yesterDaysData = dataSets.get(0);
-    if (yesterDaysData != null) {
-      rainDTO.setYesterday(calculateRain(yesterDaysData.getRainCounter(), 0));
+    AggregatedWeatherDataSet yesterdaysData = dataSets.get(0);
+    if (yesterdaysData != null) {
+      rainDTO.setYesterday(calculateRain(yesterdaysData.getRainCounter(), 0));
     }
 
     int days = 0;
@@ -101,6 +101,13 @@ public class WeatherDataFetcher {
     }
 
     return rainDTO;
+  }
+
+  private Float calculateRain(WeatherDataSet latest, SmoothedWeatherDataSet previous) {
+    if (latest == null || previous == null) {
+      return null;
+    }
+    return calculateRain(latest.getRainCounter(), previous.getRainCounter());
   }
 
   private Float calculateRain(int youngerCount, int olderCount) {
