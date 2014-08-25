@@ -58,7 +58,7 @@ public class UploadServlet extends AbstractServlet {
       }
 
       for (DataLine dl : lines) {
-        log.severe(dl.toString());
+        log.info(dl.toString());
       }
     } catch (IOException ex) {
       log.severe("failed to read POST input stream");
