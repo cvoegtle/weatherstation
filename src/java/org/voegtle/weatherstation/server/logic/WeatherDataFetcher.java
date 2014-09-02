@@ -104,7 +104,7 @@ public class WeatherDataFetcher {
   }
 
   private Float calculateRain(WeatherDataSet latest, SmoothedWeatherDataSet previous) {
-    if (latest == null || previous == null) {
+    if (latest == null || previous == null || latest.getRainCounter() == null || previous.getRainCounter() == null) {
       return null;
     }
     return calculateRain(latest.getRainCounter(), previous.getRainCounter());
