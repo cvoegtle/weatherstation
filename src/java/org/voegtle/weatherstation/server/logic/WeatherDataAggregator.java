@@ -48,7 +48,7 @@ public class WeatherDataAggregator {
       }
 
       if (rainCountStart != null) {
-        aggregation.setRainCounter(rainCountLast - rainCountStart);
+        aggregation.setRainCounter(Math.max(rainCountLast - rainCountStart, 0));
         aggregation.setRainDays(rainCountLast > rainCountStart ? 1 : 0);
       }
 
