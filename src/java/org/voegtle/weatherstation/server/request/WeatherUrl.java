@@ -13,4 +13,9 @@ public class WeatherUrl {
   public URL getUrl() {
     return url;
   }
+
+  @Override
+  public String toString() {
+    return url.toString();
+  }
 }

@@ -20,10 +20,9 @@ public class WeatherDataSmoother {
   }
 
   public void smoothWeatherData() {
-    Date startTime = calculateStartTime();
     Date endTime = calculateEndTime();
 
-    Date currentTime = startTime;
+    Date currentTime = calculateStartTime(endTime);
     while (currentTime.before(endTime)) {
       TimeRange range = DateUtil.getRangeAround(currentTime, 7 * 60 + 30);
       List<WeatherDataSet> weatherData = pm.fetchWeatherDataInRange(range.getBegin(), range.getEnd());
@@ -48,7 +47,7 @@ public class WeatherDataSmoother {
     return cal.getTime();
   }
 
-  private Date calculateStartTime() {
+  private Date calculateStartTime(Date timeOfYoungestWeatherDataSet) {
     SmoothedWeatherDataSet youngest = pm.fetchYoungestSmoothedDataSet();
 
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
@@ -57,7 +56,8 @@ public class WeatherDataSmoother {
       cal.setTime(youngest.getTimestamp());
       cal.add(Calendar.MINUTE, 15);
     } else {
-      cal.setTime(new Date());
+      cal.setTime(timeOfYoungestWeatherDataSet);
+      cal.add(Calendar.HOUR_OF_DAY, -1);
       cal.set(Calendar.MINUTE, 0);
     }
 

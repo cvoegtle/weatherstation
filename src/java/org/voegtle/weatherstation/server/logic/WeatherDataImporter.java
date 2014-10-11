@@ -3,11 +3,14 @@ package org.voegtle.weatherstation.server.logic;
 import org.voegtle.weatherstation.server.parser.DataLine;
 import org.voegtle.weatherstation.server.parser.DataParser;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
+import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.request.ResponseCode;
+import org.voegtle.weatherstation.server.util.DateUtil;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,15 +18,11 @@ public class WeatherDataImporter {
   private static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
 
   private final PersistenceManager pm;
+  private final Date importedUntil;
 
   public WeatherDataImporter(PersistenceManager pm) {
     this.pm = pm;
-  }
-
-  public String doImport(DataLine line) {
-    ArrayList<DataLine> lines = new ArrayList<>();
-    lines.add(line);
-    return doImport(lines);
+    this.importedUntil = getDateOfLastDataSet();
   }
 
   public String doImport(ArrayList<DataLine> lines) {
@@ -33,13 +32,16 @@ public class WeatherDataImporter {
       DataParser parser = new DataParser();
       for (DataLine dataLine : lines) {
         WeatherDataSet dataSet = parser.parse(dataLine);
-        if (pm.makePersitant(dataSet)) {
-          persisted = true;
+        if (isNotOutdated(dataSet)) {
+          if (pm.makePersitant(dataSet)) {
+            persisted = true;
+          }
         }
       }
 
       if (persisted) {
         new WeatherDataSmoother(pm).smoothWeatherData();
+        new WeatherDataAggregator(pm).aggregateWeatherData();
       }
       result = persisted ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
     } catch (ParseException ex) {
@@ -49,5 +51,23 @@ public class WeatherDataImporter {
     return result;
   }
 
+  private boolean isNotOutdated(WeatherDataSet dataSet) {
+    return importedUntil.before(dataSet.getTimestamp());
+  }
+
+  private Date getDateOfLastDataSet() {
+    Date lastImport = DateUtil.getDate(2014, 1, 1);
+
+    WeatherDataSet youngestDataSet = pm.fetchYoungestDataSet();
+    if (youngestDataSet != null && youngestDataSet.getTimestamp().after(lastImport)) {
+      lastImport = youngestDataSet.getTimestamp();
+    }
+
+    SmoothedWeatherDataSet youngestSmoothedDS = pm.fetchYoungestSmoothedDataSet();
+    if (youngestSmoothedDS != null && youngestSmoothedDS.getTimestamp().after(lastImport)) {
+      lastImport = youngestSmoothedDS.getTimestamp();
+    }
+    return lastImport;
+  }
 
 }

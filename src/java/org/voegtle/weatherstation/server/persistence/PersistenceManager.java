@@ -102,12 +102,6 @@ public class PersistenceManager {
     return selectFirstSmoothedResult(q);
   }
 
-  public WeatherDataSet fetchOldestDataSet() {
-    EntityManager em = factory.createEntityManager();
-    Query q = em.createQuery("SELECT wds FROM WeatherDataSet wds ORDER by wds.timestamp");
-    return selectFirstResult(q);
-  }
-
   public WeatherDataSet fetchYoungestDataSet() {
     EntityManager em = factory.createEntityManager();
     Query q = em.createQuery("SELECT wds FROM WeatherDataSet wds ORDER by wds.timestamp DESC");
@@ -218,7 +212,12 @@ public class PersistenceManager {
 
   private WeatherDataSet selectFirstResult(Query q) {
     q.setMaxResults(1);
-    return (WeatherDataSet) q.getSingleResult();
+    @SuppressWarnings("rawtypes")
+    List results = q.getResultList();
+    if (results.size() > 0) {
+      return (WeatherDataSet) results.get(0);
+    }
+    return null;
   }
 
   private SmoothedWeatherDataSet selectFirstSmoothedResult(Query q) {

@@ -140,4 +140,11 @@ public class DateUtil {
 
     return cal.getTime();
   }
+
+  public static Date toDate(Date timestamp) {
+    Calendar cal = Calendar.getInstance(Locale.GERMANY);
+    cal.setTime(timestamp);
+    removeTimeFraction(cal);
+    return cal.getTime();
+  }
 }

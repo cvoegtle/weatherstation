@@ -33,16 +33,6 @@
     <url-pattern>/weatherstation/upload</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>incoming</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.IncomingServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>incoming</servlet-name>
-    <url-pattern>/weatherstation/incoming</url-pattern>
-  </servlet-mapping>
-
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

@@ -3,7 +3,6 @@ package org.voegtle.weatherstation.server;
 import org.json.JSONObject;
 import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
-import org.voegtle.weatherstation.server.logic.WeatherDataAggregator;
 import org.voegtle.weatherstation.server.logic.WeatherDataFetcher;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
@@ -33,10 +32,6 @@ public class OutgoingServlet extends AbstractServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    WeatherDataAggregator aggregator = new WeatherDataAggregator(pm);
-    aggregator.aggregateWeatherData();
-
     WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
 
     OutgoingUrlParameter param = new OutgoingUrlParameter(request);
@@ -63,15 +58,13 @@ public class OutgoingServlet extends AbstractServlet {
         }
 
 
-        JSONObject bonnCurrent = getWeatherDataFromUrl(new WeatherUrl("forstwetter.appspot.com", DataType.CURRENT, param.isExtended()).getUrl());
-        collectedWeatherData.add(bonnCurrent);
-
-        JSONObject freiburgCurrent = getWeatherDataFromUrl(new WeatherUrl("oxenwetter.appspot.com", DataType.CURRENT, param.isExtended()).getUrl());
-        collectedWeatherData.add(freiburgCurrent);
+        fetchWeatherData(collectedWeatherData, new WeatherUrl("forstwetter.appspot.com", DataType.CURRENT, param.isExtended()));
+        fetchWeatherData(collectedWeatherData, new WeatherUrl("oxenwetter.appspot.com", DataType.CURRENT, param.isExtended()));
 
         writeResponse(response, collectedWeatherData);
 
-      } catch (Exception ignored) {
+      } catch (Exception ex) {
+        log.severe("Exception while reading weather data " + ex.toString());
       }
 
     } else if (param.getBegin() != null) {
@@ -79,6 +72,15 @@ public class OutgoingServlet extends AbstractServlet {
       returnDetailedResult(response, result);
     }
 
+  }
+
+  private void fetchWeatherData(ArrayList<JSONObject> collectedWeatherData, WeatherUrl weatherUrl) {
+    try {
+      JSONObject bonnCurrent = getWeatherDataFromUrl(weatherUrl.getUrl());
+      collectedWeatherData.add(bonnCurrent);
+    } catch (Exception ex) {
+      log.severe(ex.toString());
+    }
   }
 
   private void returnCurrentWeatherData(HttpServletResponse response, UnformattedWeatherDTO currentWeatherData, boolean extended) {
@@ -93,9 +95,7 @@ public class OutgoingServlet extends AbstractServlet {
     while ((line = reader.readLine()) != null) {
       received.append(line);
     }
-    JSONObject current;
-    current = new JSONObject(received.toString());
-    return current;
+    return new JSONObject(received.toString());
   }
 
   private void returnAggregatedResult(HttpServletResponse response, List<AggregatedWeatherDataSet> list) {
