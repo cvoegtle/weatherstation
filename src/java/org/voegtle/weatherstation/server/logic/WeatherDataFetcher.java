@@ -45,6 +45,7 @@ public class WeatherDataFetcher {
     dto.setWindspeed(latest.getWindSpeed());
     if (authorized) {
       dto.setInsideTemperature(latest.getInsideTemperature());
+      dto.setInsideHumidity(latest.getInsideHumidity());
     }
 
     if (oneHourBefore != null && oneHourBefore.getRainCounter() != null) {

@@ -29,6 +29,9 @@ public class JSONConverter {
         json.put("inside_temperature", currentWeatherData.getInsideTemperature());
       }
       json.put("humidity", currentWeatherData.getHumidity());
+      if (currentWeatherData.getInsideHumidity() != null) {
+        json.put("inside_humidity", currentWeatherData.getInsideHumidity());
+      }
       json.put("rain", currentWeatherData.getRainLastHour());
       json.put("rain_today", currentWeatherData.getRainToday());
       json.put("raining", currentWeatherData.isRaining());
