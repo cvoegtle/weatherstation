@@ -6,6 +6,7 @@ import java.util.Date;
 public class UnformattedWeatherDTO implements Serializable {
   private Date time;
   private Float temperature;
+  private Float insideTemperature;
   private Float humidity;
   boolean raining;
   private Float rainLastHour;
@@ -71,4 +72,11 @@ public class UnformattedWeatherDTO implements Serializable {
     this.rainToday = rainToday;
   }
 
+  public Float getInsideTemperature() {
+    return insideTemperature;
+  }
+
+  public void setInsideTemperature(Float insideTemperature) {
+    this.insideTemperature = insideTemperature;
+  }
 }
