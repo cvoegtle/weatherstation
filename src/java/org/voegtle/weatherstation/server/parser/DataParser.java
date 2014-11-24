@@ -1,13 +1,12 @@
 package org.voegtle.weatherstation.server.parser;
 
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
+import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.StringUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 public class DataParser {
 // 1;1;;;;;;;;;;;;;;;;;;15,1;78;0,0;616;0;0
@@ -21,11 +20,37 @@ public class DataParser {
   private static final int INDEX_RAINING = 23;
   private static final int INDEX_DATE = 25;
 
-  public DataParser() {
+  private static final Date MIN_DATE = DateUtil.getDate(2014, 1, 1);
 
+  public DataParser() {
   }
 
-  public WeatherDataSet parse(DataLine data) throws ParseException {
+  public List<WeatherDataSet> parse(List<DataLine> lines) throws ParseException {
+    ArrayList<WeatherDataSet> dataSets = new ArrayList<>();
+    WeatherDataSet lastDataSet = null;
+    for (DataLine line : lines) {
+      lastDataSet = parse(line);
+      dataSets.add(lastDataSet);
+    }
+
+    repairDate(lastDataSet);
+
+    return dataSets;
+  }
+
+  /**
+   * es kann vorkommen, dass das Datum der Fritzbox falsch gesetzt ist. Meist 1970.
+   * In diesem Fall zumindest für den letzten Datum die aktuelle Zeit setzen.
+   * Denn dieser Datensatz hat die Übertragung ausgelöst.
+   */
+  private void repairDate(WeatherDataSet dataSet) {
+
+    if (dataSet != null && dataSet.getTimestamp().before(MIN_DATE)) {
+      dataSet.setTimestamp(new Date());
+    }
+  }
+
+  private WeatherDataSet parse(DataLine data) throws ParseException {
 
     Date timestamp = getTimestamp(data);
 

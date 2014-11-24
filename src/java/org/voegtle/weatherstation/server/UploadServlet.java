@@ -57,9 +57,13 @@ public class UploadServlet extends AbstractServlet {
         lines.add(new DataLine(line));
       }
       log.info("number of datalines: " + lines.size());
+      for (DataLine dl : lines) {
+        log.info(dl.toString());
+      }
     } catch (IOException ex) {
       log.severe("failed to read POST input stream");
     }
     return lines;
   }
+
 }

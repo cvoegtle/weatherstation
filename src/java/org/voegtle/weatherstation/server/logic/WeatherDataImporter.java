@@ -11,6 +11,7 @@ import org.voegtle.weatherstation.server.util.DateUtil;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,8 +31,8 @@ public class WeatherDataImporter {
     try {
       boolean persisted = false;
       DataParser parser = new DataParser();
-      for (DataLine dataLine : lines) {
-        WeatherDataSet dataSet = parser.parse(dataLine);
+      List<WeatherDataSet> dataSets = parser.parse(lines);
+      for (WeatherDataSet dataSet : dataSets) {
         if (isNotOutdated(dataSet)) {
           if (pm.makePersitant(dataSet)) {
             persisted = true;
