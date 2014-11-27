@@ -21,6 +21,8 @@ public class LocationProperties {
 
   private String secretHash;
 
+  private String readHash;
+
   private String weatherForecast;
 
   public LocationProperties() {
@@ -79,4 +81,11 @@ public class LocationProperties {
   }
 
 
+  public String getReadHash() {
+    return readHash;
+  }
+
+  public void setReadHash(String readHash) {
+    this.readHash = readHash;
+  }
 }

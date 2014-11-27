@@ -42,15 +42,15 @@ public abstract class AbstractServlet extends HttpServlet {
     locationProperties = pm.fetchLocationProperties();
   }
 
-//  private LocationProperties createLocationProperties() {
-//    LocationProperties lp = new LocationProperties();
-//    lp.setLocation("testweg");
-//    lp.setAddress("Testweg 8");
-//    lp.setCity("Testcity");
-//    lp.setWeatherForecast("");
-//    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
-//    return lp;
-//  }
+  private LocationProperties createLocationProperties() {
+    LocationProperties lp = new LocationProperties();
+    lp.setLocation("testweg");
+    lp.setAddress("Testweg 8");
+    lp.setCity("Testcity");
+    lp.setWeatherForecast("");
+    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
+    return lp;
+  }
 
   protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list) {
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);
@@ -128,6 +128,12 @@ public abstract class AbstractServlet extends HttpServlet {
     String secretHash = locationProperties.getSecretHash();
     return (StringUtil.isEmpty(secretHash) ||
         (StringUtil.isNotEmpty(secret) && secretHash.equals(HashService.calculateHash(secret))));
+  }
+
+  protected boolean isReadSecretValid(String secret) {
+    String readHash = locationProperties.getReadHash();
+    return (StringUtil.isEmpty(readHash) ||
+        (StringUtil.isNotEmpty(secret) && readHash.equals(HashService.calculateHash(secret))));
   }
 
 }

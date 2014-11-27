@@ -35,7 +35,7 @@ public class OutgoingServlet extends AbstractServlet {
     WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
 
     OutgoingUrlParameter param = new OutgoingUrlParameter(request);
-    boolean authorized = isSecretValid(param.getSecret());
+    boolean authorized = isReadSecretValid(param.getSecret());
 
     if (param.getType() == DataType.AGGREGATED) {
       List<AggregatedWeatherDataSet> result = weatherDataFetcher.getAggregatedWeatherData(param.getBegin(), param.getEnd());
