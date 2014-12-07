@@ -1,36 +1,30 @@
 package org.voegtle.weatherstation.server;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
-import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.HashService;
+import org.voegtle.weatherstation.server.util.JSONConverter;
 import org.voegtle.weatherstation.server.util.StringUtil;
-import org.voegtle.weatherstation.server.util.WeatherJSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractServlet extends HttpServlet {
   protected static final Logger log = Logger.getLogger("ServletLogger");
 
-  private static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
-
   private static final String MIME_TYPE_APPLICATION_JSON = "application/json";
 
   protected final PersistenceManager pm = new PersistenceManager();
   protected LocationProperties locationProperties;
+  protected JSONConverter jsonConverter;
 
   @Override
   public void init() throws ServletException {
@@ -40,6 +34,7 @@ public abstract class AbstractServlet extends HttpServlet {
 //    pm.makePersistant(lp);
 
     locationProperties = pm.fetchLocationProperties();
+    jsonConverter = new JSONConverter(locationProperties);
   }
 
   private LocationProperties createLocationProperties() {
@@ -52,32 +47,8 @@ public abstract class AbstractServlet extends HttpServlet {
     return lp;
   }
 
-  protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list) {
-    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);
-
-    Integer previousRainCounter = null;
-    ArrayList<JSONObject> jsonObjects = new ArrayList<>();
-    for (SmoothedWeatherDataSet wds : list) {
-      JSONObject json = new WeatherJSONObject();
-      try {
-        json.put("timestamp", sdf.format(DateUtil.fromGMTtoCEST(wds.getTimestamp())));
-        json.put("temperature", wds.getOutsideTemperature());
-        json.put("humidity", wds.getOutsideHumidity());
-        if (previousRainCounter != null && wds.getRainCounter() != null) {
-          double rain = 0.295 * (wds.getRainCounter() - previousRainCounter);
-          json.put("rain", Math.max(rain, 0));
-        } else {
-          json.put("rain", 0.0);
-        }
-        previousRainCounter = wds.getRainCounter();
-        json.put("wind", wds.getWindspeed());
-        json.put("windMax", wds.getWindspeedMax());
-      } catch (JSONException e) {
-        log.log(Level.SEVERE, "failed to create JSONObject", e);
-      }
-      jsonObjects.add(json);
-    }
-
+  protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list, boolean extended) {
+    List<JSONObject> jsonObjects = jsonConverter.toJson(list, extended);
     writeResponse(response, jsonObjects);
   }
 
@@ -94,7 +65,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
   }
 
-  protected void writeResponse(HttpServletResponse response, ArrayList<JSONObject> jsonObjects) {
+  protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects) {
     JSONArray jsonArray = new JSONArray(jsonObjects);
     try {
       PrintWriter out = response.getWriter();

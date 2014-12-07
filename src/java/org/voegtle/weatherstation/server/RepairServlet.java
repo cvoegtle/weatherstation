@@ -21,7 +21,7 @@ public class RepairServlet extends AbstractServlet {
     if (isSecretValid(param.getSecret())) {
       WeatherDataRepair repairService = new WeatherDataRepair(pm);
       List<SmoothedWeatherDataSet> repaired = repairService.repair(param.getBegin(), param.getEnd());
-      returnDetailedResult(response, repaired);
+      returnDetailedResult(response, repaired, false);
     } else {
       returnResult(response, ResponseCode.NOT_AUTHORIZED);
     }

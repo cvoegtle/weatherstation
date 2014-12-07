@@ -9,7 +9,6 @@ import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.request.DataType;
 import org.voegtle.weatherstation.server.request.OutgoingUrlParameter;
 import org.voegtle.weatherstation.server.request.WeatherUrl;
-import org.voegtle.weatherstation.server.util.JSONConverter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutgoingServlet extends AbstractServlet {
-  private JSONConverter jsonConverter;
 
   @Override
   public void init() throws ServletException {
     super.init();
-    jsonConverter = new JSONConverter(locationProperties);
   }
 
   @Override
@@ -70,7 +67,7 @@ public class OutgoingServlet extends AbstractServlet {
 
     } else if (param.getBegin() != null) {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
-      returnDetailedResult(response, result);
+      returnDetailedResult(response, result, authorized);
     }
 
   }

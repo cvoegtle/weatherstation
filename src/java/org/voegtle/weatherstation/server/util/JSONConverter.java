@@ -6,6 +6,7 @@ import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
+import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +58,40 @@ public class JSONConverter {
     } catch (JSONException ignored) {
     }
     return json;
+  }
+
+  private static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
+
+  public ArrayList<JSONObject> toJson(List<SmoothedWeatherDataSet> list, boolean extended) {
+    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);
+
+    Integer previousRainCounter = null;
+    ArrayList<JSONObject> jsonObjects = new ArrayList<>();
+    for (SmoothedWeatherDataSet wds : list) {
+      JSONObject json = new WeatherJSONObject();
+      try {
+        json.put("timestamp", sdf.format(DateUtil.fromGMTtoCEST(wds.getTimestamp())));
+        json.put("temperature", wds.getOutsideTemperature());
+        if (wds.getInsideTemperature() != null && extended) {
+          json.put("inside_temperature", wds.getInsideTemperature());
+        }
+
+        json.put("humidity", wds.getOutsideHumidity());
+        if (previousRainCounter != null && wds.getRainCounter() != null) {
+          double rain = 0.295 * (wds.getRainCounter() - previousRainCounter);
+          json.put("rain", Math.max(rain, 0));
+        } else {
+          json.put("rain", 0.0);
+        }
+        previousRainCounter = wds.getRainCounter();
+        json.put("wind", wds.getWindspeed());
+        json.put("windMax", wds.getWindspeedMax());
+      } catch (JSONException ignored) {
+      }
+      jsonObjects.add(json);
+    }
+
+    return jsonObjects;
   }
 
 
