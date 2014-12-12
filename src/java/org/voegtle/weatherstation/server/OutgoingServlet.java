@@ -29,6 +29,8 @@ public class OutgoingServlet extends AbstractServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+
     WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
 
     OutgoingUrlParameter param = new OutgoingUrlParameter(request);
