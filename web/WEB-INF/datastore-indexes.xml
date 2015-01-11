@@ -4,4 +4,9 @@
     <property name="period" direction="asc"/>
     <property name="date" direction="desc"/>
   </datastore-index>
+  <datastore-index kind="SmoothedWeatherDataSet" ancestor="false">
+    <property name="rainCounter" direction="desc"/>
+    <property name="timestamp" direction="desc"/>
+  </datastore-index>
+
 </datastore-indexes>
