@@ -33,6 +33,16 @@
     <url-pattern>/weatherstation/upload</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>image</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.ImageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>image</servlet-name>
+    <url-pattern>/weatherstation/image</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

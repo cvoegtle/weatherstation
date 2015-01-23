@@ -5,7 +5,7 @@
     <property name="date" direction="desc"/>
   </datastore-index>
   <datastore-index kind="SmoothedWeatherDataSet" ancestor="false">
-    <property name="rainCounter" direction="desc"/>
+    <property name="rainCounter" direction="asc"/>
     <property name="timestamp" direction="desc"/>
   </datastore-index>
 
