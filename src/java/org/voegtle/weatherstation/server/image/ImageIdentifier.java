@@ -16,4 +16,8 @@ public class ImageIdentifier {
   public String getOid() {
     return oid;
   }
+
+  public String getZx() {
+    return zx;
+  }
 }

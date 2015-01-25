@@ -21,14 +21,17 @@ public class ImageServlet extends HttpServlet {
     ImageUrlParameter param = new ImageUrlParameter(request);
     if (param.isRefresh()) {
       imageCache.refresh();
-    }
-    if (StringUtil.isNotEmpty(param.getOid())) {
-      Image image = imageCache.get(new ImageIdentifier(param.getOid(), param.getZx()));
+      response.getWriter().write("ACK " + imageCache.size());
+      response.getWriter().close();
+    } else {
+      if (StringUtil.isNotEmpty(param.getOid())) {
+        Image image = imageCache.get(new ImageIdentifier(param.getOid(), param.getZx()));
 
-      if (image != null) {
-        response.setContentType("image/png");
-        response.getOutputStream().write(image.getPng());
-        response.getOutputStream().close();
+        if (image != null) {
+          response.setContentType("image/png");
+          response.getOutputStream().write(image.getPng());
+          response.getOutputStream().close();
+        }
       }
     }
 

@@ -7,8 +7,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class ImageCache {
+  protected static final Logger log = Logger.getLogger("ImageCacheLogger");
+
   private static final String imageServerUrl = "https://docs.google.com/spreadsheet/oimg?key=0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc";
 
   private HashMap<String, Image> images = new HashMap<>();
@@ -34,16 +37,30 @@ public class ImageCache {
     }
   }
 
-  public Image get(ImageIdentifier identifier) throws IOException {
+  public Image get(ImageIdentifier identifier) {
     Image image = images.get(identifier.getOid());
     if (image == null || image.isOld()) {
-      try {
-        image = fetch(identifier);
-      } catch (IOException e) {
-        // einmal wiederholen
-        image = fetch(identifier);
+      image = fetchImageRepeated(identifier);
+      if (image != null) {
+        images.put(image.getOid(), image);
       }
-      images.put(image.getOid(), image);
+    }
+    return image;
+  }
+
+  private Image fetchImageRepeated(ImageIdentifier identifier) {
+    Image image = null;
+    try {
+      image = fetch(identifier);
+    } catch (IOException e) {
+      // einmal wiederholen
+      try {
+        Thread.sleep(1500);
+        image = fetch(identifier);
+        log.info("repeated image fetch " + identifier.getOid() + ", " + identifier.getZx());
+      } catch (IOException | InterruptedException e1) {
+        log.info("failed to fetch image " + identifier.getOid() + ", " + identifier.getZx());
+      }
     }
     return image;
   }
@@ -60,6 +77,10 @@ public class ImageCache {
     }
 
     return new Image(identifier.getOid(), new Date(), bos.toByteArray());
+  }
+
+  public int size() {
+    return images.size();
   }
 
 //  public static void main(String[] args) {
