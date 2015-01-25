@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -15,24 +14,24 @@ public class ImageCache {
   private static final String imageServerUrl = "https://docs.google.com/spreadsheet/oimg?key=0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc";
 
   private HashMap<String, Image> images = new HashMap<>();
-  private ArrayList<ImageIdentifier> knownImages = new ArrayList<>();
+  private HashMap<String, ImageIdentifier> knownImages = new HashMap<>();
 
   public ImageCache() {
-    knownImages.add(new ImageIdentifier("22", "itnq9cg9itj1"));
-    knownImages.add(new ImageIdentifier("23", "juk5ebnhgov3"));
-    knownImages.add(new ImageIdentifier("26", "3goxceuvpnz7"));
-    knownImages.add(new ImageIdentifier("24", "bmq3fhig2c"));
-    knownImages.add(new ImageIdentifier("3", "jfy3wnfa5exa"));
-    knownImages.add(new ImageIdentifier("4", "oqwhqpkqpxqq"));
-    knownImages.add(new ImageIdentifier("21", "bju20lesmatj"));
-    knownImages.add(new ImageIdentifier("7", "1geb1qiwcx3b"));
-    knownImages.add(new ImageIdentifier("16", "v9yov3sfksqb"));
-    knownImages.add(new ImageIdentifier("25", "3l67kc4xl7vx"));
+    knownImages.put("22", new ImageIdentifier("22", "itnq9cg9itj1"));
+    knownImages.put("23", new ImageIdentifier("23", "juk5ebnhgov3"));
+    knownImages.put("26", new ImageIdentifier("26", "3goxceuvpnz7"));
+    knownImages.put("24", new ImageIdentifier("24", "bmq3fhig2c"));
+    knownImages.put("3", new ImageIdentifier("3", "jfy3wnfa5exa"));
+    knownImages.put("4", new ImageIdentifier("4", "oqwhqpkqpxqq"));
+    knownImages.put("21", new ImageIdentifier("21", "bju20lesmatj"));
+    knownImages.put("7", new ImageIdentifier("7", "1geb1qiwcx3b"));
+    knownImages.put("16", new ImageIdentifier("16", "v9yov3sfksqb"));
+    knownImages.put("25", new ImageIdentifier("25", "3l67kc4xl7vx"));
   }
 
   public void refresh() throws IOException {
     images.clear();
-    for (ImageIdentifier id : knownImages) {
+    for (ImageIdentifier id : knownImages.values()) {
       get(id);
     }
   }
@@ -43,6 +42,7 @@ public class ImageCache {
       image = fetchImageRepeated(identifier);
       if (image != null) {
         images.put(image.getOid(), image);
+        knownImages.put(identifier.getOid(), identifier);
       }
     }
     return image;
