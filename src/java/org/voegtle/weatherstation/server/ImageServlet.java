@@ -2,18 +2,24 @@ package org.voegtle.weatherstation.server;
 
 import org.voegtle.weatherstation.server.image.Image;
 import org.voegtle.weatherstation.server.image.ImageCache;
-import org.voegtle.weatherstation.server.image.ImageIdentifier;
+import org.voegtle.weatherstation.server.persistence.ImageIdentifier;
 import org.voegtle.weatherstation.server.request.ImageUrlParameter;
 import org.voegtle.weatherstation.server.util.StringUtil;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ImageServlet extends HttpServlet {
-  private ImageCache imageCache = new ImageCache();
+public class ImageServlet extends AbstractServlet {
+  private ImageCache imageCache;
+
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    imageCache = new ImageCache(pm);
+    imageCache.init();
+  }
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

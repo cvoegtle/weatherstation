@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server.persistence;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,16 @@ public class PersistenceManager {
 
     em.getTransaction().begin();
     em.persist(dataSet);
+    em.getTransaction().commit();
+
+    em.close();
+  }
+
+  public void makePersistant(ImageIdentifier id) {
+    EntityManager em = factory.createEntityManager();
+
+    em.getTransaction().begin();
+    em.persist(id);
     em.getTransaction().commit();
 
     em.close();
@@ -184,6 +195,19 @@ public class PersistenceManager {
     q.executeUpdate();
 
     em.close();
+  }
+
+  public List<ImageIdentifier> fetchImageIdentifiers() {
+    ArrayList<ImageIdentifier> result = new ArrayList<>();
+    EntityManager em = factory.createEntityManager();
+    Query q = em.createQuery("SELECT id FROM ImageIdentifier id");
+    List<ImageIdentifier> list = (List<ImageIdentifier>) (q.getResultList());
+    for (ImageIdentifier id : list) {
+      result.add(id);
+    }
+    em.close();
+    return result;
+
   }
 
   public LocationProperties fetchLocationProperties() {

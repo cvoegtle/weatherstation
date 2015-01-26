@@ -1,5 +1,8 @@
 package org.voegtle.weatherstation.server.image;
 
+import org.voegtle.weatherstation.server.persistence.ImageIdentifier;
+import org.voegtle.weatherstation.server.persistence.PersistenceManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,19 +17,14 @@ public class ImageCache {
   private static final String imageServerUrl = "https://docs.google.com/spreadsheet/oimg?key=0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc";
 
   private HashMap<String, Image> images = new HashMap<>();
-  private HashMap<String, ImageIdentifier> knownImages = new HashMap<>();
+  private KnownImages knownImages;
 
-  public ImageCache() {
-    knownImages.put("22", new ImageIdentifier("22", "itnq9cg9itj1"));
-    knownImages.put("23", new ImageIdentifier("23", "juk5ebnhgov3"));
-    knownImages.put("26", new ImageIdentifier("26", "3goxceuvpnz7"));
-    knownImages.put("24", new ImageIdentifier("24", "bmq3fhig2c"));
-    knownImages.put("3", new ImageIdentifier("3", "jfy3wnfa5exa"));
-    knownImages.put("4", new ImageIdentifier("4", "oqwhqpkqpxqq"));
-    knownImages.put("21", new ImageIdentifier("21", "bju20lesmatj"));
-    knownImages.put("7", new ImageIdentifier("7", "1geb1qiwcx3b"));
-    knownImages.put("16", new ImageIdentifier("16", "v9yov3sfksqb"));
-    knownImages.put("25", new ImageIdentifier("25", "3l67kc4xl7vx"));
+  public ImageCache(PersistenceManager pm) {
+    knownImages = new KnownImages(pm);
+  }
+
+  public void init() {
+    knownImages.init();
   }
 
   public void refresh() throws IOException {
@@ -42,7 +40,7 @@ public class ImageCache {
       image = fetchImageRepeated(identifier);
       if (image != null) {
         images.put(image.getOid(), image);
-        knownImages.put(identifier.getOid(), identifier);
+        knownImages.put(identifier);
       }
     }
     return image;
