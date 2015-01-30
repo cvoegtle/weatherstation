@@ -110,31 +110,46 @@ public class PersistenceManager {
     Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp > :oneHourBefore ORDER by wds.timestamp");
     q.setParameter("oneHourBefore", oneHourBefore, TemporalType.DATE);
 
-    return selectFirstSmoothedResult(q);
+    SmoothedWeatherDataSet result = selectFirstSmoothedResult(q);
+    em.close();
+
+    return result;
   }
 
   public WeatherDataSet fetchYoungestDataSet() {
     EntityManager em = factory.createEntityManager();
     Query q = em.createQuery("SELECT wds FROM WeatherDataSet wds ORDER by wds.timestamp DESC");
-    return selectFirstResult(q);
+    WeatherDataSet result = selectFirstResult(q);
+    em.close();
+    return result;
   }
 
   @SuppressWarnings("unchecked")
   public List<WeatherDataSet> fetchWeatherDataInRange(Date begin, Date end) {
     EntityManager em = factory.createEntityManager();
     Query q = createQueryForRange("WeatherDataSet", begin, end, em);
-    return (List<WeatherDataSet>) (q.getResultList());
+
+    ArrayList<WeatherDataSet> result = new ArrayList<>();
+    for (WeatherDataSet wds : (List<WeatherDataSet>) (q.getResultList())) {
+      result.add(wds);
+    }
+    em.close();
+    return result;
   }
 
   @SuppressWarnings("unchecked")
   public List<SmoothedWeatherDataSet> fetchSmoothedWeatherDataInRange(Date begin, Date end) {
     EntityManager em = factory.createEntityManager();
     Query q = createQueryForRange("SmoothedWeatherDataSet", begin, end, em);
-    return (List<SmoothedWeatherDataSet>) (q.getResultList());
+    ArrayList<SmoothedWeatherDataSet> result = new ArrayList<>();
+    for (SmoothedWeatherDataSet ds : (List<SmoothedWeatherDataSet>) (q.getResultList())) {
+      result.add(ds);
+    }
+    em.close();
+    return result;
   }
 
 
-  @SuppressWarnings("unchecked")
 
   public List<AggregatedWeatherDataSet> fetchAggregatedWeatherDataInRange(Date begin, Date end) {
     return fetchAggregatedWeatherDataInRange(begin, end, true);
@@ -153,7 +168,12 @@ public class PersistenceManager {
       q.setParameter("begin", begin, TemporalType.DATE);
     }
 
-    return (List<AggregatedWeatherDataSet>) (q.getResultList());
+    ArrayList<AggregatedWeatherDataSet> result = new ArrayList<>();
+    for (AggregatedWeatherDataSet ds : (List<AggregatedWeatherDataSet>) (q.getResultList())) {
+      result.add(ds);
+    }
+    em.close();
+    return result;
   }
 
   public SmoothedWeatherDataSet fetchOldestSmoothedDataSetInRange(Date begin, Date end) {
