@@ -1,10 +1,7 @@
 package org.voegtle.weatherstation.server.persistence;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class PersistenceManager {
   private static final String PERSISTENCE_UNIT_NAME = "transactions-optional";
@@ -61,6 +58,29 @@ public class PersistenceManager {
 
     em.close();
     return persisted;
+  }
+
+  public void makePersistant(WeatherLocation location) {
+    EntityManager em = factory.createEntityManager();
+
+    em.getTransaction().begin();
+    em.persist(location);
+    em.getTransaction().commit();
+
+    em.close();
+  }
+
+  public HashMap<String, WeatherLocation> fetchWeatherLocations() {
+    EntityManager em = factory.createEntityManager();
+    Query q = em.createQuery("SELECT location FROM WeatherLocation location");
+
+    HashMap<String, WeatherLocation> result = new HashMap<>();
+    for (WeatherLocation location : (List<WeatherLocation>) (q.getResultList())) {
+      result.put(location.getLocation(), location);
+    }
+
+    em.close();
+    return result;
   }
 
   public void updateDataset(SmoothedWeatherDataSet ds) {
@@ -148,7 +168,6 @@ public class PersistenceManager {
     em.close();
     return result;
   }
-
 
 
   public List<AggregatedWeatherDataSet> fetchAggregatedWeatherDataInRange(Date begin, Date end) {

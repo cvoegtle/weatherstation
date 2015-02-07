@@ -44,6 +44,23 @@ var singleTestdaten = {
   "temperature": 5.3
 };
 
+function fetchAllWeatherData(processWeatherData, reportConnectionProblem) {
+  var ajaxRequest = new XMLHttpRequest();
+  ajaxRequest.onload = function () {
+    var weatherData = JSON.parse(ajaxRequest.responseText);
+    processWeatherData(weatherData);
+
+
+  };
+  ajaxRequest.onerror = reportConnectionProblem;
+
+  ajaxRequest.open("get", "/weatherstation/read?locations=tegelweg8,ochsengasse,forstweg17&ext", true);
+  ajaxRequest.send();
+
+//    processWeatherData(singleTestdaten);
+
+}
+
 function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
   var ajaxRequest = new XMLHttpRequest();
   ajaxRequest.onload = function () {

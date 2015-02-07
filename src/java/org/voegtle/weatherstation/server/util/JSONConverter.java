@@ -77,6 +77,10 @@ public class JSONConverter {
         }
 
         json.put("humidity", wds.getOutsideHumidity());
+        if (wds.getInsideHumidity() != null && extended) {
+          json.put("inside_humidity", wds.getInsideHumidity());
+        }
+
         if (previousRainCounter != null && wds.getRainCounter() != null) {
           double rain = 0.295 * (wds.getRainCounter() - previousRainCounter);
           json.put("rain", Math.max(rain, 0));

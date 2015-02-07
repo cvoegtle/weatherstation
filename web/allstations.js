@@ -202,7 +202,7 @@ function init() {
 
   var workingArea = new WorkingArea();
 
-  fetchWeatherData(updateWeatherView, reportConnectionProblem, "all");
-  window.setInterval(fetchWeatherData, 3 * 60 * 1000, updateWeatherView, reportConnectionProblem, "all");
+  fetchAllWeatherData(updateWeatherView, reportConnectionProblem, "all");
+  window.setInterval(fetchAllWeatherData, 3 * 60 * 1000, updateWeatherView, reportConnectionProblem, "all");
 }
 

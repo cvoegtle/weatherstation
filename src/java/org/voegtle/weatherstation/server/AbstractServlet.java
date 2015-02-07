@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.WeatherLocation;
 import org.voegtle.weatherstation.server.util.HashService;
 import org.voegtle.weatherstation.server.util.JSONConverter;
 import org.voegtle.weatherstation.server.util.StringUtil;
@@ -30,21 +31,33 @@ public abstract class AbstractServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
 
-/*    LocationProperties lp = createLocationProperties();
-    pm.makePersistant(lp);
-*/
+/*    WeatherLocation location = createWeatherLocation();
+    pm.makePersistant(location);
+
+    LocationProperties lp = createLocationProperties();
+    pm.makePersistant(lp); */
+
     locationProperties = pm.fetchLocationProperties();
     jsonConverter = new JSONConverter(locationProperties);
   }
 
   private LocationProperties createLocationProperties() {
     LocationProperties lp = new LocationProperties();
-    lp.setLocation("Images");
-    lp.setAddress("Imageweg 8");
+    lp.setLocation("Central");
+    lp.setAddress("Wetter Central");
     lp.setCity("Paderborn");
     lp.setWeatherForecast("");
     lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
     return lp;
+  }
+
+  private WeatherLocation createWeatherLocation() {
+    WeatherLocation location = new WeatherLocation();
+    location.setLocation("ochsengasse");
+    location.setHost("oxenwetter.appspot.com");
+    location.setForwardSecret(false);
+
+    return location;
   }
 
   protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list, boolean extended) {
