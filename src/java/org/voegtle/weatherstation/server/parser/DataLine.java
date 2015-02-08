@@ -23,6 +23,10 @@ public class DataLine {
     return values.get(index);
   }
 
+  public int size() {
+    return values.size();
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

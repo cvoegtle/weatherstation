@@ -58,7 +58,7 @@ public class WeatherDataAggregator {
   private Date fetchDateOfLastAggregation() {
     AggregatedWeatherDataSet lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY);
 
-    return lastAggregatedDay == null ? DateUtil.getDate(2014, 9, 24) : lastAggregatedDay.getDate();
+    return lastAggregatedDay == null ? DateUtil.getDate(2015, 2, 6) : lastAggregatedDay.getDate();
   }
 
   private Date fetchLastDateWithCompleteWeatherDataSets() {

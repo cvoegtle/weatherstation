@@ -32,6 +32,7 @@ public class WeatherDataImporter {
       boolean persisted = false;
       DataParser parser = new DataParser();
       List<WeatherDataSet> dataSets = parser.parse(lines);
+      log.info("Number of valid datasets: " + dataSets.size());
       for (WeatherDataSet dataSet : dataSets) {
         if (isNotOutdated(dataSet)) {
           if (pm.makePersitant(dataSet)) {
