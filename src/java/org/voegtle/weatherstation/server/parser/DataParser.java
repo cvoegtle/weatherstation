@@ -87,7 +87,7 @@ public class DataParser {
   }
 
   private boolean isValid(DataLine data) {
-    return data.size() > INDEX_DATE;
+    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(INDEX_OUTSIDE_TEMPERATURE));
   }
 
   private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";

@@ -48,6 +48,14 @@ abstract class AbstractUrlParameter {
     return result;
   }
 
+  protected Integer getUrlParameterInteger(String paramName) {
+    String param = request.getParameter(paramName);
+    if (StringUtil.isNotEmpty(param)) {
+      return new Integer(param);
+    }
+    return null;
+  }
+
   protected DataType getUrlParameterType(String paramName) {
     String param = request.getParameter(paramName);
     return DataType.fromString(param);

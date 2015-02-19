@@ -26,8 +26,12 @@ public class ImageServlet extends AbstractServlet {
 
     ImageUrlParameter param = new ImageUrlParameter(request);
     if (param.isRefresh()) {
-      imageCache.refresh();
+      imageCache.refresh(param.getBegin(), param.getEnd());
       response.getWriter().write("ACK " + imageCache.size());
+      response.getWriter().close();
+    } else if (param.isClear()) {
+      imageCache.clear();
+      response.getWriter().write("ACK");
       response.getWriter().close();
     } else {
       if (StringUtil.isNotEmpty(param.getOid())) {

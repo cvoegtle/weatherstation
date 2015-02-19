@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ public class ImageCache {
   protected static final Logger log = Logger.getLogger("ImageCacheLogger");
 
   private static final String imageServerUrl = "https://docs.google.com/spreadsheet/oimg?key=0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc";
+  private static final int TIMEOUT = 10000;
 
   private HashMap<String, Image> images = new HashMap<>();
   private KnownImages knownImages;
@@ -27,16 +29,30 @@ public class ImageCache {
     knownImages.init();
   }
 
-  public void refresh() throws IOException {
+  public void clear() {
     images.clear();
+  }
+
+  public void refresh(Integer begin, Integer end) throws IOException {
+    Integer index = 0;
     for (ImageIdentifier id : knownImages.values()) {
-      get(id);
+      if (begin == null || index.compareTo(begin) >= 0) {
+        get(id, true);
+      }
+      if (index.equals(end)) {
+        break;
+      }
+      index++;
     }
   }
 
   public Image get(ImageIdentifier identifier) {
+    return get(identifier, false);
+  }
+
+  private Image get(ImageIdentifier identifier, boolean forceReload) {
     Image image = images.get(identifier.getOid());
-    if (image == null || image.isOld()) {
+    if (image == null || image.isOld() || forceReload) {
       image = fetchImageRepeated(identifier);
       if (image != null) {
         images.put(image.getOid(), image);
@@ -47,6 +63,7 @@ public class ImageCache {
   }
 
   private Image fetchImageRepeated(ImageIdentifier identifier) {
+    log.info("fetch image " + identifier.getOid() + ", " + identifier.getZx());
     Image image = null;
     try {
       image = fetch(identifier);
@@ -55,9 +72,9 @@ public class ImageCache {
       try {
         Thread.sleep(1500);
         image = fetch(identifier);
-        log.info("repeated image fetch " + identifier.getOid() + ", " + identifier.getZx());
+        log.info("repeated image fetch " + identifier.getOid() + ", " + identifier.getZx() + "\n" + e.getMessage());
       } catch (IOException | InterruptedException e1) {
-        log.info("failed to fetch image " + identifier.getOid() + ", " + identifier.getZx());
+        log.info("failed to fetch image " + identifier.getOid() + ", " + identifier.getZx() + "\n" + e1.getMessage());
       }
     }
     return image;
@@ -65,7 +82,9 @@ public class ImageCache {
 
   private Image fetch(ImageIdentifier identifier) throws IOException {
     URL url = new URL(imageServerUrl + identifier.asUrlParameter());
-    InputStream in = url.openStream();
+    URLConnection connection = url.openConnection();
+    connection.setConnectTimeout(TIMEOUT);
+    InputStream in = connection.getInputStream();
 
     byte[] buffer = new byte[4096];
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
