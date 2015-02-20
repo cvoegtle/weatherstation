@@ -39,6 +39,8 @@ public class JSONConverter {
       json.put("wind", currentWeatherData.getWindspeed());
 
       json.put("location", locationProperties.getCity());
+      json.put("location_short", locationProperties.getCityShortcut());
+
       json.put("id", locationProperties.getLocation());
       if (extended) {
         json.put("forecast", locationProperties.getWeatherForecast());

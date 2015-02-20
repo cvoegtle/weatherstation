@@ -16,6 +16,7 @@ public class LocationProperties {
 
   private String location;
   private String city;
+  private String cityShortcut;
 
   private String address;
 
@@ -54,6 +55,14 @@ public class LocationProperties {
 
   public void setCity(String city) {
     this.city = city;
+  }
+
+  public String getCityShortcut() {
+    return cityShortcut;
+  }
+
+  public void setCityShortcut(String cityShortcut) {
+    this.cityShortcut = cityShortcut;
   }
 
   public String getAddress() {
