@@ -31,6 +31,7 @@ public class UploadServlet extends AbstractServlet {
         result = ResponseCode.WRONG_LOCATION;
       }
     } else {
+      log.warning("request without authorisation. Sent secret: " + param.getSecret());
       result = ResponseCode.NOT_AUTHORIZED;
     }
 
