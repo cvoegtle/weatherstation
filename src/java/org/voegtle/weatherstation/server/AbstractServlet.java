@@ -34,8 +34,8 @@ public abstract class AbstractServlet extends HttpServlet {
 //    WeatherLocation location = createWeatherLocation();
 //    pm.makePersistant(location);
 
-//    LocationProperties lp = createLocationProperties();
-//    pm.makePersistant(lp);
+    //LocationProperties lp = createLocationProperties();
+    //pm.makePersistant(lp);
 
     locationProperties = pm.fetchLocationProperties();
     jsonConverter = new JSONConverter(locationProperties);
@@ -43,11 +43,13 @@ public abstract class AbstractServlet extends HttpServlet {
 
   private LocationProperties createLocationProperties() {
     LocationProperties lp = new LocationProperties();
-    lp.setLocation("instant");
-    lp.setAddress("Mobile Wetterstation");
-    lp.setCity("unbekannt");
+    lp.setLocation("bali");
+    lp.setAddress("Auf der Mersch 17");
+    lp.setCityShortcut("Bali");
+    lp.setCity("Bad Lippspringe");
     lp.setWeatherForecast("");
-    lp.setSecretHash("2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4");
+    lp.setSecretHash("a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c");
+    lp.setReadHash("a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c");
     return lp;
   }
 
