@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server.logic;
 
 import org.voegtle.weatherstation.server.data.RainDTO;
+import org.voegtle.weatherstation.server.data.Statistics;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
@@ -24,6 +25,11 @@ public class WeatherDataFetcher {
 
   public List<SmoothedWeatherDataSet> fetchSmoothedWeatherData(Date begin, Date end) {
     return pm.fetchSmoothedWeatherDataInRange(begin, end);
+  }
+
+  public List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
+    Date today = DateUtil.getToday();
+    return pm.fetchSmoothedWeatherDataInRange(DateUtil.fromCESTtoGMT(today), null);
   }
 
   public SmoothedWeatherDataSet getFirstDataSetOfToday() {
@@ -59,52 +65,53 @@ public class WeatherDataFetcher {
     return dto;
   }
 
-  public RainDTO fetchRainData() {
-    RainDTO rainDTO = new RainDTO();
+  public Statistics fetchStatistics() {
+    Statistics stats = new Statistics();
+    buildHistoricStatistics(stats);
+    buildTodaysStatistics(stats);
+    return stats;
+  }
 
-    SmoothedWeatherDataSet today = getFirstDataSetOfToday();
-    WeatherDataSet latest = pm.fetchYoungestDataSet();
-    SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
-
-    rainDTO.setLastHour(calculateRain(latest, oneHourBefore));
-    Float rainToday = calculateRain(latest, today);
-    rainDTO.setToday(rainToday);
-
+  private void buildHistoricStatistics(Statistics stats) {
     Date yesterday = DateUtil.getYesterday();
     List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(DateUtil.daysEarlier(yesterday, 29), yesterday, false);
-    AggregatedWeatherDataSet yesterdaysData = dataSets.get(0);
-    if (yesterdaysData != null) {
-      rainDTO.setYesterday(calculateRain(yesterdaysData.getRainCounter(), 0));
-    }
 
-    int days = 0;
-    int rainCountWeek = 0;
-    int rainCount30days = 0;
-    for (AggregatedWeatherDataSet ads : dataSets) {
-      if (days < 6) {
-        rainCountWeek += ads.getRainCounter();
+    int day = 1;
+    for (AggregatedWeatherDataSet dataSet : dataSets) {
+      Statistics.TimeRange range = Statistics.TimeRange.byDay(day++);
+
+      Float rain = calculateRain(dataSet.getRainCounter(), 0);
+      if (rain != null) {
+        stats.addRain(range, rain);
       }
-      rainCount30days += ads.getRainCounter();
-      days++;
+      stats.setTemperature(range, dataSet.getOutsideTemperatureMax());
+      stats.setTemperature(range, dataSet.getOutsideTemperatureMin());
     }
+  }
 
-    float rainWeek = (float) (rainCountWeek * 0.295);
-    float rain30days = (float) (rainCount30days * 0.295);
+  private void buildTodaysStatistics(Statistics stats) {
+    List<SmoothedWeatherDataSet> todaysDataSets = fetchTodaysDataSets();
 
-    if (rainToday != null) {
-      rainWeek += rainToday;
-      rain30days += rainToday;
+    if (todaysDataSets.size() > 0) {
+      SmoothedWeatherDataSet firstSet = todaysDataSets.get(0);
+      WeatherDataSet latest = pm.fetchYoungestDataSet();
+      SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
+      stats.setRainLastHour(calculateRain(latest, oneHourBefore));
+
+      stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet));
+      stats.setTemperature(Statistics.TimeRange.today, latest.getOutsideTemperature());
+
+      for (SmoothedWeatherDataSet dataSet : todaysDataSets) {
+        stats.setTemperature(Statistics.TimeRange.today, dataSet.getOutsideTemperature());
+      }
     }
+  }
 
-    if (rainWeek > 0.1) {
-      rainDTO.setLastWeek(rainWeek);
-    }
 
-    if (rain30days > 0.1) {
-      rainDTO.setLast30Days(rain30days);
-    }
+  public RainDTO fetchRainData() {
+    Statistics statistics = fetchStatistics();
 
-    return rainDTO;
+    return statistics.toRainDTO();
   }
 
   private Float calculateRain(WeatherDataSet latest, SmoothedWeatherDataSet previous) {

@@ -3,6 +3,8 @@ package org.voegtle.weatherstation.server.util;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.voegtle.weatherstation.server.data.RainDTO;
+import org.voegtle.weatherstation.server.data.Statistics;
+import org.voegtle.weatherstation.server.data.StatisticsSet;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
@@ -127,4 +129,30 @@ public class JSONConverter {
     return jsonObjects;
   }
 
+  public List<JSONObject> toJson(Statistics stats) {
+    ArrayList<JSONObject> jsonObjects = new ArrayList<>();
+    if (stats.getRainLastHour() != null) {
+      StatisticsSet lastHour = new StatisticsSet();
+      lastHour.addRain(stats.getRainLastHour());
+      jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour));
+    }
+
+    jsonObjects.add(toJson(Statistics.TimeRange.today, stats.getToday()));
+    jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.getYesterday()));
+    jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.getLast7days()));
+    jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.getLast30days()));
+    return jsonObjects;
+  }
+
+  public JSONObject toJson(Statistics.TimeRange range, StatisticsSet set) {
+    JSONObject json = new WeatherJSONObject();
+    try {
+      json.put("type", range);
+      json.put("rain", set.getRain());
+      json.put("minTemperature", set.getMinTemperature());
+      json.put("maxTemperature", set.getMaxTemperature());
+    } catch (JSONException ignored) {
+    }
+    return json;
+  }
 }

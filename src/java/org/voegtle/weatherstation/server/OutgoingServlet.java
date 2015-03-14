@@ -2,6 +2,7 @@ package org.voegtle.weatherstation.server;
 
 import org.json.JSONObject;
 import org.voegtle.weatherstation.server.data.RainDTO;
+import org.voegtle.weatherstation.server.data.Statistics;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.logic.WeatherDataFetcher;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
@@ -45,6 +46,9 @@ public class OutgoingServlet extends AbstractServlet {
     } else if (param.getType() == DataType.RAIN) {
       RainDTO rainData = weatherDataFetcher.fetchRainData();
       writeResponse(response, jsonConverter.toJson(rainData));
+    } else if (param.getType() == DataType.STATS) {
+      Statistics stats = weatherDataFetcher.fetchStatistics();
+      writeResponse(response, jsonConverter.toJson(stats));
     } else if (param.getType() == DataType.ALL) {
       try {
         ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
@@ -67,7 +71,9 @@ public class OutgoingServlet extends AbstractServlet {
         log.severe("Exception while reading weather data " + ex.toString());
       }
 
-    } else if (param.getBegin() != null) {
+    } else if (param.getBegin() != null)
+
+    {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
       returnDetailedResult(response, result, authorized);
     }

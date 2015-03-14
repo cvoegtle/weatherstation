@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.request;
 
 public enum DataType {
-  AGGREGATED("aggregated"), DETAIL("detail"), CURRENT("current"), ALL("all"), RAIN("rain"), UNDEFINED("undefined");
+  AGGREGATED("aggregated"), DETAIL("detail"), CURRENT("current"), ALL("all"), RAIN("rain"), STATS("stats"), UNDEFINED("undefined");
 
   private final String name;
 
