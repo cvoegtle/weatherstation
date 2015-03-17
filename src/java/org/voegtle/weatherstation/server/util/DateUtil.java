@@ -4,9 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 
 public class DateUtil {
   private static final TimeZone timezone = TimeZone.getTimeZone("Europe/Berlin");
+  private static final Logger log = Logger.getLogger(DateUtil.class.getName());
+
 
   public static Date fromCESTtoGMT(Date date) {
     Calendar cal = Calendar.getInstance(Locale.UK);
@@ -37,7 +40,7 @@ public class DateUtil {
 
   public static Date getYesterday() {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
-    cal.setTime(fromCESTtoGMT(cal.getTime()));
+    cal.setTime(fromGMTtoCEST(cal.getTime()));
     removeTimeFraction(cal);
 
     cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -47,7 +50,7 @@ public class DateUtil {
 
   public static Date getToday() {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
-    cal.setTime(fromCESTtoGMT(cal.getTime()));
+    cal.setTime(fromGMTtoCEST(cal.getTime()));
     removeTimeFraction(cal);
 
     return cal.getTime();
