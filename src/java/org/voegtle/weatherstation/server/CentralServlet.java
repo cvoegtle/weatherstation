@@ -38,7 +38,7 @@ public class CentralServlet extends AbstractServlet {
       WeatherLocation location = locations.get(locationIdentifier);
       if (location != null) {
         log.info("fetch data from " + location.getHost());
-        WeatherUrl url = new WeatherUrl(location, param.isExtended(), param.getSecret());
+        WeatherUrl url = new WeatherUrl(location, param.getType(), param.isExtended(), param.getSecret());
         fetchWeatherData(collectedWeatherData, url);
       }
     }
@@ -49,8 +49,8 @@ public class CentralServlet extends AbstractServlet {
 
   private void fetchWeatherData(ArrayList<JSONObject> collectedWeatherData, WeatherUrl weatherUrl) {
     try {
-      JSONObject bonnCurrent = getWeatherDataFromUrl(weatherUrl.getUrl());
-      collectedWeatherData.add(bonnCurrent);
+      JSONObject current = getWeatherDataFromUrl(weatherUrl.getUrl());
+      collectedWeatherData.add(current);
     } catch (Exception ex) {
       log.severe(ex.toString());
     }

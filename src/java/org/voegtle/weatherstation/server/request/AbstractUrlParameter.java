@@ -56,6 +56,15 @@ abstract class AbstractUrlParameter {
     return null;
   }
 
+  protected DataType getUrlParameterType(String paramName, DataType defaultType) {
+    String param = request.getParameter(paramName);
+    DataType dataType = DataType.fromString(param);
+    if (dataType.equals(DataType.UNDEFINED)) {
+      dataType = defaultType;
+    }
+    return dataType;
+  }
+
   protected DataType getUrlParameterType(String paramName) {
     String param = request.getParameter(paramName);
     return DataType.fromString(param);

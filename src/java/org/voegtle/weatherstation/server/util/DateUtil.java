@@ -37,6 +37,7 @@ public class DateUtil {
 
   public static Date getYesterday() {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
+    cal.setTime(fromCESTtoGMT(cal.getTime()));
     removeTimeFraction(cal);
 
     cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -46,6 +47,7 @@ public class DateUtil {
 
   public static Date getToday() {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
+    cal.setTime(fromCESTtoGMT(cal.getTime()));
     removeTimeFraction(cal);
 
     return cal.getTime();
@@ -97,18 +99,6 @@ public class DateUtil {
 
     cal.setTime(start);
     cal.add(Calendar.HOUR_OF_DAY, 1);
-
-    return cal.getTime();
-  }
-
-  public static Date endOfDay(Date date) {
-    Calendar cal = Calendar.getInstance(Locale.GERMANY);
-
-    cal.setTime(date);
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-    cal.set(Calendar.MILLISECOND, 0);
 
     return cal.getTime();
   }
