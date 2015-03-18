@@ -5,8 +5,11 @@ import org.voegtle.weatherstation.server.util.DateUtil;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class WeatherDataAggregator {
+  private static final Logger log = Logger.getLogger(WeatherDataAggregator.class.getName());
+
   private final PersistenceManager pm;
 
   public WeatherDataAggregator(PersistenceManager pm) {
@@ -19,6 +22,7 @@ public class WeatherDataAggregator {
 
     while (DateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       AggregatedWeatherDataSet aggregatedDay = createNewDay(dateOfLastAggregation);
+      log.warning("aggregate " + aggregatedDay.getDate());
       List<SmoothedWeatherDataSet> weatherDataSets = pm.fetchSmoothedWeatherDataInRange(DateUtil.fromCESTtoGMT(aggregatedDay.getDate()),
           DateUtil.fromCESTtoGMT(DateUtil.nextDay(aggregatedDay.getDate())));
       aggregate(aggregatedDay, weatherDataSets);
@@ -57,14 +61,14 @@ public class WeatherDataAggregator {
 
   private Date fetchDateOfLastAggregation() {
     AggregatedWeatherDataSet lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY);
-
-    return lastAggregatedDay == null ? DateUtil.getDate(2015, 2, 26) : lastAggregatedDay.getDate();
+    return lastAggregatedDay == null ? DateUtil.getDate(2015, 3, 16) : lastAggregatedDay.getDate();
   }
 
   private Date fetchLastDateWithCompleteWeatherDataSets() {
     WeatherDataSet youngest = pm.fetchYoungestDataSet();
     Date timestamp = DateUtil.daysEarlier(youngest.getTimestamp(), 1);
-    return DateUtil.toDate(timestamp);
+    timestamp = DateUtil.fromGMTtoCEST(timestamp);
+    return timestamp;
   }
 
   private AggregatedWeatherDataSet createNewDay(Date lastDay) {

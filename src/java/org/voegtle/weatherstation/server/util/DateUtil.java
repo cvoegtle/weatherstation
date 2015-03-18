@@ -58,10 +58,11 @@ public class DateUtil {
 
   public static boolean isClearlyBefore(Date date, Date compareWith) {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
-    cal.setTime(compareWith);
-    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(compareWith));
+    cal.setTime(date);
+    cal.add(Calendar.DAY_OF_YEAR, 1);
+    cal.add(Calendar.MINUTE, 15);
 
-    return date.before(cal.getTime());
+    return cal.getTime().before(compareWith);
   }
 
   /**
