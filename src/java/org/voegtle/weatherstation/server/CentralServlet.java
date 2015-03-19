@@ -58,7 +58,7 @@ public class CentralServlet extends AbstractServlet {
 
   private JSONObject getWeatherDataFromUrl(URL url) throws Exception {
     StringBuilder received = new StringBuilder();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "ISO-8859-1"));
     String line;
     while ((line = reader.readLine()) != null) {
       received.append(line);
