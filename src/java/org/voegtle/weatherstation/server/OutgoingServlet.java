@@ -71,9 +71,7 @@ public class OutgoingServlet extends AbstractServlet {
         log.severe("Exception while reading weather data " + ex.toString());
       }
 
-    } else if (param.getBegin() != null)
-
-    {
+    } else if (param.getBegin() != null) {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
       returnDetailedResult(response, result, authorized);
     }
