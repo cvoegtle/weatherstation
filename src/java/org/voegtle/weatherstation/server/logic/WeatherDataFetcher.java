@@ -34,8 +34,9 @@ public class WeatherDataFetcher {
 
   public SmoothedWeatherDataSet getFirstDataSetOfToday() {
     Date today = DateUtil.getToday();
+    today = DateUtil.fromCESTtoGMT(today);
     Date oneHourLater = DateUtil.incrementHour(today);
-    return pm.fetchOldestSmoothedDataSetInRange(DateUtil.fromCESTtoGMT(today), DateUtil.fromCESTtoGMT(oneHourLater));
+    return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
   }
 
   public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized) {
