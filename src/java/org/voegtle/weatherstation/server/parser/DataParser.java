@@ -19,6 +19,7 @@ public class DataParser {
   private static final int INDEX_RAINCOUNTER = 22;
   private static final int INDEX_RAINING = 23;
   private static final int INDEX_DATE = 25;
+  private static final int INDEX_WATT = 26;
 
   private static final Date MIN_DATE = DateUtil.getDate(2014, 1, 1);
 
@@ -69,6 +70,7 @@ public class DataParser {
       dataSet.setRaining(parseBoolean(data.get(INDEX_RAINING)));
 
       dataSet.setWindspeed(parseFloat(data.get(INDEX_WIND_SPEED)));
+      dataSet.setWatt(parseFloat(data.get(INDEX_WATT)));
 
       return dataSet;
     } else {

@@ -13,6 +13,7 @@ public class UnformattedWeatherDTO implements Serializable {
   private Float rainToday;
   private Float windspeed;
   private Float insideHumidity;
+  private Float watt;
 
   public UnformattedWeatherDTO() {
   }
@@ -88,4 +89,14 @@ public class UnformattedWeatherDTO implements Serializable {
   public void setInsideHumidity(Float insideHumidity) {
     this.insideHumidity = insideHumidity;
   }
+
+  public Float getWatt() {
+    return watt;
+  }
+
+  public void setWatt(Float watt) {
+    this.watt = watt;
+  }
+
+
 }

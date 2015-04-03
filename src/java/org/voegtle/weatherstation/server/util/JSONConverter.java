@@ -39,6 +39,9 @@ public class JSONConverter {
       json.put("rain_today", currentWeatherData.getRainToday());
       json.put("raining", currentWeatherData.isRaining());
       json.put("wind", currentWeatherData.getWindspeed());
+      if (currentWeatherData.getWatt() != null) {
+        json.put("watt", currentWeatherData.getWatt());
+      }
 
       json.put("location", locationProperties.getCity());
       json.put("location_short", locationProperties.getCityShortcut());
@@ -95,6 +98,10 @@ public class JSONConverter {
         previousRainCounter = wds.getRainCounter();
         json.put("wind", wds.getWindspeed());
         json.put("windMax", wds.getWindspeedMax());
+
+        if (wds.getWatt() != null) {
+          json.put("watt", wds.getWatt());
+        }
       } catch (JSONException ignored) {
       }
       jsonObjects.add(json);

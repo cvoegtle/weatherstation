@@ -49,7 +49,8 @@ public class WeatherDataFetcher {
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
     dto.setRaining(latest.isRaining());
-    dto.setWindspeed(latest.getWindSpeed());
+    dto.setWindspeed(latest.getWindspeed());
+    dto.setWatt(latest.getWatt());
     if (authorized) {
       dto.setInsideTemperature(latest.getInsideTemperature());
       dto.setInsideHumidity(latest.getInsideHumidity());

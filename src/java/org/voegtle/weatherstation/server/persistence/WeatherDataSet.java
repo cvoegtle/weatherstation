@@ -1,13 +1,12 @@
 package org.voegtle.weatherstation.server.persistence;
 
-import java.util.Date;
+import com.google.appengine.api.datastore.Key;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.google.appengine.api.datastore.Key;
+import java.util.Date;
 
 @Entity
 public class WeatherDataSet {
@@ -24,6 +23,7 @@ public class WeatherDataSet {
   private Boolean raining;
 
   private Float windspeed;
+  private Float watt;
 
   public WeatherDataSet() {
   }
@@ -100,7 +100,17 @@ public class WeatherDataSet {
     this.windspeed = windspeed;
   }
 
-  public Float getWindSpeed() {
+  public Float getWindspeed() {
     return windspeed;
   }
+
+  public Float getWatt() {
+    return watt;
+  }
+
+  public void setWatt(Float watt) {
+    this.watt = watt;
+  }
+
+
 }
