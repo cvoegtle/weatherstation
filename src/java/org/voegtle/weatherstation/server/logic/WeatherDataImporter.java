@@ -44,7 +44,10 @@ public class WeatherDataImporter {
       if (persisted) {
         new WeatherDataSmoother(pm).smoothWeatherData();
         new WeatherDataAggregator(pm).aggregateWeatherData();
+      } else {
+        log.warning("no dataset has been persisted");
       }
+
       result = persisted ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
     } catch (ParseException ex) {
       log.log(Level.SEVERE, "parsing failed", ex);
@@ -54,7 +57,11 @@ public class WeatherDataImporter {
   }
 
   private boolean isNotOutdated(WeatherDataSet dataSet) {
-    return importedUntil.before(dataSet.getTimestamp());
+    boolean outdated = importedUntil.before(dataSet.getTimestamp());
+    if (outdated) {
+      log.warning("WeatherDataSet from " + dataSet.getTimestamp() + " is outdated. import until: " + importedUntil);
+    }
+    return outdated;
   }
 
   private Date getDateOfLastDataSet() {
