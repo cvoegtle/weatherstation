@@ -36,6 +36,9 @@ public class WeatherDataAggregator {
     if (weatherDataSets.size() > 0) {
       Integer rainCountStart = null;
       Integer rainCountLast = null;
+
+      Float kwhStart = null;
+      Float kwhLast = null;
       for (SmoothedWeatherDataSet wds : weatherDataSets) {
         if (wds.isValid()) {
           aggregation.addOutsideTemperature(wds.getOutsideTemperature(), wds.getTimestamp());
@@ -46,12 +49,20 @@ public class WeatherDataAggregator {
             rainCountStart = wds.getRainCounter();
           }
           rainCountLast = wds.getRainCounter();
+          if (kwhStart == null) {
+            kwhStart = wds.getKwh();
+          }
+          kwhLast = wds.getKwh();
         }
       }
 
       if (rainCountStart != null) {
         aggregation.setRainCounter(Math.max(rainCountLast - rainCountStart, 0));
         aggregation.setRainDays(rainCountLast > rainCountStart ? 1 : 0);
+      }
+
+      if (kwhStart != null && kwhLast != null) {
+        aggregation.setKwh(Math.max(kwhLast - kwhStart, 0));
       }
 
       aggregation.normalize();

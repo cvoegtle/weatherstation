@@ -57,11 +57,11 @@ public class WeatherDataImporter {
   }
 
   private boolean isNotOutdated(WeatherDataSet dataSet) {
-    boolean outdated = importedUntil.before(dataSet.getTimestamp());
-    if (outdated) {
+    boolean notOutdated = importedUntil.before(dataSet.getTimestamp());
+    if (!notOutdated) {
       log.warning("WeatherDataSet from " + dataSet.getTimestamp() + " is outdated. import until: " + importedUntil);
     }
-    return outdated;
+    return notOutdated;
   }
 
   private Date getDateOfLastDataSet() {

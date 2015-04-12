@@ -67,6 +67,23 @@ public class Statistics {
     last30days.addRain(rain);
   }
 
+  public void addKwh(TimeRange range, Float kwh) {
+    switch (range) {
+      case today:
+        today.addKwh(kwh);
+        last7days.addKwh(kwh);
+        break;
+      case yesterday:
+        yesterday.addKwh(kwh);
+        last7days.addKwh(kwh);
+        break;
+      case last7days:
+        last7days.addKwh(kwh);
+        break;
+    }
+    last30days.addKwh(kwh);
+  }
+
   public StatisticsSet getToday() {
     return today;
   }

@@ -24,6 +24,7 @@ public class WeatherDataSet {
 
   private Float windspeed;
   private Float watt;
+  private Float kwh;
 
   public WeatherDataSet() {
   }
@@ -112,5 +113,11 @@ public class WeatherDataSet {
     this.watt = watt;
   }
 
+  public Float getKwh() {
+    return kwh;
+  }
 
+  public void setKwh(Float kwh) {
+    this.kwh = kwh;
+  }
 }

@@ -21,6 +21,7 @@ public class SmoothedWeatherDataSet {
   private Float windspeed;
   private Float windspeedMax;
   private Float watt;
+  private Float kwh;
 
   @Transient
   private int countOutsideTemperature = 0;
@@ -53,6 +54,7 @@ public class SmoothedWeatherDataSet {
     addWindspeed(wds.getWindspeed());
     setWindspeedMaxIfMax(wds.getWindspeed());
     addWatt(wds.getWatt());
+    addKwh(wds.getKwh());
   }
 
   public void normalize() {
@@ -153,7 +155,7 @@ public class SmoothedWeatherDataSet {
       }
     }
   }
-  
+
   private void addWatt(Float value) {
     if (value != null) {
       countWatt++;
@@ -161,6 +163,14 @@ public class SmoothedWeatherDataSet {
         value = value + getWatt();
       }
       setWatt(value);
+    }
+  }
+
+  private void addKwh(Float value) {
+    if (value != null) {
+      if (getKwh() == null || value > getKwh()) {
+        setKwh(value);
+      }
     }
   }
 
@@ -250,5 +260,13 @@ public class SmoothedWeatherDataSet {
 
   public void setWatt(Float watt) {
     this.watt = watt;
+  }
+
+  public Float getKwh() {
+    return kwh;
+  }
+
+  public void setKwh(Float kwh) {
+    this.kwh = kwh;
   }
 }

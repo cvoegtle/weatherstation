@@ -53,6 +53,8 @@ public class AggregatedWeatherDataSet {
   private int rainCounter;
   private int rainDays;
 
+  private Float kwh;
+
   public AggregatedWeatherDataSet() {
   }
 
@@ -296,4 +298,11 @@ public class AggregatedWeatherDataSet {
     this.windspeedAverage = windspeedAverage;
   }
 
+  public Float getKwh() {
+    return kwh;
+  }
+
+  public void setKwh(Float kwh) {
+    this.kwh = kwh;
+  }
 }

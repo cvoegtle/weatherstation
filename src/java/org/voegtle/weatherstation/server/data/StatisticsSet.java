@@ -4,6 +4,7 @@ public class StatisticsSet {
   Float rain;
   Float maxTemperature;
   Float minTemperature;
+  Float kwh;
 
   public StatisticsSet() {
   }
@@ -45,4 +46,19 @@ public class StatisticsSet {
     return maxTemperature;
   }
 
+  public void addKwh(Float kwh) {
+    if (kwh == null) {
+      return;
+    }
+
+    if (this.kwh == null) {
+      this.kwh = kwh;
+    } else {
+      this.kwh += kwh;
+    }
+  }
+
+  public Float getKwh() {
+    return kwh;
+  }
 }

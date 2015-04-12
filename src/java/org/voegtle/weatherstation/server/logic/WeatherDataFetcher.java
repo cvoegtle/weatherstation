@@ -86,6 +86,8 @@ public class WeatherDataFetcher {
       if (rain != null) {
         stats.addRain(range, rain);
       }
+      stats.addKwh(range, calculateKwh(dataSet.getKwh(), 0.0f));
+
       stats.setTemperature(range, dataSet.getOutsideTemperatureMax());
       stats.setTemperature(range, dataSet.getOutsideTemperatureMin());
     }
@@ -101,6 +103,7 @@ public class WeatherDataFetcher {
       stats.setRainLastHour(calculateRain(latest, oneHourBefore));
 
       stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet));
+      stats.addKwh(Statistics.TimeRange.today, calculateKwh(latest, firstSet));
       stats.setTemperature(Statistics.TimeRange.today, latest.getOutsideTemperature());
 
       for (SmoothedWeatherDataSet dataSet : todaysDataSets) {
@@ -130,4 +133,18 @@ public class WeatherDataFetcher {
     }
     return null;
   }
+
+  private Float calculateKwh(WeatherDataSet latest, SmoothedWeatherDataSet previous) {
+    if (latest == null || previous == null || latest.getKwh() == null || previous.getKwh() == null) {
+      return null;
+    }
+    return calculateKwh(latest.getKwh(), previous.getKwh());
+  }
+
+  private Float calculateKwh(Float youngerKwh, Float olderKwh) {
+    float kwh = youngerKwh - olderKwh;
+    return kwh > 0 ? kwh : null;
+  }
+
+
 }
