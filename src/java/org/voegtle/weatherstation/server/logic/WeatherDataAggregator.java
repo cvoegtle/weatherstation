@@ -37,8 +37,8 @@ public class WeatherDataAggregator {
       Integer rainCountStart = null;
       Integer rainCountLast = null;
 
-      Float kwhStart = null;
-      Float kwhLast = null;
+      Double kwhStart = null;
+      Double kwhLast = null;
       for (SmoothedWeatherDataSet wds : weatherDataSets) {
         if (wds.isValid()) {
           aggregation.addOutsideTemperature(wds.getOutsideTemperature(), wds.getTimestamp());

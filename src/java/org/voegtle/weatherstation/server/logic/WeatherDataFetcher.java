@@ -86,7 +86,8 @@ public class WeatherDataFetcher {
       if (rain != null) {
         stats.addRain(range, rain);
       }
-      stats.addKwh(range, calculateKwh(dataSet.getKwh(), 0.0f));
+
+      stats.addKwh(range, calculateKwh(dataSet.getKwh(), 0.0d));
 
       stats.setTemperature(range, dataSet.getOutsideTemperatureMax());
       stats.setTemperature(range, dataSet.getOutsideTemperatureMin());
@@ -134,16 +135,19 @@ public class WeatherDataFetcher {
     return null;
   }
 
-  private Float calculateKwh(WeatherDataSet latest, SmoothedWeatherDataSet previous) {
+  private Double calculateKwh(WeatherDataSet latest, SmoothedWeatherDataSet previous) {
     if (latest == null || previous == null || latest.getKwh() == null || previous.getKwh() == null) {
       return null;
     }
     return calculateKwh(latest.getKwh(), previous.getKwh());
   }
 
-  private Float calculateKwh(Float youngerKwh, Float olderKwh) {
-    float kwh = youngerKwh - olderKwh;
-    return kwh > 0 ? kwh : null;
+  private Double calculateKwh(Double youngerKwh, Double olderKwh) {
+    if (youngerKwh != null && olderKwh != null) {
+      double kwh = youngerKwh - olderKwh;
+      return kwh > 0 ? kwh : null;
+    }
+    return null;
   }
 
 

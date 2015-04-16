@@ -72,7 +72,7 @@ public class DataParser {
 
       dataSet.setWindspeed(parseFloat(data.get(INDEX_WIND_SPEED)));
       dataSet.setWatt(parseFloat(data.get(INDEX_WATT)));
-      dataSet.setKwh(parseFloat(data.get(INDEX_KWH)));
+      dataSet.setKwh(parseDouble(data.get(INDEX_KWH)));
 
       return dataSet;
     } else {
@@ -106,6 +106,13 @@ public class DataParser {
       return null;
     }
     return Float.parseFloat(val.replace(',', '.'));
+  }
+
+  private Double parseDouble(String val) {
+    if (StringUtil.isEmpty(val)) {
+      return null;
+    }
+    return Double.parseDouble(val.replace(',', '.'));
   }
 
   private Integer parseInteger(String val) {

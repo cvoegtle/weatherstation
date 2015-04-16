@@ -21,7 +21,7 @@ public class SmoothedWeatherDataSet {
   private Float windspeed;
   private Float windspeedMax;
   private Float watt;
-  private Float kwh;
+  private Double kwh;
 
   @Transient
   private int countOutsideTemperature = 0;
@@ -166,7 +166,7 @@ public class SmoothedWeatherDataSet {
     }
   }
 
-  private void addKwh(Float value) {
+  private void addKwh(Double value) {
     if (value != null) {
       if (getKwh() == null || value > getKwh()) {
         setKwh(value);
@@ -262,11 +262,11 @@ public class SmoothedWeatherDataSet {
     this.watt = watt;
   }
 
-  public Float getKwh() {
+  public Double getKwh() {
     return kwh;
   }
 
-  public void setKwh(Float kwh) {
+  public void setKwh(Double kwh) {
     this.kwh = kwh;
   }
 }
