@@ -111,7 +111,7 @@ public class JSONConverter {
   }
 
 
-  public ArrayList<JSONObject> toJson(List<AggregatedWeatherDataSet> list) {
+  public ArrayList<JSONObject> toJsonAggregated(List<AggregatedWeatherDataSet> list, boolean extended) {
     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
 
     ArrayList<JSONObject> jsonObjects = new ArrayList<>();
@@ -129,6 +129,9 @@ public class JSONConverter {
         json.put("windMax", wds.getWindspeedMax());
         double rain = 0.295 * (wds.getRainCounter());
         json.put("rain", Math.max(rain, 0));
+        if (extended) {
+          json.put("kwh", wds.getKwh());
+        }
       } catch (JSONException ignored) {
       }
       jsonObjects.add(json);

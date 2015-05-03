@@ -39,7 +39,7 @@ public class OutgoingServlet extends AbstractServlet {
 
     if (param.getType() == DataType.AGGREGATED) {
       List<AggregatedWeatherDataSet> result = weatherDataFetcher.getAggregatedWeatherData(param.getBegin(), param.getEnd());
-      returnAggregatedResult(response, result);
+      returnAggregatedResult(response, result, param.isExtended());
     } else if (param.getType() == DataType.CURRENT) {
       UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
       returnCurrentWeatherData(response, currentWeatherData, param.isExtended());
@@ -102,8 +102,8 @@ public class OutgoingServlet extends AbstractServlet {
     return new JSONObject(received.toString());
   }
 
-  private void returnAggregatedResult(HttpServletResponse response, List<AggregatedWeatherDataSet> list) {
-    ArrayList<JSONObject> jsonObjects = jsonConverter.toJson(list);
+  private void returnAggregatedResult(HttpServletResponse response, List<AggregatedWeatherDataSet> list, boolean extended) {
+    ArrayList<JSONObject> jsonObjects = jsonConverter.toJsonAggregated(list, extended);
 
     writeResponse(response, jsonObjects);
 
