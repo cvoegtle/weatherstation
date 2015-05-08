@@ -49,11 +49,15 @@ abstract class AbstractUrlParameter {
   }
 
   protected Integer getUrlParameterInteger(String paramName) {
+    return getUrlParameterInteger(paramName, null);
+  }
+
+  protected Integer getUrlParameterInteger(String paramName, Integer defaultValue) {
     String param = request.getParameter(paramName);
     if (StringUtil.isNotEmpty(param)) {
       return new Integer(param);
     }
-    return null;
+    return defaultValue;
   }
 
   protected DataType getUrlParameterType(String paramName, DataType defaultType) {

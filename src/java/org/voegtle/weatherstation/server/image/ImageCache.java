@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class ImageCache {
   protected static final Logger log = Logger.getLogger("ImageCacheLogger");
 
-  private static final String imageServerUrl = "https://docs.google.com/spreadsheet/oimg?key=0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc";
+  private static final ImageServers imageServers = new ImageServers();
   private static final int TIMEOUT = 10000;
 
   private HashMap<String, Image> images = new HashMap<>();
@@ -81,6 +81,8 @@ public class ImageCache {
   }
 
   private Image fetch(ImageIdentifier identifier) throws IOException {
+    String imageServerUrl = imageServers.get(identifier.getSheet());
+
     URL url = new URL(imageServerUrl + identifier.asUrlParameter());
     URLConnection connection = url.openConnection();
     connection.setConnectTimeout(TIMEOUT);

@@ -35,7 +35,13 @@ public class ImageServlet extends AbstractServlet {
       response.getWriter().close();
     } else {
       if (StringUtil.isNotEmpty(param.getOid())) {
-        Image image = imageCache.get(new ImageIdentifier(param.getOid(), param.getZx()));
+        ImageIdentifier identifier;
+        if (StringUtil.isNotEmpty(param.getZx())) {
+          identifier = new ImageIdentifier(param.getOid(), param.getZx());
+        } else {
+          identifier = new ImageIdentifier(param.getSheet(), param.getOid(), param.getFormat());
+        }
+        Image image = imageCache.get(identifier);
 
         if (image != null) {
           response.setContentType("image/png");

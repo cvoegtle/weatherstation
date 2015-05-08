@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server.persistence;
 
 import com.google.appengine.api.datastore.Key;
+import org.voegtle.weatherstation.server.util.StringUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,19 +14,32 @@ public class ImageIdentifier {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Key key;
 
+  private Integer sheet;
   private String oid;
   private String zx;
+  private String format;
 
   public ImageIdentifier() {
   }
 
   public ImageIdentifier(String oid, String zx) {
+    this.sheet = 0;
     this.oid = oid;
     this.zx = zx;
   }
 
+  public ImageIdentifier(Integer sheet, String oid, String format) {
+    this.sheet = sheet;
+    this.oid = oid;
+    this.format = format;
+  }
+
   public String asUrlParameter() {
-    return "&oid=" + oid + "&zx=" + zx;
+    if (StringUtil.isEmpty(zx)) {
+      return "?oid=" + oid + "&format=" + format;
+    } else {
+      return "&oid=" + oid + "&zx=" + zx;
+    }
   }
 
   public Key getKey() {
@@ -50,5 +64,21 @@ public class ImageIdentifier {
 
   public String getZx() {
     return zx;
+  }
+
+  public Integer getSheet() {
+    return sheet;
+  }
+
+  public void setSheet(Integer sheet) {
+    this.sheet = sheet;
+  }
+
+  public String getFormat() {
+    return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
   }
 }
