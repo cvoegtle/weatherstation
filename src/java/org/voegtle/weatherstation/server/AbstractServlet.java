@@ -43,13 +43,13 @@ public abstract class AbstractServlet extends HttpServlet {
 
   private LocationProperties createLocationProperties() {
     LocationProperties lp = new LocationProperties();
-    lp.setLocation("leoxity");
-    lp.setAddress("Wichernweg");
-    lp.setCityShortcut("Leo");
-    lp.setCity("Leopoldshöhe");
+    lp.setLocation("herzo");
+    lp.setAddress("Von-Hauck-Straße");
+    lp.setCityShortcut("HZA");
+    lp.setCity("Herzogenaurach");
     lp.setWeatherForecast("");
-    lp.setSecretHash("2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4");
-    lp.setReadHash("2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4");
+    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
+    lp.setReadHash("not set");
     return lp;
   }
 
