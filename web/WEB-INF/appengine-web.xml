@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-  <application>wettercentral</application>
+  <application>wetterimages</application>
   <module>default</module>
   <version>33</version>
 
@@ -31,7 +31,6 @@
     <max-pending-latency>15s</max-pending-latency>
     <max-concurrent-requests>50</max-concurrent-requests>
   </automatic-scaling>
-
 
   <!--
     HTTP Sessions are disabled by default. To enable HTTP sessions specify:
