@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CentralServlet extends AbstractServlet {
+  private static final int TIMEOUT = 10000;
   HashMap<String, WeatherLocation> locations;
 
   @Override
@@ -58,7 +61,11 @@ public class CentralServlet extends AbstractServlet {
 
   private JSONObject getWeatherDataFromUrl(URL url) throws Exception {
     StringBuilder received = new StringBuilder();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "ISO-8859-1"));
+    URLConnection connection = url.openConnection();
+    connection.setConnectTimeout(TIMEOUT);
+    InputStream in = connection.getInputStream();
+
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "ISO-8859-1"));
     String line;
     while ((line = reader.readLine()) != null) {
       received.append(line);

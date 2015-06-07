@@ -10,12 +10,12 @@ public class WeatherUrl {
   private URL url;
 
   public WeatherUrl(String host, DataType type, boolean extended) throws MalformedURLException {
-    url = new URL("http://" + host + "/weatherstation/query?type=" + type.toString() + (extended ? "&ext" : ""));
+    url = new URL("https://" + host + "/weatherstation/query?type=" + type.toString() + (extended ? "&ext" : ""));
   }
 
   public WeatherUrl(WeatherLocation location, DataType type, boolean extended, String secret) throws MalformedURLException {
     boolean forwardSecret = StringUtil.isNotEmpty(secret) && location.isForwardSecret();
-    url = new URL("http://" + location.getHost() + "/weatherstation/query?type=" + type
+    url = new URL("https://" + location.getHost() + "/weatherstation/query?type=" + type
         + (extended ? "&ext" : "")
         + (forwardSecret ? "&secret=" + StringUtil.urlEncode(secret) : ""));
   }

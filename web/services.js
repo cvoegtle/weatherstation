@@ -44,7 +44,7 @@ var singleTestdaten = {
   "temperature": 5.3
 };
 
-function fetchAllWeatherData(processWeatherData, reportConnectionProblem) {
+function fetchAllWeatherData(processWeatherData, reportConnectionProblem, urlParam) {
   var ajaxRequest = new XMLHttpRequest();
   ajaxRequest.onload = function () {
     var weatherData = JSON.parse(ajaxRequest.responseText);
@@ -54,7 +54,8 @@ function fetchAllWeatherData(processWeatherData, reportConnectionProblem) {
   };
   ajaxRequest.onerror = reportConnectionProblem;
 
-  ajaxRequest.open("get", "/weatherstation/read?locations=tegelweg8,ochsengasse,forstweg17&ext", true);
+
+  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&ext", true);
   ajaxRequest.send();
 
 //    processWeatherData(singleTestdaten);
