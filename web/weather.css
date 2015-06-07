@@ -29,7 +29,7 @@
 }
 
 .location {
-    width: 75px;
+    width: 120px;
     font-weight: bold;
 }
 
@@ -56,7 +56,6 @@
     width: 20px;
     height: 20px;
 }
-
 
 .rain_div {
     width: 151px;
