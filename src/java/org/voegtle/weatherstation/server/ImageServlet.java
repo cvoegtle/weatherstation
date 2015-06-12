@@ -45,7 +45,7 @@ public class ImageServlet extends AbstractServlet {
 
         if (image != null) {
           response.setContentType("image/png");
-          response.getOutputStream().write(image.getPng());
+          response.getOutputStream().write(image.getPngAsBytes());
           response.getOutputStream().close();
         }
       }

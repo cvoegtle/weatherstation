@@ -1,5 +1,7 @@
 package org.voegtle.weatherstation.server.persistence;
 
+import org.voegtle.weatherstation.server.image.Image;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -69,6 +71,48 @@ public class PersistenceManager {
 
     em.close();
   }
+
+  public void makePersistant(Image image) {
+    EntityManager em = factory.createEntityManager();
+
+    em.getTransaction().begin();
+    em.persist(image);
+    em.getTransaction().commit();
+
+    em.close();
+  }
+
+  public void clearImages() {
+    EntityManager em = factory.createEntityManager();
+
+    em.createQuery("DELETE FROM Image").executeUpdate();
+
+    em.close();
+  }
+
+  public int countImages() {
+    EntityManager em = factory.createEntityManager();
+
+    Query q = em.createQuery("SELECT count(img.oid) FROM Image img");
+    Integer count = (Integer) q.getSingleResult();
+    return count != null ? count : 0;
+  }
+
+
+  public Image fetchImage(String oid) {
+    EntityManager em = factory.createEntityManager();
+    Query q = em.createQuery("SELECT img FROM Image img WHERE img.oid = :oid");
+    q.setParameter("oid", oid);
+    q.setMaxResults(1);
+    ListIterator it = q.getResultList().listIterator();
+    Image result = null;
+    if (it.hasNext()) {
+      result = (Image) it.next();
+    }
+    em.close();
+    return result;
+  }
+
 
   public HashMap<String, WeatherLocation> fetchWeatherLocations() {
     EntityManager em = factory.createEntityManager();

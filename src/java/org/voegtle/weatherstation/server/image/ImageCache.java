@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class ImageCache {
@@ -18,19 +17,22 @@ public class ImageCache {
   private static final ImageServers imageServers = new ImageServers();
   private static final int TIMEOUT = 10000;
 
-  private HashMap<String, Image> images = new HashMap<>();
+  private final PersistenceManager pm;
+
   private KnownImages knownImages;
 
   public ImageCache(PersistenceManager pm) {
     knownImages = new KnownImages(pm);
+    this.pm = pm;
   }
 
   public void init() {
     knownImages.init();
+
   }
 
   public void clear() {
-    images.clear();
+    pm.clearImages();
   }
 
   public void refresh(Integer begin, Integer end) throws IOException {
@@ -51,12 +53,12 @@ public class ImageCache {
   }
 
   private Image get(ImageIdentifier identifier, boolean forceReload) {
-    Image image = images.get(identifier.getOid());
+    Image image = pm.fetchImage(identifier.getOid());
     if (image == null || image.isOld() || forceReload) {
       image = fetchImageRepeated(identifier);
       if (image != null) {
-        images.put(image.getOid(), image);
         knownImages.put(identifier);
+        pm.makePersistant(image);
       }
     }
     return image;
@@ -99,7 +101,7 @@ public class ImageCache {
   }
 
   public int size() {
-    return images.size();
+    return pm.countImages();
   }
 
 //  public static void main(String[] args) {
@@ -107,7 +109,7 @@ public class ImageCache {
 //      ImageCache cache = new ImageCache();
 //      Image image = cache.get("0AnsQlmDoHHbKdFVvS1VEMUp6c3FkcElibFhWUGpramc&oid=23&zx=juk5ebnhgov3");
 //      FileOutputStream fos = new FileOutputStream("test.png");
-//      fos.write(image.getPng());
+//      fos.write(image.getPngAsBytes());
 //      fos.close();
 //    } catch (IOException ex) {
 //
