@@ -83,8 +83,9 @@ public abstract class AbstractServlet extends HttpServlet {
   protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects) {
     JSONArray jsonArray = new JSONArray(jsonObjects);
     try {
-      PrintWriter out = response.getWriter();
+      response.setCharacterEncoding("UTF-8");
       response.setContentType(MIME_TYPE_APPLICATION_JSON);
+      PrintWriter out = response.getWriter();
       String responseString = jsonArray.toString();
       log.info(responseString);
       out.write(responseString);
