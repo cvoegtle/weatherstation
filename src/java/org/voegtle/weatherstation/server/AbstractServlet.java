@@ -81,9 +81,13 @@ public abstract class AbstractServlet extends HttpServlet {
   }
 
   protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects) {
+    writeResponse(response, jsonObjects, "ISO-8859-1");
+  }
+
+  protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects, String encoding) {
     JSONArray jsonArray = new JSONArray(jsonObjects);
     try {
-      response.setCharacterEncoding("UTF-8");
+      response.setCharacterEncoding(encoding);
       response.setContentType(MIME_TYPE_APPLICATION_JSON);
       PrintWriter out = response.getWriter();
       String responseString = jsonArray.toString();

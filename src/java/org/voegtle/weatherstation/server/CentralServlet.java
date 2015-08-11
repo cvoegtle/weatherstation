@@ -46,7 +46,7 @@ public class CentralServlet extends AbstractServlet {
       }
     }
 
-    writeResponse(response, collectedWeatherData);
+    writeResponse(response, collectedWeatherData, param.isUtf8() ? "UTF-8" : "ISO-8859-1");
 
   }
 
