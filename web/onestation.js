@@ -134,6 +134,33 @@ function showMoreRain() {
 
 }
 
+function repairinit() {
+  init();
+
+  var today = new Date();
+
+  var inputStart = document.getElementById("starttime");
+  inputStart.value= today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate() + "-00:00:00";
+}
+
+function repairData() {
+  var inputStart = document.getElementById("starttime");
+  var location = "/weatherstation/repair?begin=" + inputStart.value;
+
+  var endinput = document.getElementById("endtime");
+  var endValue = endinput.value;
+  if (endValue !== "") {
+    location += "&end="+endValue;
+  }
+  var inputSecret = document.getElementById("secret");
+  var secretValue = inputSecret.value;
+  if (secretValue !== "") {
+    location += "&secret=" +secretValue;
+  }
+
+  window.location.href=location;
+}
+
 function init() {
   var weatherArea = new WeatherArea();
 

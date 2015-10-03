@@ -59,5 +59,29 @@
   }
 
   .page1 { background-color: rgb(207, 202, 255);
-    }
+  }
+
+  .repair_div {
+    margin-top: 15px;
+  }
+
+  .repairlabel {
+    width: 70px;
+    text-align: right;
+    float: left;
+  }
+
+  .inputline {
+    width: 100%;
+  }
+
+  .repair_input {
+    width: 160px;
+    margin-left: 5px;
+  }
+
+  .repairbutton {
+    margin-left: 70px;
+    height: 20px;
+  }
 
