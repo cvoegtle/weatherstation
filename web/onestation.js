@@ -143,6 +143,12 @@ function repairinit() {
   inputStart.value= today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate() + "-00:00:00";
 }
 
+function onKeyDownOnSecret(event) {
+  if (event.keyCode === 13) {
+    repairData();
+  }
+}
+
 function repairData() {
   var inputStart = document.getElementById("starttime");
   var location = "/weatherstation/repair?begin=" + inputStart.value;

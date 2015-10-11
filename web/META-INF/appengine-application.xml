@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <appengine-application xmlns="http://appengine.google.com/ns/1.0">
-  <application>oxenwetter</application>
+  <!-- baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
+     oxenwetter tegelwetter testwetter wettercentral wetterimages -->
+  <application>herzowetter</application>
 
 </appengine-application>
