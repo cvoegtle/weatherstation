@@ -140,7 +140,10 @@ function repairinit() {
   var today = new Date();
 
   var inputStart = document.getElementById("starttime");
-  inputStart.value= today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate() + "-00:00:00";
+  var inputValue = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate() + "-00:00:00"
+  inputStart.value= inputValue;
+  inputStart.setSelectionRange(0, inputValue.length);
+  inputStart.focus();
 }
 
 function onKeyDownOnSecret(event) {
