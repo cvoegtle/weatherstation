@@ -12,7 +12,7 @@
   .page { background-color: #F0EEEB;
     }
 
-  .cv_footer { padding: 0px;
+  .cv_footer { padding: 0;
     font-family: Verdana,Arial,Helvetica,sans-serif;
     font-size: 9px;
     font-style: normal;
@@ -22,7 +22,7 @@
     text-transform: none;
     height: auto;
     left: auto;
-    top: 0px;
+    top: 0;
     right: auto;
     bottom: auto;
     clip: rect(auto, auto, auto, auto);
@@ -50,12 +50,11 @@
     }
 
   .cv_no_margin {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .cv_small {
     font-size: 10px;
-    align: center;
   }
 
   .page1 { background-color: rgb(207, 202, 255);
@@ -85,3 +84,59 @@
     height: 25px;
   }
 
+.statistics_container {
+  margin-left: 50px;
+}
+
+.statistics_row {
+  width: 100%;
+  overflow: hidden;
+  height: 27px;
+}
+
+.statistics_caption {
+  width: 60px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
+}
+
+.statistics_caption_narrow {
+  width: 48px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
+}
+
+.statistics_caption2 {
+  width: 75px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
+}
+
+.statistics_value_narrow {
+  text-align: right;
+  height: 27px;
+  width: 48px;
+  float: left;
+}
+
+.statistics_value {
+  text-align: right;
+  width: 60px;
+  float: left;
+}
+
+.statistics_value2 {
+  text-align: right;
+  width: 75px;
+  float: left;
+}
+
+.column_caption {
+  width: 55px;
+  font-weight: bold;
+  float: left;
+  height: 22px;
+}
