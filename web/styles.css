@@ -99,6 +99,7 @@
   text-align: right;
   font-weight: bold;
   float: left;
+  color: #555555;
 }
 
 .statistics_caption_narrow {
@@ -106,6 +107,7 @@
   text-align: right;
   font-weight: bold;
   float: left;
+  color: #555555;
 }
 
 .statistics_caption2 {
@@ -113,6 +115,7 @@
   text-align: right;
   font-weight: bold;
   float: left;
+  color: #555555;
 }
 
 .statistics_value_narrow {
@@ -139,4 +142,24 @@
   font-weight: bold;
   float: left;
   height: 22px;
+  color: #555555;
+}
+
+.current_table {
+  vertical-align: top;
+}
+
+.current_time {
+  height: 27px;
+}
+
+.current_caption {
+  font-weight: bold;
+  padding-right: 10px;
+  vertical-align: top;
+  color: #555555;
+}
+
+.current_value {
+  vertical-align: top;
 }
