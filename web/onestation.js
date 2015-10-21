@@ -7,6 +7,8 @@ function WeatherArea() {
   this.labelWind = document.getElementById("wind");
   this.labelRain = document.getElementById("rain");
   this.labelRainText = document.getElementById("rainText");
+  this.labelWattText = document.getElementById("wattText");
+  this.labelWatt = document.getElementById("watt");
 
   this.rainInfoButton = this.createMoreInfoButton();
 }
@@ -21,6 +23,15 @@ WeatherArea.prototype.update = function (weatherData) {
     this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
   }
   this.labelRain.appendChild(this.rainInfoButton);
+
+  if (this.labelWatt !== undefined) {
+    this.updateLabel(this.labelWattText, "");
+    this.updateLabel(this.labelWatt, "");
+    if (weatherData.hasOwnProperty("watt") && weatherData.watt > 0) {
+      this.updateLabel(this.labelWattText, "Leistung:");
+      this.updateLabel(this.labelWatt, getOptionalNumber(weatherData.watt, "W"));
+    }
+  }
 };
 
 WeatherArea.prototype.setup = function (weatherData) {
