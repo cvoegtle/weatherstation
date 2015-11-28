@@ -136,6 +136,10 @@ public class PersistenceManager {
     managedDS.setOutsideTemperature(ds.getOutsideTemperature());
     managedDS.setRainCounter(ds.getRainCounter());
     managedDS.setRaining(ds.isRaining());
+    managedDS.setInsideTemperature(ds.getInsideTemperature());
+    managedDS.setInsideHumidity(ds.getInsideHumidity());
+    managedDS.setKwh(ds.getKwh());
+    managedDS.setRepaired(ds.getRepaired());
     em.getTransaction().commit();
 
     em.close();

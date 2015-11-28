@@ -6,8 +6,10 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class WeatherDataRepair {
+  private static final Logger log = Logger.getLogger(WeatherDataRepair.class.getName());
 
   private final PersistenceManager pm;
   private List<SmoothedWeatherDataSet> datasets;
@@ -81,12 +83,22 @@ public class WeatherDataRepair {
   private void repair(RepairJob repairJob) {
     if (repairJob.getFirst() != null) {
       SmoothedWeatherDataSet first = repairJob.getFirst();
+      RepairJob.RepairStep step = repairJob.getStep();
       int index = 0;
       for (SmoothedWeatherDataSet ds : repairJob.getDefectDataSets()) {
         index++;
-        ds.setOutsideHumidity(getNewValue(first.getOutsideHumidity(), index, repairJob.getStep().humidity));
-        ds.setOutsideTemperature(getNewValue(first.getOutsideTemperature(), index, repairJob.getStep().temperature));
-        ds.setRainCounter(getNewValue(first.getRainCounter(), index, repairJob.getStep().rain));
+        log.info("repair " + index + " - " + ds.getTimestamp());
+        log.info("insideTemperature: " + first.getInsideTemperature() + " " + step.insideTemperature);
+
+        ds.setOutsideHumidity(getNewValue(first.getOutsideHumidity(), index, step.humidity));
+        ds.setOutsideTemperature(getNewValue(first.getOutsideTemperature(), index, step.temperature));
+
+        ds.setInsideHumidity(getNewValue(first.getInsideHumidity(), index, step.insideHumidity));
+        ds.setInsideTemperature(getNewValue(first.getInsideTemperature(), index, step.insideTemperature));
+
+        ds.setRainCounter(getNewValue(first.getRainCounter(), index, step.rain));
+        ds.setKwh(getNewValue(first.getKwh(), index, step.kwh));
+
         setDefaults(ds);
         pm.updateDataset(ds);
       }
@@ -97,6 +109,7 @@ public class WeatherDataRepair {
     ds.setRaining(false);
     ds.setWindspeed((float) 0.0);
     ds.setWindspeedMax((float) 0.0);
+    ds.setRepaired(true);
   }
 
   private Integer getNewValue(Integer startValue, int index, double step) {
@@ -104,8 +117,20 @@ public class WeatherDataRepair {
     return Math.round((float) value);
   }
 
-  private Float getNewValue(Float startValue, int index, double step) {
+  private Float getNewValue(Float startValue, int index, Double step) {
+    log.info("startValue=" + startValue + ", step=" + step);
+    if (step == null) {
+      return null;
+    }
     double value = startValue + index * step;
+    log.info("value=" + value);
     return new Float(value);
+  }
+
+  private Double getNewValue(Double startValue, int index, Double step) {
+    if (step == null) {
+      return null;
+    }
+    return startValue + index * step;
   }
 }

@@ -11,6 +11,9 @@ public class RepairJob {
     public double temperature = 0.0;
     public double humidity = 0.0;
     public double rain = 0.0;
+    public Double insideTemperature;
+    public Double insideHumidity;
+    public Double kwh;
 
     public RepairStep() {
     }
@@ -59,6 +62,24 @@ public class RepairJob {
     step.humidity = (last.getOutsideHumidity() - first.getOutsideHumidity()) / (defectDataSets.size() + 1);
     step.temperature = (last.getOutsideTemperature() - first.getOutsideTemperature()) / (defectDataSets.size() + 1);
     step.rain = (last.getRainCounter() - first.getRainCounter()) / (defectDataSets.size() + 1);
+
+    step.insideHumidity = spreadEqually(first.getInsideHumidity(), last.getInsideHumidity(), defectDataSets.size());
+    step.insideTemperature = spreadEqually(first.getInsideTemperature(), last.getInsideTemperature(), defectDataSets.size());
+    step.kwh = spreadEqually(first.getKwh(), last.getKwh(), defectDataSets.size());
+  }
+
+  private Double spreadEqually(Double firstValue, Double lastValue, int numberOfSets) {
+    if (firstValue == null || lastValue == null) {
+      return null;
+    }
+    return (lastValue - firstValue) / (numberOfSets + 1);
+  }
+
+  private Double spreadEqually(Float firstValue, Float lastValue, int numberOfSets) {
+    if (firstValue == null || lastValue == null) {
+      return null;
+    }
+    return new Double((lastValue - firstValue) / (numberOfSets + 1));
   }
 
   public RepairStep getStep() {

@@ -22,6 +22,7 @@ public class SmoothedWeatherDataSet {
   private Float windspeedMax;
   private Float watt;
   private Double kwh;
+  private Boolean repaired;
 
   @Transient
   private int countOutsideTemperature = 0;
@@ -268,5 +269,14 @@ public class SmoothedWeatherDataSet {
 
   public void setKwh(Double kwh) {
     this.kwh = kwh;
+  }
+
+
+  public Boolean getRepaired() {
+    return repaired;
+  }
+
+  public void setRepaired(Boolean repaired) {
+    this.repaired = repaired;
   }
 }

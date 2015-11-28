@@ -2,6 +2,6 @@
 <appengine-application xmlns="http://appengine.google.com/ns/1.0">
   <!-- baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
      oxenwetter tegelwetter testwetter wettercentral wetterimages -->
-  <application>leo-wetter</application>
+  <application>instantwetter</application>
 
 </appengine-application>
