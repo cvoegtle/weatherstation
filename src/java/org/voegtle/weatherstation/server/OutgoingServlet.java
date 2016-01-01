@@ -41,7 +41,8 @@ public class OutgoingServlet extends AbstractServlet {
       List<AggregatedWeatherDataSet> result = weatherDataFetcher.getAggregatedWeatherData(param.getBegin(), param.getEnd());
       returnAggregatedResult(response, result, param.isExtended());
     } else if (param.getType() == DataType.CURRENT) {
-      UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
+      UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized,
+          locationProperties.isWindRelevant());
       returnCurrentWeatherData(response, currentWeatherData, param.isExtended());
     } else if (param.getType() == DataType.RAIN) {
       RainDTO rainData = weatherDataFetcher.fetchRainData();
@@ -54,7 +55,8 @@ public class OutgoingServlet extends AbstractServlet {
         ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
         try {
-          UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
+          UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized,
+              locationProperties.isWindRelevant());
           JSONObject paderbornCurrent = jsonConverter.toJson(currentWeatherData, param.isExtended());
           collectedWeatherData.add(paderbornCurrent);
         } catch (Throwable throwable) {

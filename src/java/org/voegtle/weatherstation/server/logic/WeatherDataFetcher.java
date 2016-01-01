@@ -39,7 +39,7 @@ public class WeatherDataFetcher {
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
   }
 
-  public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized) {
+  public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized, boolean windRelevant) {
     SmoothedWeatherDataSet today = getFirstDataSetOfToday();
     WeatherDataSet latest = pm.fetchYoungestDataSet();
     SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
@@ -49,7 +49,9 @@ public class WeatherDataFetcher {
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
     dto.setRaining(latest.isRaining());
-    dto.setWindspeed(latest.getWindspeed());
+    if (windRelevant) {
+      dto.setWindspeed(latest.getWindspeed());
+    }
     dto.setWatt(latest.getWatt());
     if (authorized) {
       dto.setInsideTemperature(latest.getInsideTemperature());

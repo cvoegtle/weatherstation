@@ -26,6 +26,8 @@ public class LocationProperties {
 
   private String weatherForecast;
 
+  private Boolean windRelevant;
+
   public LocationProperties() {
   }
 
@@ -96,5 +98,13 @@ public class LocationProperties {
 
   public void setReadHash(String readHash) {
     this.readHash = readHash;
+  }
+
+  public boolean isWindRelevant() {
+    return windRelevant != null && windRelevant;
+  }
+
+  public void setWindRelevant(Boolean windRelevant) {
+    this.windRelevant = windRelevant;
   }
 }
