@@ -28,6 +28,8 @@ public class LocationProperties {
 
   private Boolean windRelevant;
 
+  private Float windMultiplier;
+
   public LocationProperties() {
   }
 
@@ -106,5 +108,16 @@ public class LocationProperties {
 
   public void setWindRelevant(Boolean windRelevant) {
     this.windRelevant = windRelevant;
+  }
+
+  public Float getWindMultiplier() {
+    if (windMultiplier == null) {
+      windMultiplier = 1.0f;
+    }
+    return windMultiplier;
+  }
+
+  public void setWindMultiplier(Float windMultiplier) {
+    this.windMultiplier = windMultiplier;
   }
 }

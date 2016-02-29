@@ -38,7 +38,7 @@ public class JSONConverter {
       json.put("rain", currentWeatherData.getRainLastHour());
       json.put("rain_today", currentWeatherData.getRainToday());
       json.put("raining", currentWeatherData.isRaining());
-      json.put("wind", currentWeatherData.getWindspeed());
+      json.put("wind", multiply(currentWeatherData.getWindspeed(), locationProperties.getWindMultiplier()));
       if (currentWeatherData.getWatt() != null) {
         json.put("watt", currentWeatherData.getWatt());
       }
@@ -96,8 +96,8 @@ public class JSONConverter {
           json.put("rain", 0.0);
         }
         previousRainCounter = wds.getRainCounter();
-        json.put("wind", wds.getWindspeed());
-        json.put("windMax", wds.getWindspeedMax());
+        json.put("wind", multiply(wds.getWindspeed(),locationProperties.getWindMultiplier()));
+        json.put("windMax", multiply(wds.getWindspeedMax(),locationProperties.getWindMultiplier()));
 
         if (wds.getWatt() != null) {
           json.put("watt", wds.getWatt());
@@ -108,6 +108,13 @@ public class JSONConverter {
     }
 
     return jsonObjects;
+  }
+
+  private Float multiply(Float number, Float factor) {
+    if (number != null) {
+      number *= factor;
+    }
+    return number;
   }
 
 
@@ -125,8 +132,8 @@ public class JSONConverter {
         json.put("humAvg", wds.getOutsideHumidityAverage());
         json.put("humMin", wds.getOutsideHumidityMin());
         json.put("humMax", wds.getOutsideHumidityMax());
-        json.put("wind", wds.getWindspeedAverage());
-        json.put("windMax", wds.getWindspeedMax());
+        json.put("wind", multiply(wds.getWindspeedAverage(), locationProperties.getWindMultiplier()));
+        json.put("windMax", multiply(wds.getWindspeedMax(), locationProperties.getWindMultiplier()));
         double rain = 0.295 * (wds.getRainCounter());
         json.put("rain", Math.max(rain, 0));
         if (extended) {
