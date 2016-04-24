@@ -1,6 +1,44 @@
+var WeatherData = (function () {
+    function WeatherData() {
+    }
+    return WeatherData;
+}());
 var testdaten = [
-
-  {
+    {
+        timestamp: "Fri Apr 18 20:28:11 UTC 2014",
+        wind: 0,
+        humidity: 85,
+        raining: false,
+        location: "Paderborn",
+        rain_today: 5.015,
+        rain: 2.065,
+        temperature: 5.3,
+        watt: null
+    },
+    {
+        "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
+        "wind": 0,
+        "humidity": 76,
+        "raining": false,
+        "location": "Bonn",
+        "rain_today": 1.475,
+        "rain": "",
+        "temperature": 8.6,
+        watt: null
+    },
+    {
+        "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
+        "wind": 0,
+        "humidity": 84,
+        "raining": false,
+        "location": "Freiburg",
+        "rain_today": 2.065,
+        "rain": "",
+        "temperature": 4.6,
+        watt: null
+    }
+];
+var singleTestdaten = {
     "timestamp": "Fri Apr 18 20:28:11 UTC 2014",
     "wind": 0,
     "humidity": 85,
@@ -8,92 +46,44 @@ var testdaten = [
     "location": "Paderborn",
     "rain_today": 5.015,
     "rain": 2.065,
-    "temperature": 5.3
-  },
-  {
-    "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
-    "wind": 0,
-    "humidity": 76,
-    "raining": false,
-    "location": "Bonn",
-    "rain_today": 1.475,
-    "rain": "",
-    "temperature": 8.6
-  },
-  {
-    "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
-    "wind": 0,
-    "humidity": 84,
-    "raining": false,
-    "location": "Freiburg",
-    "rain_today": 2.065,
-    "rain": "",
-    "temperature": 4.6
-  }
-
-];
-
-var singleTestdaten = {
-  "timestamp": "Fri Apr 18 20:28:11 UTC 2014",
-  "wind": 0,
-  "humidity": 85,
-  "raining": false,
-  "location": "Paderborn",
-  "rain_today": 5.015,
-  "rain": 2.065,
-  "temperature": 5.3
+    "temperature": 5.3,
+    watt: null
 };
-
 function fetchAllWeatherData(processWeatherData, reportConnectionProblem, urlParam) {
-  var ajaxRequest = new XMLHttpRequest();
-  ajaxRequest.onload = function () {
-    var weatherData = JSON.parse(ajaxRequest.responseText);
-    processWeatherData(weatherData);
-
-
-  };
-  ajaxRequest.onerror = reportConnectionProblem;
-
-
-  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&ext", true);
-  ajaxRequest.send();
-
-//    processWeatherData(singleTestdaten);
-
+    var ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.onload = function () {
+        var weatherData = JSON.parse(ajaxRequest.responseText);
+        processWeatherData(weatherData);
+    };
+    ajaxRequest.onerror = reportConnectionProblem;
+    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&ext", true);
+    ajaxRequest.send();
+    //    processWeatherData(singleTestdaten);
 }
-
 function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
-  var ajaxRequest = new XMLHttpRequest();
-  ajaxRequest.onload = function () {
-    var weatherData = JSON.parse(ajaxRequest.responseText);
-    processWeatherData(weatherData);
-
-
-  };
-  ajaxRequest.onerror = reportConnectionProblem;
-
-  ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&ext", true);
-  ajaxRequest.send();
-
-//    processWeatherData(singleTestdaten);
-
+    var ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.onload = function () {
+        var weatherData = JSON.parse(ajaxRequest.responseText);
+        processWeatherData(weatherData);
+    };
+    ajaxRequest.onerror = reportConnectionProblem;
+    ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&ext", true);
+    ajaxRequest.send();
+    //    processWeatherData(singleTestdaten);
 }
-
 function getOptionalNumber(value, unit) {
-  if (value !== "") {
-    var result = value.toFixed(1);
-    return result.replace(".", ",") + " " + unit;
-
-  } else {
-    return "";
-  }
+    if (value !== "") {
+        var result = value.toFixed(1);
+        return result.replace(".", ",") + " " + unit;
+    }
+    else {
+        return "";
+    }
 }
-
 function getTimeFractionAsString(dateAsString) {
-  var date = new Date(dateAsString);
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-
-  return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
+    var date = new Date(dateAsString);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
 }
-
+//# sourceMappingURL=services.js.map
