@@ -2,11 +2,13 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/web/stats.js" />
         <item url="file://$PROJECT_DIR$/web/onestation.js" />
         <item url="file://$PROJECT_DIR$/web/services.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
+      <root url="file://$PROJECT_DIR$/web/stats.js" />
       <root url="file://$PROJECT_DIR$/web/onestation.js" />
       <root url="file://$PROJECT_DIR$/web/services.js" />
     </CLASSES>
