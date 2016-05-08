@@ -2,7 +2,7 @@ var WeatherData = (function () {
     function WeatherData() {
     }
     return WeatherData;
-}());
+})();
 var testdaten = [
     {
         timestamp: "Fri Apr 18 20:28:11 UTC 2014",

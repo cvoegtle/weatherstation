@@ -4,6 +4,11 @@ var Column = (function () {
     }
     return Column;
 })();
+var Columns = (function () {
+    function Columns() {
+    }
+    return Columns;
+})();
 var WorkingArea = (function () {
     function WorkingArea() {
         this.area = document.getElementById("working_area");
@@ -65,9 +70,9 @@ var WorkingArea = (function () {
             errorLine.innerHTML = problemDescription;
         }
         else {
-            errorLine = this.createErrorLine(problemDescription);
+            errorLine = WorkingArea.createErrorLine(problemDescription);
             errorLine.id = "errorLine";
-            this.prependChild(this.area, errorLine);
+            WorkingArea.prependChild(this.area, errorLine);
         }
     };
     WorkingArea.prototype.updateColumns = function () {
@@ -89,11 +94,11 @@ var WorkingArea = (function () {
         }
         for (var i in this.columns) {
             if (this.columns.hasOwnProperty(i)) {
-                this.columns[i].visible = this.detectFilledColumn(this.columns[i].value);
+                this.columns[i].visible = WorkingArea.detectFilledColumn(this.columns[i].value);
             }
         }
     };
-    WorkingArea.prototype.detectFilledColumn = function (value) {
+    WorkingArea.detectFilledColumn = function (value) {
         var filled = false;
         for (var i in value) {
             if (value.hasOwnProperty(i)) {
@@ -107,7 +112,7 @@ var WorkingArea = (function () {
         }
         return filled;
     };
-    WorkingArea.prototype.createErrorLine = function (errorMessage) {
+    WorkingArea.createErrorLine = function (errorMessage) {
         var errorLine = document.createElement("div");
         errorLine.className = "error";
         errorLine.id = "errorLine";
@@ -119,13 +124,13 @@ var WorkingArea = (function () {
         caption.className = "caption";
         for (var i in this.columns) {
             if (this.columns.hasOwnProperty(i)) {
-                var element = this.createWeatherElement(this.columns[i].caption, this.columns[i].style);
-                this.appendChild(caption, this.columns[i].visible, element);
+                var element = WorkingArea.createWeatherElement(this.columns[i].caption, this.columns[i].style);
+                WorkingArea.appendChild(caption, this.columns[i].visible, element);
             }
         }
         return caption;
     };
-    WorkingArea.prototype.createWeatherElement = function (text, style) {
+    WorkingArea.createWeatherElement = function (text, style) {
         var element = document.createElement("div");
         element.className = "column " + style;
         element.innerHTML = text;
@@ -137,17 +142,17 @@ var WorkingArea = (function () {
         for (var i in this.columns) {
             if (this.columns.hasOwnProperty(i)) {
                 var element = this.createWeatherSpan(this.columns[i].value[rowNumber], this.columns[i].style);
-                this.appendChild(row, this.columns[i].visible, element);
+                WorkingArea.appendChild(row, this.columns[i].visible, element);
             }
         }
         return row;
     };
-    WorkingArea.prototype.appendChild = function (parent, visible, child) {
+    WorkingArea.appendChild = function (parent, visible, child) {
         if (visible) {
             parent.appendChild(child);
         }
     };
-    WorkingArea.prototype.prependChild = function (parent, child) {
+    WorkingArea.prependChild = function (parent, child) {
         parent.insertBefore(child, parent.firstChild);
     };
     WorkingArea.prototype.createWeatherSpan = function (value, style) {

@@ -8,16 +8,19 @@ class Column {
 
 }
 
+class Columns {
+  timestamp: Column;
+  location: Column;
+  temperature: Column;
+  humidity: Column;
+  rain: Column;
+  rain_today: Column;
+}
+
 class WorkingArea {
   area:HTMLElement = document.getElementById("working_area");
-  columns:{
-    timestamp: Column;
-    location: Column;
-    temperature: Column;
-    humidity: Column;
-    rain: Column;
-    rain_today: Column;
-  };
+  columns:Columns;
+
   weatherData:WeatherData[];
 
   constructor() {
@@ -76,14 +79,14 @@ class WorkingArea {
     }
   }
 
-  reportProblem(problemDescription:string) {
+  reportProblem(problemDescription:string):void {
     let errorLine:HTMLElement = document.getElementById("errorLine");
     if (errorLine != undefined) {
       errorLine.innerHTML = problemDescription;
     } else {
-      errorLine = this.createErrorLine(problemDescription);
+      errorLine = WorkingArea.createErrorLine(problemDescription);
       errorLine.id = "errorLine";
-      this.prependChild(this.area, errorLine);
+      WorkingArea.prependChild(this.area, errorLine);
     }
   }
 
@@ -108,12 +111,12 @@ class WorkingArea {
 
     for (let i in this.columns) {
       if (this.columns.hasOwnProperty(i)) {
-        this.columns[i].visible = this.detectFilledColumn(this.columns[i].value);
+        this.columns[i].visible = WorkingArea.detectFilledColumn(this.columns[i].value);
       }
     }
   }
 
-  private detectFilledColumn(value):boolean {
+  private static detectFilledColumn(value):boolean {
     let filled = false;
     for (var i in value) {
       if (value.hasOwnProperty(i)) {
@@ -127,7 +130,7 @@ class WorkingArea {
     return filled;
   }
 
-  private createErrorLine(errorMessage:string):HTMLElement {
+  private static createErrorLine(errorMessage:string):HTMLElement {
     let errorLine:HTMLDivElement = document.createElement("div");
     errorLine.className = "error";
     errorLine.id = "errorLine";
@@ -135,21 +138,21 @@ class WorkingArea {
     return errorLine;
   }
 
-  createCaption():HTMLElement {
+  private createCaption():HTMLElement {
     let caption:HTMLDivElement = document.createElement("div");
     caption.className = "caption";
 
     for (let i in this.columns) {
       if (this.columns.hasOwnProperty(i)) {
-        let element = this.createWeatherElement(this.columns[i].caption, this.columns[i].style);
-        this.appendChild(caption, this.columns[i].visible, element);
+        let element = WorkingArea.createWeatherElement(this.columns[i].caption, this.columns[i].style);
+        WorkingArea.appendChild(caption, this.columns[i].visible, element);
       }
     }
 
     return caption;
   }
 
-  private createWeatherElement(text:string, style:string):HTMLElement {
+  private static createWeatherElement(text:string, style:string):HTMLElement {
     let element:HTMLDivElement = document.createElement("div");
     element.className = "column " + style;
     element.innerHTML = text;
@@ -163,19 +166,19 @@ class WorkingArea {
     for (var i in this.columns) {
       if (this.columns.hasOwnProperty(i)) {
         var element = this.createWeatherSpan(this.columns[i].value[rowNumber], this.columns[i].style);
-        this.appendChild(row, this.columns[i].visible, element);
+        WorkingArea.appendChild(row, this.columns[i].visible, element);
       }
     }
     return row;
   }
 
-  private appendChild(parent:HTMLElement, visible:boolean, child:HTMLElement):void {
+  private static appendChild(parent:HTMLElement, visible:boolean, child:HTMLElement):void {
     if (visible) {
       parent.appendChild(child);
     }
   }
 
-  private prependChild(parent:HTMLElement, child:HTMLElement):void {
+  private static prependChild(parent:HTMLElement, child:HTMLElement):void {
     parent.insertBefore(child, parent.firstChild);
   }
 
