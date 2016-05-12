@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.parser;
 
+import org.voegtle.weatherstation.server.persistence.StationTypeEnum;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.StringUtil;
@@ -11,6 +12,8 @@ import java.util.*;
 public class DataParser {
 // 1;1;;;;;;;;;;;;;;;;;;15,1;78;0,0;616;0;0
 
+  private static final int INDEX_MICRO_OUTSIDE_TEMPERATURE = 10;
+  private static final int INDEX_MICRO_OUTSIDE_HUMIDITY = 18;
   private static final int INDEX_INSIDE_TEMPERATURE = 7;
   private static final int INDEX_INSIDE_HUMIDITY = 15;
   private static final int INDEX_OUTSIDE_TEMPERATURE = 19;
@@ -24,7 +27,10 @@ public class DataParser {
 
   private static final Date MIN_DATE = DateUtil.getDate(2014, 1, 1);
 
-  public DataParser() {
+  private StationTypeEnum stationType;
+
+  public DataParser(StationTypeEnum stationType) {
+    this.stationType = stationType;
   }
 
   public List<WeatherDataSet> parse(List<DataLine> lines) throws ParseException {
@@ -64,8 +70,8 @@ public class DataParser {
       dataSet.setInsideTemperature(parseFloat(data.get(INDEX_INSIDE_TEMPERATURE)));
       dataSet.setInsideHumidity(parseFloat(data.get(INDEX_INSIDE_HUMIDITY)));
 
-      dataSet.setOutsideTemperature(parseFloat(data.get(INDEX_OUTSIDE_TEMPERATURE)));
-      dataSet.setOutsideHumidity(parseFloat(data.get(INDEX_OUTSIDE_HUMIDITY)));
+      dataSet.setOutsideTemperature(parseFloat(data.get(getOutsideTemperatureIndex())));
+      dataSet.setOutsideHumidity(parseFloat(data.get(getOutsideHumidityIndex())));
 
       dataSet.setRainCounter(parseInteger(data.get(INDEX_RAINCOUNTER)));
       dataSet.setRaining(parseBoolean(data.get(INDEX_RAINING)));
@@ -91,7 +97,15 @@ public class DataParser {
   }
 
   private boolean isValid(DataLine data) {
-    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(INDEX_OUTSIDE_TEMPERATURE));
+      return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(getOutsideTemperatureIndex()));
+  }
+
+  private int getOutsideTemperatureIndex() {
+    return stationType == StationTypeEnum.STANDARD ? INDEX_OUTSIDE_TEMPERATURE : INDEX_MICRO_OUTSIDE_TEMPERATURE;
+  }
+
+  private int getOutsideHumidityIndex() {
+    return stationType == StationTypeEnum.STANDARD ? INDEX_OUTSIDE_HUMIDITY: INDEX_MICRO_OUTSIDE_HUMIDITY;
   }
 
   private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";

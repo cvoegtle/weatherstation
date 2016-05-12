@@ -25,7 +25,7 @@ public class UploadServlet extends AbstractServlet {
     if (isSecretValid(param.getSecret())) {
       if (isCorrectLocation(param.getLocation())) {
         ArrayList<DataLine> lines = readInputLines(getContentStream(request));
-        WeatherDataImporter importer = new WeatherDataImporter(pm);
+        WeatherDataImporter importer = new WeatherDataImporter(pm, locationProperties.getStationType());
         result = importer.doImport(lines);
       } else {
         result = ResponseCode.WRONG_LOCATION;

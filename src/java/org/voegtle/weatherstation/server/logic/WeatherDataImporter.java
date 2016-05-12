@@ -4,6 +4,7 @@ import org.voegtle.weatherstation.server.parser.DataLine;
 import org.voegtle.weatherstation.server.parser.DataParser;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.StationTypeEnum;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.request.ResponseCode;
 import org.voegtle.weatherstation.server.util.DateUtil;
@@ -19,10 +20,12 @@ public class WeatherDataImporter {
   private static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
 
   private final PersistenceManager pm;
+  private StationTypeEnum stationType;
   private final Date importedUntil;
 
-  public WeatherDataImporter(PersistenceManager pm) {
+  public WeatherDataImporter(PersistenceManager pm, StationTypeEnum stationType) {
     this.pm = pm;
+    this.stationType = stationType;
     this.importedUntil = getDateOfLastDataSet();
   }
 
@@ -30,7 +33,7 @@ public class WeatherDataImporter {
     String result;
     try {
       boolean persisted = false;
-      DataParser parser = new DataParser();
+      DataParser parser = new DataParser(stationType);
       List<WeatherDataSet> dataSets = parser.parse(lines);
       log.info("Number of valid datasets: " + dataSets.size());
       for (WeatherDataSet dataSet : dataSets) {

@@ -30,6 +30,8 @@ public class LocationProperties {
 
   private Float windMultiplier;
 
+  private StationTypeEnum stationType;
+
   public LocationProperties() {
   }
 
@@ -119,5 +121,16 @@ public class LocationProperties {
 
   public void setWindMultiplier(Float windMultiplier) {
     this.windMultiplier = windMultiplier;
+  }
+
+  public StationTypeEnum getStationType() {
+    if (stationType == null) {
+      stationType = StationTypeEnum.STANDARD;
+    }
+    return stationType;
+  }
+
+  public void setStationType(StationTypeEnum stationType) {
+    this.stationType = stationType;
   }
 }
