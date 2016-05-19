@@ -94,7 +94,7 @@ public class WeatherDataSet {
   }
 
   public boolean isValid() {
-    return outsideTemperature != null && outsideHumidity != null && rainCounter != null && raining != null;
+    return outsideTemperature != null && outsideHumidity != null;
   }
 
   public void setWindspeed(Float windspeed) {
@@ -119,5 +119,10 @@ public class WeatherDataSet {
 
   public void setKwh(Double kwh) {
     this.kwh = kwh;
+  }
+
+  @Override
+  public String toString() {
+    return "WeatherDataSet={ TS=" + timestamp + ", OutT=" +outsideTemperature + ", OutH=" + outsideHumidity + ", valid=" +  isValid() + "}" ;
   }
 }
