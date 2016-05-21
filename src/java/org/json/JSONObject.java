@@ -606,33 +606,6 @@ public class JSONObject {
     return this.map.containsKey(key);
   }
 
-  /**
-   * Increment a property of a JSONObject. If there is no such property, create
-   * one with a value of 1. If there is such a property, and if it is an
-   * Integer, Long, Double, or Float, then add one to it.
-   *
-   * @param key A key string.
-   * @return this.
-   * @throws JSONException If there is already a property with this name that is not an
-   *                       Integer, Long, Double, or Float.
-   */
-  public JSONObject increment(String key) throws JSONException {
-    Object value = this.opt(key);
-    if (value == null) {
-      this.put(key, 1);
-    } else if (value instanceof Integer) {
-      this.put(key, ((Integer) value).intValue() + 1);
-    } else if (value instanceof Long) {
-      this.put(key, ((Long) value).longValue() + 1);
-    } else if (value instanceof Double) {
-      this.put(key, ((Double) value).doubleValue() + 1);
-    } else if (value instanceof Float) {
-      this.put(key, ((Float) value).floatValue() + 1);
-    } else {
-      throw new JSONException("Unable to increment [" + quote(key) + "].");
-    }
-    return this;
-  }
 
   /**
    * Determine if the value associated with the key is null or if there is no
@@ -922,19 +895,6 @@ public class JSONObject {
   }
 
   /**
-   * Put a key/boolean pair in the JSONObject.
-   *
-   * @param key   A key string.
-   * @param value A boolean which is the value.
-   * @return this.
-   * @throws JSONException If the key is null.
-   */
-  public JSONObject put(String key, boolean value) throws JSONException {
-    this.put(key, value ? Boolean.TRUE : Boolean.FALSE);
-    return this;
-  }
-
-  /**
    * Put a key/value pair in the JSONObject, where the value will be a JSONArray
    * which is produced from a Collection.
    *
@@ -945,45 +905,6 @@ public class JSONObject {
    */
   public JSONObject put(String key, Collection value) throws JSONException {
     this.put(key, new JSONArray(value));
-    return this;
-  }
-
-  /**
-   * Put a key/double pair in the JSONObject.
-   *
-   * @param key   A key string.
-   * @param value A double which is the value.
-   * @return this.
-   * @throws JSONException If the key is null or if the number is invalid.
-   */
-  public JSONObject put(String key, double value) throws JSONException {
-    this.put(key, new Double(value));
-    return this;
-  }
-
-  /**
-   * Put a key/int pair in the JSONObject.
-   *
-   * @param key   A key string.
-   * @param value An int which is the value.
-   * @return this.
-   * @throws JSONException If the key is null.
-   */
-  public JSONObject put(String key, int value) throws JSONException {
-    this.put(key, new Integer(value));
-    return this;
-  }
-
-  /**
-   * Put a key/long pair in the JSONObject.
-   *
-   * @param key   A key string.
-   * @param value A long which is the value.
-   * @return this.
-   * @throws JSONException If the key is null.
-   */
-  public JSONObject put(String key, long value) throws JSONException {
-    this.put(key, new Long(value));
     return this;
   }
 
@@ -1029,11 +950,6 @@ public class JSONObject {
    * Put a key/value pair in the JSONObject, but only if the key and the value
    * are both non-null, and only if there is not already a member with that
    * name.
-   *
-   * @param key
-   * @param value
-   * @return his.
-   * @throws JSONException if the key is a duplicate
    */
   public JSONObject putOnce(String key, Object value) throws JSONException {
     if (key != null && value != null) {
@@ -1190,8 +1106,8 @@ public class JSONObject {
           }
         } else {
           Long myLong = new Long(string);
-          if (myLong.longValue() == myLong.intValue()) {
-            return new Integer(myLong.intValue());
+          if (myLong == myLong.intValue()) {
+            return myLong.intValue();
           } else {
             return myLong;
           }
@@ -1308,16 +1224,11 @@ public class JSONObject {
       return "null";
     }
     if (value instanceof JSONString) {
-      Object object;
       try {
-        object = ((JSONString) value).toJSONString();
+        return ((JSONString) value).toJSONString();
       } catch (Exception e) {
         throw new JSONException(e);
       }
-      if (object instanceof String) {
-        return (String) object;
-      }
-      throw new JSONException("Bad value from toJSONString: " + object);
     }
     if (value instanceof Number) {
       return numberToString((Number) value);
@@ -1393,7 +1304,7 @@ public class JSONObject {
     return this.write(writer, 0, 0);
   }
 
-  static final Writer writeValue(Writer writer, Object value, int indentFactor, int indent) throws JSONException, IOException {
+  static Writer writeValue(Writer writer, Object value, int indentFactor, int indent) throws JSONException, IOException {
     if (value == null || value.equals(null)) {
       writer.write("null");
     } else if (value instanceof JSONObject) {
@@ -1424,7 +1335,7 @@ public class JSONObject {
     return writer;
   }
 
-  static final void indent(Writer writer, int indent) throws IOException {
+  static void indent(Writer writer, int indent) throws IOException {
     for (int i = 0; i < indent; i += 1) {
       writer.write(' ');
     }

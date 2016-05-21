@@ -8,7 +8,7 @@ public class UnformattedWeatherDTO implements Serializable {
   private Float temperature;
   private Float insideTemperature;
   private Float humidity;
-  boolean raining;
+  Boolean raining;
   private Float rainLastHour;
   private Float rainToday;
   private Float windspeed;
@@ -42,11 +42,11 @@ public class UnformattedWeatherDTO implements Serializable {
     this.humidity = humidity;
   }
 
-  public boolean isRaining() {
+  public Boolean isRaining() {
     return raining;
   }
 
-  public void setRaining(boolean raining) {
+  public void setRaining(Boolean raining) {
     this.raining = raining;
   }
 
