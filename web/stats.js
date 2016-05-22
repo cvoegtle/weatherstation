@@ -1,4 +1,4 @@
-Å/// <reference path='services.ts'/>
+/// <reference path='services.ts'/>
 /// <reference path='onestation.ts'/>
 function statsinit() {
     init();

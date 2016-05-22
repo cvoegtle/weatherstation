@@ -3,12 +3,12 @@ var Column = (function () {
     function Column() {
     }
     return Column;
-})();
+}());
 var Columns = (function () {
     function Columns() {
     }
     return Columns;
-})();
+}());
 var WorkingArea = (function () {
     function WorkingArea() {
         this.area = document.getElementById("working_area");
@@ -175,14 +175,14 @@ var WorkingArea = (function () {
         return element;
     };
     return WorkingArea;
-})();
+}());
 var WeatherLocation = (function () {
     function WeatherLocation(weatherDataset) {
         this.description = weatherDataset.location;
         this.forecast = weatherDataset.forecast;
     }
     return WeatherLocation;
-})();
+}());
 function init() {
     var workingArea = new WorkingArea();
     function updateWeatherView(weatherData) {

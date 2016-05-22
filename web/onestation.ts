@@ -6,6 +6,7 @@ class WeatherArea {
   labelProblem:HTMLElement = document.getElementById("problem");
   labelTemperature:HTMLElement = document.getElementById("temperature");
   labelHumidity:HTMLElement = document.getElementById("humidity");
+  labelWindText:HTMLElement = document.getElementById("windText");
   labelWind:HTMLElement = document.getElementById("wind");
   labelRain:HTMLElement = document.getElementById("rain");
   labelRainText:HTMLElement = document.getElementById("rainText");
@@ -18,12 +19,17 @@ class WeatherArea {
     this.updateLabel(this.labelTime, getTimeFractionAsString(weatherData.timestamp));
     this.updateLabel(this.labelTemperature, getOptionalNumber(weatherData.temperature, "°C"));
     this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
-    this.updateLabel(this.labelWind, getOptionalNumber(weatherData.wind, "km/h"));
-    this.updateLabel(this.labelRainText, "Regen:");
-    if (weatherData.rain_today != "") {
-      this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
+    if (this.labelWind !== undefined) {
+      if (weatherData.wind != null) {
+        this.updateLabel(this.labelWindText, "Wind:");
+        this.updateLabel(this.labelWind, getOptionalNumber(weatherData.wind, "km/h"));
+      }
     }
-    this.labelRain.appendChild(this.rainInfoButton);
+    if (weatherData.rain_today != null) {
+      this.updateLabel(this.labelRainText, "Regen:");
+      this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
+      this.labelRain.appendChild(this.rainInfoButton);
+    }
 
     if (this.labelWatt !== undefined) {
       this.updateLabel(this.labelWattText, "");

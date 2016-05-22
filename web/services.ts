@@ -4,7 +4,7 @@ class WeatherData {
   humidity: number;
   raining: boolean;
   location: string;
-  rain_today: any;
+  rain_today: number;
   rain: any;
   temperature: number;
   watt: any;
