@@ -1,5 +1,6 @@
 class WeatherData {
   timestamp: string;
+  localtime: string;
   wind: number;
   humidity: number;
   raining: boolean;

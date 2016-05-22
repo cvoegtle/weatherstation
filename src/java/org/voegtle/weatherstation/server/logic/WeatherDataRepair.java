@@ -2,6 +2,7 @@ package org.voegtle.weatherstation.server.logic;
 
 import com.google.appengine.api.datastore.Key;
 import org.voegtle.weatherstation.server.logic.data.RepairJob;
+import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 
@@ -12,15 +13,17 @@ public class WeatherDataRepair {
   private static final Logger log = Logger.getLogger(WeatherDataRepair.class.getName());
 
   private final PersistenceManager pm;
+  private LocationProperties locationProperties;
   private List<SmoothedWeatherDataSet> datasets;
 
-  public WeatherDataRepair(PersistenceManager pm) {
+  public WeatherDataRepair(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
+    this.locationProperties = locationProperties;
   }
 
   public List<SmoothedWeatherDataSet> repair(Date begin, Date end) {
     ArrayList<SmoothedWeatherDataSet> repaired = new ArrayList<>();
-    WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
+    WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm, locationProperties);
     datasets = weatherDataFetcher.fetchSmoothedWeatherData(begin, end);
 
     repaired.addAll(removeDuplicates());

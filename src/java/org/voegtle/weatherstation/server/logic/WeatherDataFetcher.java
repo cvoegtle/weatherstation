@@ -3,10 +3,7 @@ package org.voegtle.weatherstation.server.logic;
 import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.Statistics;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
-import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
-import org.voegtle.weatherstation.server.persistence.PersistenceManager;
-import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
-import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.*;
 import org.voegtle.weatherstation.server.util.DateUtil;
 
 import java.util.Date;
@@ -14,9 +11,11 @@ import java.util.List;
 
 public class WeatherDataFetcher {
   private final PersistenceManager pm;
+  private LocationProperties locationProperties;
 
-  public WeatherDataFetcher(PersistenceManager pm) {
+  public WeatherDataFetcher(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
+    this.locationProperties = locationProperties;
   }
 
   public List<AggregatedWeatherDataSet> getAggregatedWeatherData(Date begin, Date end) {
@@ -39,17 +38,18 @@ public class WeatherDataFetcher {
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
   }
 
-  public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized, boolean windRelevant) {
+  public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized) {
     SmoothedWeatherDataSet today = getFirstDataSetOfToday();
     WeatherDataSet latest = pm.fetchYoungestDataSet();
     SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetOneHourBefore(latest.getTimestamp());
 
     UnformattedWeatherDTO dto = new UnformattedWeatherDTO();
     dto.setTime(latest.getTimestamp());
+    dto.setLocalTime(DateUtil.toLocalTime(latest.getTimestamp(), locationProperties.getTimezone()));
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
     dto.setRaining(latest.isRaining());
-    if (windRelevant) {
+    if (locationProperties.isWindRelevant()) {
       dto.setWindspeed(latest.getWindspeed());
     }
     dto.setWatt(latest.getWatt());

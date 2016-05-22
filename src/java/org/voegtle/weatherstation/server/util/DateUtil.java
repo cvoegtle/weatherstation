@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -118,6 +119,13 @@ public class DateUtil {
     cal.set(Calendar.MILLISECOND, 0);
 
     return cal.getTime();
+  }
+
+  public static String toLocalTime(Date date, String timezone) {
+    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+    sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+    return sdf.format(date);
   }
 
 

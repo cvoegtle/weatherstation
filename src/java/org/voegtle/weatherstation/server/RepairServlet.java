@@ -19,7 +19,7 @@ public class RepairServlet extends AbstractServlet {
     RepairUrlParameter param = new RepairUrlParameter(request);
 
     if (isSecretValid(param.getSecret())) {
-      WeatherDataRepair repairService = new WeatherDataRepair(pm);
+      WeatherDataRepair repairService = new WeatherDataRepair(pm, locationProperties);
       List<SmoothedWeatherDataSet> repaired = repairService.repair(param.getBegin(), param.getEnd());
       returnDetailedResult(response, repaired, false);
     } else {

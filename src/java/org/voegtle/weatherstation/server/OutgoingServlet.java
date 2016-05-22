@@ -32,7 +32,7 @@ public class OutgoingServlet extends AbstractServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setHeader("Access-Control-Allow-Origin", "*");
 
-    WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm);
+    WeatherDataFetcher weatherDataFetcher = new WeatherDataFetcher(pm, locationProperties);
 
     OutgoingUrlParameter param = new OutgoingUrlParameter(request);
     boolean authorized = isReadSecretValid(param.getSecret());
@@ -41,8 +41,7 @@ public class OutgoingServlet extends AbstractServlet {
       List<AggregatedWeatherDataSet> result = weatherDataFetcher.getAggregatedWeatherData(param.getBegin(), param.getEnd());
       returnAggregatedResult(response, result, param.isExtended());
     } else if (param.getType() == DataType.CURRENT) {
-      UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized,
-          locationProperties.isWindRelevant());
+      UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
       returnCurrentWeatherData(response, currentWeatherData, param.isExtended());
     } else if (param.getType() == DataType.RAIN) {
       RainDTO rainData = weatherDataFetcher.fetchRainData();
@@ -55,8 +54,7 @@ public class OutgoingServlet extends AbstractServlet {
         ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
         try {
-          UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized,
-              locationProperties.isWindRelevant());
+          UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
           JSONObject paderbornCurrent = jsonConverter.toJson(currentWeatherData, param.isExtended());
           collectedWeatherData.add(paderbornCurrent);
         } catch (Throwable throwable) {

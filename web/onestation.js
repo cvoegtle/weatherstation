@@ -15,7 +15,7 @@ var WeatherArea = (function () {
         this.rainInfoButton = this.createMoreInfoButton();
     }
     WeatherArea.prototype.update = function (weatherData) {
-        this.updateLabel(this.labelTime, getTimeFractionAsString(weatherData.timestamp));
+        this.updateLabel(this.labelTime, weatherData.localtime);
         this.updateLabel(this.labelTemperature, getOptionalNumber(weatherData.temperature, "°C"));
         this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
         if (this.labelWind !== undefined) {

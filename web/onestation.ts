@@ -16,7 +16,7 @@ class WeatherArea {
   rainInfoButton = this.createMoreInfoButton();
 
   update(weatherData:WeatherData):void {
-    this.updateLabel(this.labelTime, getTimeFractionAsString(weatherData.timestamp));
+    this.updateLabel(this.labelTime, weatherData.localtime);
     this.updateLabel(this.labelTemperature, getOptionalNumber(weatherData.temperature, "°C"));
     this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
     if (this.labelWind !== undefined) {

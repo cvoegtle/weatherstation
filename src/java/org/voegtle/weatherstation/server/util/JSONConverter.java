@@ -40,6 +40,7 @@ public class JSONConverter {
 
       json.put("location", locationProperties.getCity());
       json.put("location_short", locationProperties.getCityShortcut());
+      json.putOpt("localtime", currentWeatherData.getLocalTime());
 
       json.put("id", locationProperties.getLocation());
       if (extended) {

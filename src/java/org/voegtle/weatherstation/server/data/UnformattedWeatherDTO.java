@@ -5,10 +5,11 @@ import java.util.Date;
 
 public class UnformattedWeatherDTO implements Serializable {
   private Date time;
+  private String localTime;
   private Float temperature;
   private Float insideTemperature;
   private Float humidity;
-  Boolean raining;
+  private Boolean raining;
   private Float rainLastHour;
   private Float rainToday;
   private Float windspeed;
@@ -24,6 +25,14 @@ public class UnformattedWeatherDTO implements Serializable {
 
   public void setTime(Date time) {
     this.time = time;
+  }
+
+  public String getLocalTime() {
+    return localTime;
+  }
+
+  public void setLocalTime(String localTime) {
+    this.localTime = localTime;
   }
 
   public Float getTemperature() {

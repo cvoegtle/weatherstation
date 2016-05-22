@@ -17,6 +17,7 @@ public class LocationProperties {
   private String location;
   private String city;
   private String cityShortcut;
+  private String timezone;
 
   private String address;
 
@@ -132,5 +133,9 @@ public class LocationProperties {
 
   public void setStationType(StationTypeEnum stationType) {
     this.stationType = stationType;
+  }
+
+  public String getTimezone() {
+    return timezone;
   }
 }
