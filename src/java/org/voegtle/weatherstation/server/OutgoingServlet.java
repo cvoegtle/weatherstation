@@ -42,35 +42,13 @@ public class OutgoingServlet extends AbstractServlet {
       returnAggregatedResult(response, result, param.isExtended());
     } else if (param.getType() == DataType.CURRENT) {
       UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
-      returnCurrentWeatherData(response, currentWeatherData, param.isExtended());
+      returnCurrentWeatherData(response, currentWeatherData, param.isExtended(), param.isNewFormat());
     } else if (param.getType() == DataType.RAIN) {
       RainDTO rainData = weatherDataFetcher.fetchRainData();
       writeResponse(response, jsonConverter.toJson(rainData));
     } else if (param.getType() == DataType.STATS) {
       Statistics stats = weatherDataFetcher.fetchStatistics();
       writeResponse(response, jsonConverter.toJson(stats));
-    } else if (param.getType() == DataType.ALL) {
-      try {
-        ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
-
-        try {
-          UnformattedWeatherDTO currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized);
-          JSONObject paderbornCurrent = jsonConverter.toJson(currentWeatherData, param.isExtended());
-          collectedWeatherData.add(paderbornCurrent);
-        } catch (Throwable throwable) {
-          // weiter machen, auch wenn wir die aktuellen Daten nicht lesen können.
-        }
-
-
-        fetchWeatherData(collectedWeatherData, new WeatherUrl("forstwetter.appspot.com", DataType.CURRENT, param.isExtended()));
-        fetchWeatherData(collectedWeatherData, new WeatherUrl("oxenwetter.appspot.com", DataType.CURRENT, param.isExtended()));
-
-        writeResponse(response, collectedWeatherData);
-
-      } catch (Exception ex) {
-        log.severe("Exception while reading weather data " + ex.toString());
-      }
-
     } else if (param.getBegin() != null) {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
       returnDetailedResult(response, result, authorized);
@@ -87,8 +65,8 @@ public class OutgoingServlet extends AbstractServlet {
     }
   }
 
-  private void returnCurrentWeatherData(HttpServletResponse response, UnformattedWeatherDTO currentWeatherData, boolean extended) {
-    JSONObject json = jsonConverter.toJson(currentWeatherData, extended);
+  private void returnCurrentWeatherData(HttpServletResponse response, UnformattedWeatherDTO currentWeatherData, boolean extended, boolean newFormat) {
+    JSONObject json = newFormat ?  jsonConverter.toJson(currentWeatherData) : jsonConverter.toJsonLegacy(currentWeatherData, extended);
     writeResponse(response, json);
   }
 

@@ -23,7 +23,7 @@ public class JSONConverter {
     this.locationProperties = locationProperties;
   }
 
-  public JSONObject toJson(UnformattedWeatherDTO currentWeatherData, boolean extended) {
+  public JSONObject toJson(UnformattedWeatherDTO currentWeatherData) {
     JSONObject json = new WeatherJSONObject();
     try {
       json.put("timestamp", currentWeatherData.getTime());
@@ -43,13 +43,44 @@ public class JSONConverter {
       json.putOpt("localtime", currentWeatherData.getLocalTime());
 
       json.put("id", locationProperties.getLocation());
+      json.putOpt("forecast", locationProperties.getWeatherForecast());
+    } catch (JSONException ignored) {
+    }
+    return json;
+  }
+
+  public JSONObject toJsonLegacy(UnformattedWeatherDTO currentWeatherData, boolean extended) {
+    JSONObject json = new WeatherJSONObject();
+    try {
+      json.put("timestamp", currentWeatherData.getTime());
+      json.put("temperature", currentWeatherData.getTemperature());
+      if (currentWeatherData.getInsideTemperature() != null) {
+        json.put("inside_temperature", currentWeatherData.getInsideTemperature());
+      }
+      json.put("humidity", currentWeatherData.getHumidity());
+      if (currentWeatherData.getInsideHumidity() != null) {
+        json.put("inside_humidity", currentWeatherData.getInsideHumidity());
+      }
+      json.put("rain", currentWeatherData.getRainLastHour());
+      json.put("rain_today", currentWeatherData.getRainToday());
+      json.put("raining", currentWeatherData.isRaining());
+      json.put("wind", multiply(currentWeatherData.getWindspeed(), locationProperties.getWindMultiplier()));
+      if (currentWeatherData.getWatt() != null) {
+        json.put("watt", currentWeatherData.getWatt());
+      }
+
+      json.put("location", locationProperties.getCity());
+      json.put("location_short", locationProperties.getCityShortcut());
+
+      json.put("id", locationProperties.getLocation());
       if (extended) {
-        json.putOpt("forecast", locationProperties.getWeatherForecast());
+        json.put("forecast", locationProperties.getWeatherForecast());
       }
     } catch (JSONException ignored) {
     }
     return json;
   }
+
 
   public JSONObject toJson(RainDTO rain) {
     JSONObject json = new WeatherJSONObject();
