@@ -6,6 +6,7 @@ var WeatherData = (function () {
 var testdaten = [
     {
         timestamp: "Fri Apr 18 20:28:11 UTC 2014",
+        localtime: "20:28",
         wind: 0,
         humidity: 85,
         raining: false,
@@ -17,6 +18,7 @@ var testdaten = [
     },
     {
         "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
+        "localtime": "20:28",
         "wind": 0,
         "humidity": 76,
         "raining": false,
@@ -28,6 +30,7 @@ var testdaten = [
     },
     {
         "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
+        "localtime": "20:29",
         "wind": 0,
         "humidity": 84,
         "raining": false,
@@ -56,7 +59,7 @@ function fetchAllWeatherData(processWeatherData, reportConnectionProblem, urlPar
         processWeatherData(weatherData);
     };
     ajaxRequest.onerror = reportConnectionProblem;
-    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new", true);
+    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&type=current", true);
     ajaxRequest.send();
     //    processWeatherData(singleTestdaten);
 }
@@ -72,7 +75,7 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
     //    processWeatherData(singleTestdaten);
 }
 function getOptionalNumber(value, unit) {
-    if (value !== "") {
+    if (value != null) {
         var result = value.toFixed(1);
         return result.replace(".", ",") + " " + unit;
     }

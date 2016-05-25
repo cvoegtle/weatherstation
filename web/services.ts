@@ -1,22 +1,22 @@
 class WeatherData {
-  timestamp: string;
-  localtime: string;
-  wind: number;
-  humidity: number;
-  raining: boolean;
-  location: string;
-  rain_today: number;
-  rain: any;
-  temperature: number;
-  watt: any;
+  timestamp:string;
+  localtime:string;
+  wind:number;
+  humidity:number;
+  raining:boolean;
+  location:string;
+  rain_today:number;
+  rain:any;
+  temperature:number;
+  watt:any;
 }
 
 
+let testdaten:WeatherData[] = [
 
-let testdaten: WeatherData[] = [
-
-   {
+  {
     timestamp: "Fri Apr 18 20:28:11 UTC 2014",
+    localtime: "20:28",
     wind: 0,
     humidity: 85,
     raining: false,
@@ -24,10 +24,11 @@ let testdaten: WeatherData[] = [
     rain_today: 5.015,
     rain: 2.065,
     temperature: 5.3,
-     watt: null
+    watt: null
   },
   {
     "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
+    "localtime": "20:28",
     "wind": 0,
     "humidity": 76,
     "raining": false,
@@ -39,6 +40,7 @@ let testdaten: WeatherData[] = [
   },
   {
     "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
+    "localtime": "20:29",
     "wind": 0,
     "humidity": 84,
     "raining": false,
@@ -63,10 +65,10 @@ let singleTestdaten = {
   watt: null
 };
 
-function fetchAllWeatherData(processWeatherData: Function, reportConnectionProblem: any, urlParam: string) {
+function fetchAllWeatherData(processWeatherData:Function, reportConnectionProblem:any, urlParam:string) {
   var ajaxRequest = new XMLHttpRequest();
   ajaxRequest.onload = function () {
-    let weatherData: WeatherData[] = JSON.parse(ajaxRequest.responseText);
+    let weatherData:WeatherData[] = JSON.parse(ajaxRequest.responseText);
     processWeatherData(weatherData);
 
 
@@ -74,14 +76,14 @@ function fetchAllWeatherData(processWeatherData: Function, reportConnectionProbl
   ajaxRequest.onerror = reportConnectionProblem;
 
 
-  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new", true);
+  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&type=current", true);
   ajaxRequest.send();
 
 //    processWeatherData(singleTestdaten);
 
 }
 
-function fetchWeatherData(processWeatherData: Function, reportConnectionProblem: any, type: string): void {
+function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:any, type:string):void {
   let ajaxRequest = new XMLHttpRequest();
   ajaxRequest.onload = function () {
     let weatherData = JSON.parse(ajaxRequest.responseText);
@@ -98,17 +100,16 @@ function fetchWeatherData(processWeatherData: Function, reportConnectionProblem:
 
 }
 
-function getOptionalNumber(value: any, unit: string): string {
-  if (value !== "") {
+function getOptionalNumber(value:number, unit:string):string {
+  if (value != null) {
     let result = value.toFixed(1);
     return result.replace(".", ",") + " " + unit;
-
   } else {
     return "";
   }
 }
 
-function getTimeFractionAsString(dateAsString: string): string {
+function getTimeFractionAsString(dateAsString:string):string {
   let date = new Date(dateAsString);
   let hours = date.getHours();
   let minutes = date.getMinutes();

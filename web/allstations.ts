@@ -100,7 +100,7 @@ class WorkingArea {
 
     for (let i in this.weatherData) {
       if (this.weatherData.hasOwnProperty(i)) {
-        this.columns.timestamp.value[i] = getTimeFractionAsString(this.weatherData[i].timestamp);
+        this.columns.timestamp.value[i] = this.weatherData[i].localtime;
         this.columns.location.value[i] = new WeatherLocation(this.weatherData[i]);
         this.columns.temperature.value[i] = getOptionalNumber(this.weatherData[i].temperature, "°C");
         this.columns.humidity.value[i] = this.weatherData[i].humidity + " %";

@@ -13,11 +13,11 @@ public class WeatherUrl {
     url = new URL("https://" + host + "/weatherstation/query?type=" + type.toString() + (extended ? "&ext" : ""));
   }
 
-  public WeatherUrl(WeatherLocation location, DataType type, boolean extended, String secret) throws MalformedURLException {
-    boolean forwardSecret = StringUtil.isNotEmpty(secret) && location.isForwardSecret();
-    url = new URL("https://" + location.getHost() + "/weatherstation/query?type=" + type
-        + (extended ? "&ext" : "")
-        + (forwardSecret ? "&secret=" + StringUtil.urlEncode(secret) : ""));
+  public WeatherUrl(WeatherLocation location, UrlParameter param) throws MalformedURLException {
+    boolean forwardSecret = StringUtil.isNotEmpty(param.getSecret()) && location.isForwardSecret();
+    url = new URL("https://" + location.getHost() + "/weatherstation/query?type=" + param.getType()
+        + (param.isExtended() ? "&ext" : "") + (param.isNewFormat() ? "&new" : "")
+        + (forwardSecret ? "&secret=" + StringUtil.urlEncode(param.getSecret()) : ""));
   }
 
   public URL getUrl() {

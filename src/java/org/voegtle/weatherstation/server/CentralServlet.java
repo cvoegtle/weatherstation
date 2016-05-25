@@ -40,8 +40,8 @@ public class CentralServlet extends AbstractServlet {
       log.info("Location: " + locationIdentifier);
       WeatherLocation location = locations.get(locationIdentifier);
       if (location != null) {
-        log.info("fetch data from " + location.getHost());
-        WeatherUrl url = new WeatherUrl(location, param.getType(), param.isExtended(), param.getSecret());
+        WeatherUrl url = new WeatherUrl(location, param);
+        log.info("fetch data from " + url);
         fetchWeatherData(collectedWeatherData, url);
       }
     }
@@ -70,6 +70,7 @@ public class CentralServlet extends AbstractServlet {
     while ((line = reader.readLine()) != null) {
       received.append(line);
     }
+    log.info("response: <" + received + ">");
     return new JSONObject(received.toString());
   }
 
