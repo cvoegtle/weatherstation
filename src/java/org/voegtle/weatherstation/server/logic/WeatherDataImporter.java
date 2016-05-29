@@ -2,10 +2,7 @@ package org.voegtle.weatherstation.server.logic;
 
 import org.voegtle.weatherstation.server.parser.DataLine;
 import org.voegtle.weatherstation.server.parser.DataParser;
-import org.voegtle.weatherstation.server.persistence.PersistenceManager;
-import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
-import org.voegtle.weatherstation.server.persistence.StationTypeEnum;
-import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.*;
 import org.voegtle.weatherstation.server.request.ResponseCode;
 import org.voegtle.weatherstation.server.util.DateUtil;
 
@@ -20,12 +17,14 @@ public class WeatherDataImporter {
   private static final Logger log = Logger.getLogger(WeatherDataImporter.class.getName());
 
   private final PersistenceManager pm;
+  private final DateUtil dateUtil;
   private StationTypeEnum stationType;
   private final Date importedUntil;
 
-  public WeatherDataImporter(PersistenceManager pm, StationTypeEnum stationType) {
+  public WeatherDataImporter(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
-    this.stationType = stationType;
+    this.stationType = locationProperties.getStationType();
+    this.dateUtil = locationProperties.getDateUtil();
     this.importedUntil = getDateOfLastDataSet();
   }
 
@@ -33,7 +32,7 @@ public class WeatherDataImporter {
     String result;
     try {
       boolean persisted = false;
-      DataParser parser = new DataParser(stationType);
+      DataParser parser = new DataParser(stationType, dateUtil);
       List<WeatherDataSet> dataSets = parser.parse(lines);
       log.info("Number of valid datasets: " + dataSets.size());
       for (WeatherDataSet dataSet : dataSets) {
@@ -45,8 +44,8 @@ public class WeatherDataImporter {
       }
 
       if (persisted) {
-        new WeatherDataSmoother(pm).smoothWeatherData();
-        new WeatherDataAggregator(pm).aggregateWeatherData();
+        new WeatherDataSmoother(pm, dateUtil).smoothWeatherData();
+        new WeatherDataAggregator(pm, dateUtil).aggregateWeatherData();
       } else {
         log.warning("no dataset has been persisted");
       }
@@ -68,7 +67,7 @@ public class WeatherDataImporter {
   }
 
   private Date getDateOfLastDataSet() {
-    Date lastImport = DateUtil.getDate(2014, 1, 1);
+    Date lastImport = dateUtil.getDate(2016, 1, 1);
 
     WeatherDataSet youngestDataSet = pm.fetchYoungestDataSet();
     if (youngestDataSet != null && youngestDataSet.getTimestamp().after(lastImport)) {

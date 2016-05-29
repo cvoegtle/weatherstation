@@ -16,7 +16,7 @@ public class RepairServlet extends AbstractServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    RepairUrlParameter param = new RepairUrlParameter(request);
+    RepairUrlParameter param = new RepairUrlParameter(request, locationProperties.getDateUtil());
 
     if (isSecretValid(param.getSecret())) {
       WeatherDataRepair repairService = new WeatherDataRepair(pm, locationProperties);

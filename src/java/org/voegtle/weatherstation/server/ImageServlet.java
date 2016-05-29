@@ -24,7 +24,7 @@ public class ImageServlet extends AbstractServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    ImageUrlParameter param = new ImageUrlParameter(request);
+    ImageUrlParameter param = new ImageUrlParameter(request, locationProperties.getDateUtil());
     if (param.isRefresh()) {
       imageCache.refresh(param.getBegin(), param.getEnd());
       response.getWriter().write("ACK " + imageCache.size());

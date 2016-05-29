@@ -25,12 +25,13 @@ public class DataParser {
   private static final int INDEX_WATT = 26;
   private static final int INDEX_KWH = 27;
 
-  private static final Date MIN_DATE = DateUtil.getDate(2014, 1, 1);
+  private final Date MIN_DATE;
 
   private StationTypeEnum stationType;
 
-  public DataParser(StationTypeEnum stationType) {
+  public DataParser(StationTypeEnum stationType, DateUtil dateUtil) {
     this.stationType = stationType;
+    this.MIN_DATE = dateUtil.getDate(2016, 1, 1);
   }
 
   public List<WeatherDataSet> parse(List<DataLine> lines) throws ParseException {

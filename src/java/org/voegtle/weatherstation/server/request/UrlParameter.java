@@ -1,5 +1,7 @@
 package org.voegtle.weatherstation.server.request;
 
+import org.voegtle.weatherstation.server.util.DateUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -19,9 +21,9 @@ public class UrlParameter extends AbstractUrlParameter {
   private final boolean extended;
   private final boolean newFormat;
 
-  public UrlParameter(final HttpServletRequest request) {
-    super(request);
-    this.type = getUrlParameterType(PARAM_TYPE, DataType.CURRENT);
+  public UrlParameter(final HttpServletRequest request, DateUtil dateUtil, DataType defaultDataType) {
+    super(request, dateUtil);
+    this.type = getUrlParameterType(PARAM_TYPE, defaultDataType);
     this.begin = getUrlParameterDate(PARAM_BEGIN);
     this.end = getUrlParameterDate(PARAM_END);
     this.secret = getUrlParameter(PARAM_SECRET);

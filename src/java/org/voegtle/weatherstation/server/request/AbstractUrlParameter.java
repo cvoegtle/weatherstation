@@ -12,9 +12,11 @@ abstract class AbstractUrlParameter {
   private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd-HH:mm:ss";
 
   final private HttpServletRequest request;
+  private final DateUtil dateUtil;
 
-  protected AbstractUrlParameter(final HttpServletRequest request) {
+  protected AbstractUrlParameter(final HttpServletRequest request, DateUtil dateUtil) {
     this.request = request;
+    this.dateUtil = dateUtil;
   }
 
   protected String getUrlParameter(String paramName) {
@@ -40,7 +42,7 @@ abstract class AbstractUrlParameter {
     Date result;
     try {
       result = sdf.parse(param);
-      result = DateUtil.fromCESTtoGMT(result);
+      result = dateUtil.fromCESTtoGMT(result);
     } catch (ParseException e) {
       result = null;
     }

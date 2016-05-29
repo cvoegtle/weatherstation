@@ -21,11 +21,11 @@ public class UploadServlet extends AbstractServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String result;
 
-    IncomingUrlParameter param = new IncomingUrlParameter(request);
+    IncomingUrlParameter param = new IncomingUrlParameter(request, locationProperties.getDateUtil());
     if (isSecretValid(param.getSecret())) {
       if (isCorrectLocation(param.getLocation())) {
         ArrayList<DataLine> lines = readInputLines(getContentStream(request));
-        WeatherDataImporter importer = new WeatherDataImporter(pm, locationProperties.getStationType());
+        WeatherDataImporter importer = new WeatherDataImporter(pm, locationProperties);
         result = importer.doImport(lines);
       } else {
         result = ResponseCode.WRONG_LOCATION;

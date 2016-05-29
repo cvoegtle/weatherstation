@@ -14,9 +14,11 @@ import java.util.Locale;
 public class WeatherDataSmoother {
 
   private final PersistenceManager pm;
+  private final DateUtil dateUtil;
 
-  public WeatherDataSmoother(PersistenceManager pm) {
+  public WeatherDataSmoother(PersistenceManager pm, DateUtil dateUtil) {
     this.pm = pm;
+    this.dateUtil = dateUtil;
   }
 
   public void smoothWeatherData() {
@@ -24,7 +26,7 @@ public class WeatherDataSmoother {
 
     Date currentTime = calculateStartTime(endTime);
     while (currentTime.before(endTime)) {
-      TimeRange range = DateUtil.getRangeAround(currentTime, 7 * 60 + 30);
+      TimeRange range = dateUtil.getRangeAround(currentTime, 7 * 60 + 30);
       List<WeatherDataSet> weatherData = pm.fetchWeatherDataInRange(range.getBegin(), range.getEnd());
 
       SmoothedWeatherDataSet smoothed = new SmoothedWeatherDataSet(currentTime);

@@ -11,11 +11,13 @@ import java.util.List;
 
 public class WeatherDataFetcher {
   private final PersistenceManager pm;
-  private LocationProperties locationProperties;
+  private final DateUtil dateUtil;
+  private final LocationProperties locationProperties;
 
   public WeatherDataFetcher(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
     this.locationProperties = locationProperties;
+    this.dateUtil = locationProperties.getDateUtil();
   }
 
   public List<AggregatedWeatherDataSet> getAggregatedWeatherData(Date begin, Date end) {
@@ -27,14 +29,14 @@ public class WeatherDataFetcher {
   }
 
   public List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
-    Date today = DateUtil.getToday();
-    return pm.fetchSmoothedWeatherDataInRange(DateUtil.fromCESTtoGMT(today), null);
+    Date today = dateUtil.getToday();
+    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromCESTtoGMT(today), null);
   }
 
   public SmoothedWeatherDataSet getFirstDataSetOfToday() {
-    Date today = DateUtil.getToday();
-    today = DateUtil.fromCESTtoGMT(today);
-    Date oneHourLater = DateUtil.incrementHour(today);
+    Date today = dateUtil.getToday();
+    today = dateUtil.fromCESTtoGMT(today);
+    Date oneHourLater = dateUtil.incrementHour(today);
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
   }
 
@@ -45,7 +47,7 @@ public class WeatherDataFetcher {
 
     UnformattedWeatherDTO dto = new UnformattedWeatherDTO();
     dto.setTime(latest.getTimestamp());
-    dto.setLocalTime(DateUtil.toLocalTime(latest.getTimestamp(), locationProperties.getTimezone()));
+    dto.setLocalTime(dateUtil.toLocalTime(latest.getTimestamp()));
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
     dto.setRaining(latest.isRaining());
@@ -77,8 +79,8 @@ public class WeatherDataFetcher {
   }
 
   private void buildHistoricStatistics(Statistics stats) {
-    Date yesterday = DateUtil.getYesterday();
-    List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(DateUtil.daysEarlier(yesterday, 29), yesterday, false);
+    Date yesterday = dateUtil.getYesterday();
+    List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
 
     int day = 1;
     for (AggregatedWeatherDataSet dataSet : dataSets) {

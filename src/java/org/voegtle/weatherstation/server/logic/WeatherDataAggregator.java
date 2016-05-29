@@ -11,20 +11,22 @@ public class WeatherDataAggregator {
   private static final Logger log = Logger.getLogger(WeatherDataAggregator.class.getName());
 
   private final PersistenceManager pm;
+  private final DateUtil dateUtil;
 
-  public WeatherDataAggregator(PersistenceManager pm) {
+  public WeatherDataAggregator(PersistenceManager pm, DateUtil dateUtil) {
     this.pm = pm;
+    this.dateUtil = dateUtil;
   }
 
   public void aggregateWeatherData() {
     Date dateOfLastAggregation = fetchDateOfLastAggregation();
     Date dateOfLastWeatherDataSet = fetchLastDateWithCompleteWeatherDataSets();
 
-    while (DateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
+    while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       AggregatedWeatherDataSet aggregatedDay = createNewDay(dateOfLastAggregation);
       log.warning("aggregate " + aggregatedDay.getDate());
-      List<SmoothedWeatherDataSet> weatherDataSets = pm.fetchSmoothedWeatherDataInRange(DateUtil.fromCESTtoGMT(aggregatedDay.getDate()),
-          DateUtil.fromCESTtoGMT(DateUtil.nextDay(aggregatedDay.getDate())));
+      List<SmoothedWeatherDataSet> weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromCESTtoGMT(aggregatedDay.getDate()),
+          dateUtil.fromCESTtoGMT(dateUtil.nextDay(aggregatedDay.getDate())));
       aggregate(aggregatedDay, weatherDataSets);
 
       pm.makePersitant(aggregatedDay);
@@ -72,17 +74,17 @@ public class WeatherDataAggregator {
 
   private Date fetchDateOfLastAggregation() {
     AggregatedWeatherDataSet lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY);
-    return lastAggregatedDay == null ? DateUtil.getDate(2016, 5, 11) : lastAggregatedDay.getDate();
+    return lastAggregatedDay == null ? dateUtil.getDate(2016, 5, 11) : lastAggregatedDay.getDate();
   }
 
   private Date fetchLastDateWithCompleteWeatherDataSets() {
     WeatherDataSet youngest = pm.fetchYoungestDataSet();
-    Date timestamp = DateUtil.daysEarlier(youngest.getTimestamp(), 1);
-    timestamp = DateUtil.fromGMTtoCEST(timestamp);
+    Date timestamp = dateUtil.daysEarlier(youngest.getTimestamp(), 1);
+    timestamp = dateUtil.fromGMTtoCEST(timestamp);
     return timestamp;
   }
 
   private AggregatedWeatherDataSet createNewDay(Date lastDay) {
-    return new AggregatedWeatherDataSet(DateUtil.incrementDay(lastDay), PeriodEnum.DAY);
+    return new AggregatedWeatherDataSet(dateUtil.incrementDay(lastDay), PeriodEnum.DAY);
   }
 }

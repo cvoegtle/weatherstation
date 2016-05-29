@@ -18,9 +18,11 @@ public class JSONConverter {
   public static final String FORMAT_DATE = "yyyy-MM-dd";
 
   private final LocationProperties locationProperties;
+  private final DateUtil dateUtil;
 
   public JSONConverter(LocationProperties locationProperties) {
     this.locationProperties = locationProperties;
+    this.dateUtil = locationProperties.getDateUtil();
   }
 
   public JSONObject toJson(UnformattedWeatherDTO currentWeatherData) {
@@ -95,17 +97,13 @@ public class JSONConverter {
     return json;
   }
 
-  private static final String FORMAT_OUTGOING_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
-
   public ArrayList<JSONObject> toJson(List<SmoothedWeatherDataSet> list, boolean extended) {
-    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_OUTGOING_TIMESTAMP);
-
     Integer previousRainCounter = null;
     ArrayList<JSONObject> jsonObjects = new ArrayList<>();
     for (SmoothedWeatherDataSet wds : list) {
       JSONObject json = new WeatherJSONObject();
       try {
-        json.put("timestamp", sdf.format(DateUtil.fromGMTtoCEST(wds.getTimestamp())));
+        json.put("timestamp", dateUtil.toLocalDate(wds.getTimestamp()));
         json.put("temperature", wds.getOutsideTemperature());
         if (wds.getInsideTemperature() != null && extended) {
           json.put("inside_temperature", wds.getInsideTemperature());

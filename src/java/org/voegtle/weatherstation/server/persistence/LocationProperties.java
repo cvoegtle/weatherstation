@@ -1,12 +1,14 @@
 package org.voegtle.weatherstation.server.persistence;
 
 import com.google.appengine.api.datastore.Key;
+import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.StringUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.TimeZone;
 
 @Entity
 public class LocationProperties {
@@ -137,5 +139,13 @@ public class LocationProperties {
 
   public String getTimezone() {
     return timezone;
+  }
+
+  public DateUtil getDateUtil() {
+    return new DateUtil(TimeZone.getTimeZone(timezone));
+  }
+
+  public void setTimezone(String timezone) {
+    this.timezone = timezone;
   }
 }

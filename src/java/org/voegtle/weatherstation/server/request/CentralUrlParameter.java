@@ -1,9 +1,12 @@
 package org.voegtle.weatherstation.server.request;
 
+import org.voegtle.weatherstation.server.util.DateUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class CentralUrlParameter extends UrlParameter {
@@ -14,7 +17,7 @@ public class CentralUrlParameter extends UrlParameter {
   private final List<String> locations;
 
   public CentralUrlParameter(HttpServletRequest request) {
-    super(request);
+    super(request, new DateUtil(TimeZone.getDefault()), DataType.CURRENT);
     this.utf8 = getUrlParameterBoolean(PARAM_UTF8);
     String locationsStr = getUrlParameter(PARAM_LOCATIONS);
     locations = new ArrayList<>();
