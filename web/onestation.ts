@@ -67,12 +67,12 @@ class WeatherArea {
     }
   }
 
-  combineRainValues(rain, rainToday):string {
+  combineRainValues(rain:number, rainToday:number):string {
     let result:string = "";
 
-    if (rainToday != "") {
+    if (rainToday != null) {
       result = getOptionalNumber(rainToday, " l");
-      if (rain != "") {
+      if (rain != null) {
         result += " / " + getOptionalNumber(rain, " l");
       }
     }

@@ -62,9 +62,9 @@ var WeatherArea = (function () {
     };
     WeatherArea.prototype.combineRainValues = function (rain, rainToday) {
         var result = "";
-        if (rainToday != "") {
+        if (rainToday != null) {
             result = getOptionalNumber(rainToday, " l");
-            if (rain != "") {
+            if (rain != null) {
                 result += " / " + getOptionalNumber(rain, " l");
             }
         }
