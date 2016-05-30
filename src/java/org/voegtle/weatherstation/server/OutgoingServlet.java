@@ -44,7 +44,7 @@ public class OutgoingServlet extends AbstractServlet {
       writeResponse(response, jsonConverter.toJson(rainData));
     } else if (param.getType() == DataType.STATS) {
       Statistics stats = weatherDataFetcher.fetchStatistics();
-      writeResponse(response, jsonConverter.toJson(stats));
+      writeResponse(response, jsonConverter.toJson(stats, param.isNewFormat()));
     } else if (param.getBegin() != null) {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
       returnDetailedResult(response, result, authorized);

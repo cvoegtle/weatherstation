@@ -169,7 +169,7 @@ public class JSONConverter {
     return jsonObjects;
   }
 
-  public JSONObject toJson(Statistics stats) {
+  public JSONObject toJson(Statistics stats, boolean newFormat) {
     JSONObject json = new WeatherJSONObject();
     try {
       json.put("id", locationProperties.getLocation());
@@ -178,28 +178,30 @@ public class JSONConverter {
       if (stats.getRainLastHour() != null) {
         StatisticsSet lastHour = new StatisticsSet();
         lastHour.addRain(stats.getRainLastHour());
-        jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour));
+        jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour, newFormat));
       }
 
-      jsonObjects.add(toJson(Statistics.TimeRange.today, stats.getToday()));
-      jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.getYesterday()));
-      jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.getLast7days()));
-      jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.getLast30days()));
+      jsonObjects.add(toJson(Statistics.TimeRange.today, stats.getToday(), newFormat));
+      jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.getYesterday(), newFormat));
+      jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.getLast7days(), newFormat));
+      jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.getLast30days(), newFormat));
       json.put("stats", jsonObjects);
     } catch (JSONException ignored) {
     }
     return json;
   }
 
-  private JSONObject toJson(Statistics.TimeRange range, StatisticsSet set) throws JSONException {
+  private JSONObject toJson(Statistics.TimeRange range, StatisticsSet set, boolean newFormat) throws JSONException {
     JSONObject json = new WeatherJSONObject();
     json.put("range", range);
-    json.put("rain", set.getRain());
+    if (newFormat) {
+      json.putOpt("rain", set.getRain());
+    } else {
+      json.put("rain", set.getRain());
+    }
     json.put("minTemperature", set.getMinTemperature());
     json.put("maxTemperature", set.getMaxTemperature());
-    if (set.getKwh() != null) {
-      json.put("kwh", set.getKwh());
-    }
+    json.putOpt("kwh", set.getKwh());
     return json;
   }
 }
