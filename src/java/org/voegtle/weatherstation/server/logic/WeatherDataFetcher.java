@@ -8,8 +8,11 @@ import org.voegtle.weatherstation.server.util.DateUtil;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class WeatherDataFetcher {
+  private static final Logger log = Logger.getLogger(WeatherDataFetcher.class.getName());
+
   private final PersistenceManager pm;
   private final DateUtil dateUtil;
   private final LocationProperties locationProperties;
@@ -30,12 +33,12 @@ public class WeatherDataFetcher {
 
   public List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
     Date today = dateUtil.getToday();
-    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromCESTtoGMT(today), null);
+    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today), null);
   }
 
   public SmoothedWeatherDataSet getFirstDataSetOfToday() {
     Date today = dateUtil.getToday();
-    today = dateUtil.fromCESTtoGMT(today);
+    today = dateUtil.fromLocalToGMT(today);
     Date oneHourLater = dateUtil.incrementHour(today);
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
   }
@@ -80,6 +83,7 @@ public class WeatherDataFetcher {
 
   private void buildHistoricStatistics(Statistics stats) {
     Date yesterday = dateUtil.getYesterday();
+    log.warning("Yesterday: " + yesterday);
     List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
 
     int day = 1;

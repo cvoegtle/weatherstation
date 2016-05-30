@@ -25,8 +25,9 @@ public class WeatherDataAggregator {
     while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       AggregatedWeatherDataSet aggregatedDay = createNewDay(dateOfLastAggregation);
       log.warning("aggregate " + aggregatedDay.getDate());
-      List<SmoothedWeatherDataSet> weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromCESTtoGMT(aggregatedDay.getDate()),
-          dateUtil.fromCESTtoGMT(dateUtil.nextDay(aggregatedDay.getDate())));
+      List<SmoothedWeatherDataSet> weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.getDate()),
+          dateUtil.fromLocalToGMT(dateUtil.nextDay(aggregatedDay.getDate())));
+
       aggregate(aggregatedDay, weatherDataSets);
 
       pm.makePersitant(aggregatedDay);
@@ -43,14 +44,17 @@ public class WeatherDataAggregator {
       Double kwhLast = null;
       for (SmoothedWeatherDataSet wds : weatherDataSets) {
         if (wds.isValid()) {
+          log.warning("Smoothed DS: " + wds.getTimestamp());
           aggregation.addOutsideTemperature(wds.getOutsideTemperature(), wds.getTimestamp());
           aggregation.addOutsideHumidity(wds.getOutsideHumidity());
           aggregation.addInsideTemperature(wds.getInsideTemperature());
           aggregation.addInsideHumidity(wds.getInsideHumidity());
-          if (rainCountStart == null) {
-            rainCountStart = wds.getRainCounter();
+          if (wds.getRainCounter() != null) {
+            if (rainCountStart == null) {
+              rainCountStart = wds.getRainCounter();
+            }
+            rainCountLast = wds.getRainCounter();
           }
-          rainCountLast = wds.getRainCounter();
           if (kwhStart == null) {
             kwhStart = wds.getKwh();
           }
@@ -80,7 +84,7 @@ public class WeatherDataAggregator {
   private Date fetchLastDateWithCompleteWeatherDataSets() {
     WeatherDataSet youngest = pm.fetchYoungestDataSet();
     Date timestamp = dateUtil.daysEarlier(youngest.getTimestamp(), 1);
-    timestamp = dateUtil.fromGMTtoCEST(timestamp);
+    timestamp = dateUtil.fromGMTtoLocal(timestamp);
     return timestamp;
   }
 

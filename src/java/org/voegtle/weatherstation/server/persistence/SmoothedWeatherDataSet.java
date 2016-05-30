@@ -236,7 +236,7 @@ public class SmoothedWeatherDataSet {
   }
 
   public boolean isValid() {
-    return outsideTemperature != null && outsideHumidity != null && rainCounter != null;
+    return outsideTemperature != null && outsideHumidity != null;
   }
 
   public Float getWindspeed() {

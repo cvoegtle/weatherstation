@@ -18,14 +18,28 @@ public class DateUtil {
   public Date fromCESTtoGMT(Date date) {
     Calendar cal = Calendar.getInstance(Locale.UK);
     cal.setTime(date);
-    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date));
+    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, tzCEST));
     return cal.getTime();
   }
 
   public Date fromGMTtoCEST(Date date) {
     Calendar cal = Calendar.getInstance(tzCEST, Locale.GERMANY);
     cal.setTime(date);
-    cal.add(Calendar.HOUR_OF_DAY, getTimeOffset(date));
+    cal.add(Calendar.HOUR_OF_DAY, getTimeOffset(date, tzCEST));
+    return cal.getTime();
+  }
+
+  public Date fromLocalToGMT(Date date) {
+    Calendar cal = Calendar.getInstance(Locale.UK);
+    cal.setTime(date);
+    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, timezone));
+    return cal.getTime();
+  }
+
+  public Date fromGMTtoLocal(Date date){
+    Calendar cal = Calendar.getInstance(timezone);
+    cal.setTime(date);
+    cal.add(Calendar.HOUR_OF_DAY, getTimeOffset(date, timezone));
     return cal.getTime();
   }
 
@@ -43,8 +57,8 @@ public class DateUtil {
   }
 
   public Date getYesterday() {
-    Calendar cal = Calendar.getInstance(Locale.GERMANY);
-    cal.setTime(fromGMTtoCEST(cal.getTime()));
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(fromGMTtoLocal(cal.getTime()));
     removeTimeFraction(cal);
 
     cal.add(Calendar.DAY_OF_MONTH, -1);
@@ -54,7 +68,7 @@ public class DateUtil {
 
   public Date getToday() {
     Calendar cal = Calendar.getInstance(Locale.GERMANY);
-    cal.setTime(fromGMTtoCEST(cal.getTime()));
+    cal.setTime(fromGMTtoLocal(cal.getTime()));
     removeTimeFraction(cal);
 
     return cal.getTime();
@@ -138,8 +152,8 @@ public class DateUtil {
   }
 
 
-  private int getTimeOffset(Date date) {
-    return tzCEST.getOffset(date.getTime()) / 3600000;
+  private int getTimeOffset(Date date, TimeZone tz) {
+    return tz.getOffset(date.getTime()) / 3600000;
   }
 
 
