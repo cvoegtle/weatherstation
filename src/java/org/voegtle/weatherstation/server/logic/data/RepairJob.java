@@ -61,7 +61,11 @@ public class RepairJob {
 
     step.humidity = (last.getOutsideHumidity() - first.getOutsideHumidity()) / (defectDataSets.size() + 1);
     step.temperature = (last.getOutsideTemperature() - first.getOutsideTemperature()) / (defectDataSets.size() + 1);
-    step.rain = (last.getRainCounter() - first.getRainCounter()) / (defectDataSets.size() + 1);
+    if (last.getRainCounter() == null) {
+      step.rain = 0;
+    } else {
+      step.rain = (last.getRainCounter() - first.getRainCounter()) / (defectDataSets.size() + 1);
+    }
 
     step.insideHumidity = spreadEqually(first.getInsideHumidity(), last.getInsideHumidity(), defectDataSets.size());
     step.insideTemperature = spreadEqually(first.getInsideTemperature(), last.getInsideTemperature(), defectDataSets.size());

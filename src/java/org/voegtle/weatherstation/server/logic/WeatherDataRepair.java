@@ -99,7 +99,9 @@ public class WeatherDataRepair {
         ds.setInsideHumidity(getNewValue(first.getInsideHumidity(), index, step.insideHumidity));
         ds.setInsideTemperature(getNewValue(first.getInsideTemperature(), index, step.insideTemperature));
 
-        ds.setRainCounter(getNewValue(first.getRainCounter(), index, step.rain));
+        if (first.getRainCounter() != null) {
+          ds.setRainCounter(getNewValue(first.getRainCounter(), index, step.rain));
+        }
         ds.setKwh(getNewValue(first.getKwh(), index, step.kwh));
 
         setDefaults(ds);
