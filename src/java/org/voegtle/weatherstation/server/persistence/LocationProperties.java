@@ -33,7 +33,8 @@ public class LocationProperties {
 
   private Float windMultiplier;
 
-  private StationTypeEnum stationType;
+  private Integer indexOutsideTemperature;
+  private Integer indexOutsideHumidity;
 
   public LocationProperties() {
   }
@@ -126,17 +127,6 @@ public class LocationProperties {
     this.windMultiplier = windMultiplier;
   }
 
-  public StationTypeEnum getStationType() {
-    if (stationType == null) {
-      stationType = StationTypeEnum.STANDARD;
-    }
-    return stationType;
-  }
-
-  public void setStationType(StationTypeEnum stationType) {
-    this.stationType = stationType;
-  }
-
   public String getTimezone() {
     return timezone;
   }
@@ -147,5 +137,21 @@ public class LocationProperties {
 
   public void setTimezone(String timezone) {
     this.timezone = timezone;
+  }
+
+  public Integer getIndexOutsideTemperature() {
+    return indexOutsideTemperature;
+  }
+
+  public void setIndexOutsideTemperature(Integer indexOutsideTemperature) {
+    this.indexOutsideTemperature = indexOutsideTemperature;
+  }
+
+  public Integer getIndexOutsideHumidity() {
+    return indexOutsideHumidity;
+  }
+
+  public void setIndexOutsideHumidity(Integer indexOutsideHumidity) {
+    this.indexOutsideHumidity = indexOutsideHumidity;
   }
 }

@@ -2,7 +2,10 @@ package org.voegtle.weatherstation.server.logic;
 
 import org.voegtle.weatherstation.server.parser.DataLine;
 import org.voegtle.weatherstation.server.parser.DataParser;
-import org.voegtle.weatherstation.server.persistence.*;
+import org.voegtle.weatherstation.server.persistence.LocationProperties;
+import org.voegtle.weatherstation.server.persistence.PersistenceManager;
+import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.request.ResponseCode;
 import org.voegtle.weatherstation.server.util.DateUtil;
 
@@ -18,21 +21,23 @@ public class WeatherDataImporter {
 
   private final PersistenceManager pm;
   private final DateUtil dateUtil;
-  private StationTypeEnum stationType;
   private final Date importedUntil;
+  private final Integer indexOutsideTemperature;
+  private final Integer indexOutsideHumidity;
 
   public WeatherDataImporter(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
-    this.stationType = locationProperties.getStationType();
     this.dateUtil = locationProperties.getDateUtil();
     this.importedUntil = getDateOfLastDataSet();
+    this.indexOutsideTemperature = locationProperties.getIndexOutsideTemperature();
+    this.indexOutsideHumidity = locationProperties.getIndexOutsideHumidity();
   }
 
   public String doImport(ArrayList<DataLine> lines) {
     String result;
     try {
       boolean persisted = false;
-      DataParser parser = new DataParser(stationType, dateUtil);
+      DataParser parser = new DataParser(dateUtil, indexOutsideTemperature, indexOutsideHumidity);
       List<WeatherDataSet> dataSets = parser.parse(lines);
       log.info("Number of valid datasets: " + dataSets.size());
       for (WeatherDataSet dataSet : dataSets) {
