@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.parser;
 
+import org.voegtle.weatherstation.server.persistence.DataIndicies;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.StringUtil;
@@ -26,11 +27,14 @@ public class DataParser {
 
   private final int indexOutsideTemperature;
   private final int indexOutsideHumidity;
+  private final int indexInsideTemperature;
+  private final int indexInsideHumidity;
 
-  public DataParser(DateUtil dateUtil, Integer indexOutsideTemperature, Integer indexOutsideHumidity) {
-    this.indexOutsideTemperature = indexOutsideTemperature != null ? indexOutsideTemperature : INDEX_OUTSIDE_TEMPERATURE;
-    this.indexOutsideHumidity = indexOutsideHumidity != null ? indexOutsideHumidity : INDEX_OUTSIDE_HUMIDITY;
-
+  public DataParser(DateUtil dateUtil, DataIndicies di) {
+    this.indexOutsideTemperature = di.indexOutsideTemperature != null ? di.indexOutsideTemperature : INDEX_OUTSIDE_TEMPERATURE;
+    this.indexOutsideHumidity = di.indexOutsideHumidity != null ? di.indexOutsideHumidity : INDEX_OUTSIDE_HUMIDITY;
+    this.indexInsideHumidity = di.indexInsideHumidity != null ? di.indexInsideHumidity : INDEX_INSIDE_HUMIDITY;
+    this.indexInsideTemperature = di.indexInsideTemperature != null ? di.indexInsideTemperature : INDEX_INSIDE_TEMPERATURE;
     this.MIN_DATE = dateUtil.getDate(2016, 5, 1);
   }
 
@@ -68,8 +72,8 @@ public class DataParser {
       Date timestamp = getTimestamp(data);
 
       WeatherDataSet dataSet = new WeatherDataSet(timestamp);
-      dataSet.setInsideTemperature(parseFloat(data.get(INDEX_INSIDE_TEMPERATURE)));
-      dataSet.setInsideHumidity(parseFloat(data.get(INDEX_INSIDE_HUMIDITY)));
+      dataSet.setInsideTemperature(parseFloat(data.get(indexInsideTemperature)));
+      dataSet.setInsideHumidity(parseFloat(data.get(indexInsideHumidity)));
 
       dataSet.setOutsideTemperature(parseFloat(data.get(indexOutsideTemperature)));
       dataSet.setOutsideHumidity(parseFloat(data.get(indexOutsideHumidity)));
@@ -98,7 +102,7 @@ public class DataParser {
   }
 
   private boolean isValid(DataLine data) {
-      return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(indexOutsideTemperature));
+    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(indexOutsideTemperature));
   }
 
   private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";

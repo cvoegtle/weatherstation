@@ -36,6 +36,9 @@ public class LocationProperties {
   private Integer indexOutsideTemperature;
   private Integer indexOutsideHumidity;
 
+  private Integer indexInsideTemperature;
+  private Integer indexInsideHumidity;
+
   public LocationProperties() {
   }
 
@@ -153,5 +156,32 @@ public class LocationProperties {
 
   public void setIndexOutsideHumidity(Integer indexOutsideHumidity) {
     this.indexOutsideHumidity = indexOutsideHumidity;
+  }
+
+  public Integer getIndexInsideTemperature() {
+    return indexInsideTemperature;
+  }
+
+  public void setIndexInsideTemperature(Integer indexInsideTemperature) {
+    this.indexInsideTemperature = indexInsideTemperature;
+  }
+
+  public Integer getIndexInsideHumidity() {
+    return indexInsideHumidity;
+  }
+
+  public void setIndexInsideHumidity(Integer indexInsideHumidity) {
+    this.indexInsideHumidity = indexInsideHumidity;
+  }
+
+  public DataIndicies getDataIndices() {
+    DataIndicies di = new DataIndicies();
+
+    di.indexInsideHumidity = indexInsideHumidity;
+    di.indexInsideTemperature = indexInsideTemperature;
+    di.indexOutsideHumidity = indexOutsideHumidity;
+    di.indexOutsideTemperature = indexOutsideTemperature;
+
+    return di;
   }
 }
