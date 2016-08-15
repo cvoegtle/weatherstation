@@ -1,30 +1,43 @@
-#!/bin/sh
+#!/bin/bash
 # Receive remote weather data from USB-WDE1 and send it to Google Appengine
 
 echo URL: $1
 echo Location: $2
 echo Secret: $3
-#register driver for weather logger
-modprobe usbserial || echo "couldnt modprobe usbserial"
-insmod cp210x.ko   || echo "couldnt insmod cp210x.ko"
-
+tmp=$4
+frequency=${tmp:=1}
+echo Frequency: $frequency
+wetter=/home/pi/wetter
 # Loop forever to read data from USB-WDE1
 
 while true
 do
-  LD_LIBRARY_PATH="/tmp/fritz" ./socat /dev/ttyUSB0,b9600 STDOUT | \
+  socat /dev/ttyUSB0,b9600 STDOUT | \
   while read line
-    do
-      if [[ "${line%%;*}" == '$1' ]] ; then
-        timestamp=`date -Iseconds`
-        tmp=`echo "${line};${timestamp}"`
-        echo $tmp >>sendbuffer.txt
-        ./wget --post-file=sendbuffer.txt -O wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
+  do
+    if [[ "${line%%;*}" == '$1' ]] ; then
+      timestamp=`date -Iseconds`
+      tmp=`echo "${line};${timestamp}"`
+      echo $tmp >>${wetter}/sendbuffer.txt
+      linecount=$(wc -l < "${wetter}/sendbuffer.txt")
+      if [[ $(($linecount % $frequency)) == 0 ]] ; then
+        wget --timeout=90 --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
         rc=$?
         if [[ $rc == 0 ]] ; then
-          rm sendbuffer.txt
+          rm ${wetter}/sendbuffer.txt
+        else
+          endtime=`date -Iseconds`
+          echo start: $timestamp, end: $endtime, rc: $rc >>${wetter}/error.log
+        fi
+        read response < ${wetter}/wetter_response.txt
+        echo response = $response
+        if [[ $response != 'ACK' ]] ; then
+          echo reset receiver
+          break
         fi
       fi
-    done
-    sleep 5
+    fi
+  done
+  echo restart socat
+  sleep 10
 done
