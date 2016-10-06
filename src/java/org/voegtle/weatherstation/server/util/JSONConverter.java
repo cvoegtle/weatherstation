@@ -196,11 +196,13 @@ public class JSONConverter {
     json.put("range", range);
     if (newFormat) {
       json.putOpt("rain", set.getRain());
+      json.putOpt("minTemperature", set.getMinTemperature());
+      json.putOpt("maxTemperature", set.getMaxTemperature());
     } else {
       json.put("rain", set.getRain());
+      json.put("minTemperature", set.getMinTemperature());
+      json.put("maxTemperature", set.getMaxTemperature());
     }
-    json.put("minTemperature", set.getMinTemperature());
-    json.put("maxTemperature", set.getMaxTemperature());
     json.putOpt("kwh", set.getKwh());
     return json;
   }
