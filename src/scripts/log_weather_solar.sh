@@ -19,14 +19,17 @@ do
       tmp=`echo "${line};${timestamp};${watt};${kwh}"`
       echo $tmp >>${wetter}/sendbuffer.txt
       echo $tmp >/tmp/last_weather_watt.txt
-      wget --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
+      wget --timeout=90 --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
       rc=$?
       if [[ $rc == 0 ]] ; then
         rm ${wetter}/sendbuffer.txt
+      else
+        endtime=`date -Iseconds`
+        echo start: $timestamp, end: $endtime, rc: $rc >>${wetter}/error.log
       fi
       read response < ${wetter}/wetter_response.txt 
       echo response = $response
-      if [[ $response == 'IGNORED' ]] ; then
+      if [[ $response != 'ACK' ]] ; then
         echo reset receiver
         break 
       fi
