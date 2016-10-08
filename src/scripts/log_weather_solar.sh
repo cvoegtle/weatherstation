@@ -18,6 +18,7 @@ do
 	  kwh=`wget http://192.168.199.113/a -q -T 10 -O - |grep kWh|sed s/\ kWh//|sed s/^\ //`
       tmp=`echo "${line};${timestamp};${watt};${kwh}"`
       echo $tmp >>${wetter}/sendbuffer.txt
+      echo $tmp >/tmp/last_weather_watt.txt
       wget --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
       rc=$?
       if [[ $rc == 0 ]] ; then
