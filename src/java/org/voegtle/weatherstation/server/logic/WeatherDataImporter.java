@@ -20,9 +20,11 @@ public class WeatherDataImporter {
   private final DateUtil dateUtil;
   private final Date importedUntil;
   private final DataIndicies dataIndicies;
+  private LocationProperties locationProperties;
 
   public WeatherDataImporter(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
+    this.locationProperties = locationProperties;
     this.dateUtil = locationProperties.getDateUtil();
     this.importedUntil = getDateOfLastDataSet();
     dataIndicies = locationProperties.getDataIndices();
@@ -46,6 +48,7 @@ public class WeatherDataImporter {
       if (persisted) {
         new WeatherDataSmoother(pm, dateUtil).smoothWeatherData();
         new WeatherDataAggregator(pm, dateUtil).aggregateWeatherData();
+        new WeatherDataForwarder(pm, locationProperties).forwardLastDataset();
       } else {
         log.warning("no dataset has been persisted");
       }
