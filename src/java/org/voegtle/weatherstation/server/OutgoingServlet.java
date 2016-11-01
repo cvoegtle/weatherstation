@@ -20,11 +20,6 @@ import java.util.List;
 public class OutgoingServlet extends AbstractServlet {
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     response.setHeader("Access-Control-Allow-Origin", "*");
 
