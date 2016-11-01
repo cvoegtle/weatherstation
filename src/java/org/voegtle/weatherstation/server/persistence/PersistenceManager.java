@@ -166,6 +166,16 @@ public class PersistenceManager {
     em.close();
   }
 
+  public void makePersistant(CacheWeatherDTO cacheWeatherDTO) {
+    EntityManager em = factory.createEntityManager();
+
+    em.getTransaction().begin();
+    em.persist(cacheWeatherDTO);
+    em.getTransaction().commit();
+
+    em.close();
+  }
+
   public SmoothedWeatherDataSet fetchDataSetOneHourBefore(Date referenceDate) {
     Calendar oneHourBefore = Calendar.getInstance();
     if (referenceDate != null) {

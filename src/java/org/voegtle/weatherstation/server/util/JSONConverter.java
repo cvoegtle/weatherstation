@@ -7,15 +7,17 @@ import org.voegtle.weatherstation.server.data.Statistics;
 import org.voegtle.weatherstation.server.data.StatisticsSet;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
+import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class JSONConverter {
-  public static final String FORMAT_DATE = "yyyy-MM-dd";
+  private static final String FORMAT_DATE = "yyyy-MM-dd";
 
   private final LocationProperties locationProperties;
   private final DateUtil dateUtil;
@@ -205,5 +207,56 @@ public class JSONConverter {
     }
     json.putOpt("kwh", set.getKwh());
     return json;
+  }
+
+  public CacheWeatherDTO decodeWeatherDTO(String encodedWeatherData) throws JSONException {
+    CacheWeatherDTO weatherDTO = new CacheWeatherDTO();
+    JSONObject json = new JSONObject(encodedWeatherData);
+    String timestamp = json.getString("timestamp");
+    weatherDTO.setTime(new Date(timestamp));
+
+    weatherDTO.setId(json.getString("id"));
+    weatherDTO.setForecast(json.getString("forecast"));
+
+    Number temperature = (Number) json.get("temperature");
+    weatherDTO.setTemperature(temperature.floatValue());
+
+    if (json.has("localtime")) {
+      weatherDTO.setLocalTime((String)json.get("localtime"));
+    }
+
+    if (json.has("inside_temperature")) {
+      Number insideTemperature = (Number) json.get("inside_temperature");
+      weatherDTO.setInsideTemperature(insideTemperature.floatValue());
+    }
+
+    Number humidity = (Number) json.get("humidity");
+    weatherDTO.setHumidity(humidity.floatValue());
+
+    if (json.has("inside_humidity")) {
+      Number insideHumidity = (Number) json.get("inside_humidity");
+      weatherDTO.setInsideHumidity(insideHumidity.floatValue());
+    }
+
+    if (json.has("watt")) {
+      Number watt = (Number) json.get("watt");
+      weatherDTO.setWatt(watt.floatValue());
+    }
+
+    if (json.has("rain")) {
+      Number rain = (Number)json.get("rain");
+      weatherDTO.setRainLastHour(rain.floatValue());
+    }
+
+    if (json.has("rain_today")) {
+      Number rainToday = (Number)json.get("rain_today");
+      weatherDTO.setRainToday(rainToday.floatValue());
+    }
+
+    if (json.has("wind")) {
+      Number wind = (Number)json.get("wind");
+      weatherDTO.setWindspeed(wind.floatValue());
+    }
+    return weatherDTO;
   }
 }

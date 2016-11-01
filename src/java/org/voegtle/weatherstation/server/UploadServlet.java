@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class UploadServlet extends AbstractServlet {
+public class UploadServlet extends AbstractInputServlet {
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,10 +33,6 @@ public class UploadServlet extends AbstractServlet {
     }
 
     returnResult(response, result);
-  }
-
-  private BufferedReader getContentStream(HttpServletRequest request) throws IOException {
-    return new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
   }
 
   private ArrayList<DataLine> readInputLines(BufferedReader reader) {

@@ -37,6 +37,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>cache</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.CacheServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>cache</servlet-name>
+    <url-pattern>/weatherstation/cache</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>image</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.ImageServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
