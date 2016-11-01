@@ -14,10 +14,13 @@ public class CacheServlet extends AbstractInputServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
     try {
-     String encodedWeatherData = readString(request);
+      String encodedWeatherData = readString(request);
+      log.info("received cache object: <" + encodedWeatherData + ">");
       CacheWeatherDTO cacheWeatherDTO = new JSONConverter(locationProperties).decodeWeatherDTO(encodedWeatherData);
 
       pm.makePersistant(cacheWeatherDTO);
+
+      returnResult(resp, "ACK");
     } catch (JSONException e) {
       log.severe("failed to decode CacheWeatherDTO");
     }

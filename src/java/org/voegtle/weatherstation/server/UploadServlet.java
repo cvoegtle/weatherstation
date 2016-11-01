@@ -21,7 +21,7 @@ public class UploadServlet extends AbstractInputServlet {
     IncomingUrlParameter param = new IncomingUrlParameter(request, locationProperties.getDateUtil());
     if (isSecretValid(param.getSecret())) {
       if (isCorrectLocation(param.getLocation())) {
-        ArrayList<DataLine> lines = readInputLines(getContentStream(request));
+        ArrayList<DataLine> lines = readInputLines(getContentStream(request, "$1"));
         WeatherDataImporter importer = new WeatherDataImporter(pm, locationProperties);
         result = importer.doImport(lines);
       } else {

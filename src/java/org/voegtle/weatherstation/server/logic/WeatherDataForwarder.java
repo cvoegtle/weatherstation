@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 class WeatherDataForwarder {
   private static final Logger log = Logger.getLogger(WeatherDataForwarder.class.getName());
+  private static final int COMMUNICATION_TIMEOUT = 60000;
   private WeatherDataFetcher weatherDataFetcher;
   private JSONConverter jsonConverter;
 
@@ -34,9 +35,18 @@ class WeatherDataForwarder {
 
       URL wetterCentral = new URL("https://wettercentral.appspot.com/weatherstation/cache");
       HttpURLConnection wetterConnection = (HttpURLConnection) wetterCentral.openConnection();
+      wetterConnection.setConnectTimeout(COMMUNICATION_TIMEOUT);
+      wetterConnection.setReadTimeout(COMMUNICATION_TIMEOUT);
       wetterConnection.setRequestMethod("POST");
-      wetterConnection.getOutputStream().write(encodedBytes);
-      wetterConnection.getOutputStream().close();
+      wetterConnection.setDoOutput(true);
+
+      try {
+        wetterConnection.getOutputStream().write(encodedBytes);
+        wetterConnection.getOutputStream().close();
+      } finally {
+        wetterConnection.disconnect();
+      }
+      
     } catch (IOException e) {
       log.warning("failed forwarding to wettercentral. " + e.getMessage());
     }

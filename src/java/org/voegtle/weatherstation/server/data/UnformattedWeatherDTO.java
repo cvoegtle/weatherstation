@@ -107,5 +107,4 @@ public class UnformattedWeatherDTO implements Serializable {
     this.watt = watt;
   }
 
-
 }
