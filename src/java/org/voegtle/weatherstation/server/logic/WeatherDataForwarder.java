@@ -34,7 +34,7 @@ class WeatherDataForwarder {
 
   private void forward(JSONObject json) {
     try {
-      byte encodedBytes[] = json.toString().getBytes("UTF-8");
+      byte encodedBytes[] = json.toString().getBytes("ISO-8859-1");
 
       URL wetterCentral = new URL("https://wettercentral.appspot.com/weatherstation/cache");
       HttpURLConnection wetterConnection = (HttpURLConnection) wetterCentral.openConnection();
@@ -47,7 +47,7 @@ class WeatherDataForwarder {
         wetterConnection.getOutputStream().write(encodedBytes);
         wetterConnection.getOutputStream().close();
         log.info("forwarded <" + json.toString() + ">");
-        String response = read(wetterConnection.getInputStream());
+        read(wetterConnection.getInputStream());
       } finally {
         wetterConnection.getInputStream().close();
         wetterConnection.disconnect();

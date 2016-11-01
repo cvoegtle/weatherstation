@@ -30,7 +30,7 @@ public abstract class AbstractInputServlet extends AbstractServlet {
   }
 
   protected BufferedReader getContentStream(HttpServletRequest request) throws IOException {
-    log.info("returning request.getInputStream() length:" + request.getContentLength());
+    log.info("returning request.getInputStream() length:" + request.getContentLength() + ", encoding: " +request.getCharacterEncoding());
     return request.getReader();
   }
 
