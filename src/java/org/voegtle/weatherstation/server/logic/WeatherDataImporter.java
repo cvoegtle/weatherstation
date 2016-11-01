@@ -33,6 +33,7 @@ public class WeatherDataImporter {
   public String doImport(ArrayList<DataLine> lines) {
     String result;
     try {
+      log.info("Number of lines: " + lines.size());
       boolean persisted = false;
       DataParser parser = new DataParser(dateUtil, dataIndicies);
       List<WeatherDataSet> dataSets = parser.parse(lines);
