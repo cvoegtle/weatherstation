@@ -20,11 +20,9 @@ public class JSONConverter {
   private static final String FORMAT_DATE = "yyyy-MM-dd";
 
   private final LocationProperties locationProperties;
-  private final DateUtil dateUtil;
 
   public JSONConverter(LocationProperties locationProperties) {
     this.locationProperties = locationProperties;
-    this.dateUtil = locationProperties.getDateUtil();
   }
 
   public JSONObject toJson(UnformattedWeatherDTO currentWeatherData) {
@@ -100,6 +98,8 @@ public class JSONConverter {
   }
 
   public ArrayList<JSONObject> toJson(List<SmoothedWeatherDataSet> list, boolean extended) {
+    DateUtil dateUtil = locationProperties.getDateUtil();
+
     Integer previousRainCounter = null;
     ArrayList<JSONObject> jsonObjects = new ArrayList<>();
     for (SmoothedWeatherDataSet wds : list) {
