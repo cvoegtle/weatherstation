@@ -7,7 +7,10 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.WeatherDataSet;
 import org.voegtle.weatherstation.server.util.JSONConverter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -43,13 +46,22 @@ class WeatherDataForwarder {
       try {
         wetterConnection.getOutputStream().write(encodedBytes);
         wetterConnection.getOutputStream().close();
+        log.info("forwarded <" + json.toString() + ">");
+        String response = read(wetterConnection.getInputStream());
       } finally {
+        wetterConnection.getInputStream().close();
         wetterConnection.disconnect();
       }
       
     } catch (IOException e) {
       log.warning("failed forwarding to wettercentral. " + e.getMessage());
     }
+  }
+
+  private String read(InputStream inputStream) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+    String line = reader.readLine();
+    return line;
   }
 
   private WeatherDataSet getLast(List<WeatherDataSet> dataSets) {
