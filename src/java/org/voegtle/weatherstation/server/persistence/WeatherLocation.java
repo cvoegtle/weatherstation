@@ -16,6 +16,7 @@ public class WeatherLocation {
   private String location;
   private String host;
   private boolean forwardSecret;
+  private String readHash;
 
   public WeatherLocation() {
   }
@@ -51,4 +52,13 @@ public class WeatherLocation {
   public void setForwardSecret(boolean forwardSecret) {
     this.forwardSecret = forwardSecret;
   }
+
+  public String getReadHash() {
+    return readHash;
+  }
+
+  public void setReadHash(String readHash) {
+    this.readHash = readHash;
+  }
+  
 }

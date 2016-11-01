@@ -2,7 +2,7 @@
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
   <!-- baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
        oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages -->
-  <application>instantwetter</application>
+  <application>wettercentral</application>
   <module>default</module>
   <version>46</version>
 

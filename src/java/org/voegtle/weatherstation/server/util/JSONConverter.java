@@ -51,6 +51,32 @@ public class JSONConverter {
     return json;
   }
 
+  public JSONObject toJson(CacheWeatherDTO currentWeatherData) {
+    JSONObject json = new WeatherJSONObject();
+    try {
+      json.put("timestamp", currentWeatherData.getTime());
+      json.putOpt("temperature", currentWeatherData.getTemperature());
+      json.putOpt("inside_temperature", currentWeatherData.getInsideTemperature());
+      json.putOpt("humidity", currentWeatherData.getHumidity());
+      json.putOpt("inside_humidity", currentWeatherData.getInsideHumidity());
+      json.putOpt("rain", currentWeatherData.getRainLastHour());
+      json.putOpt("rain_today", currentWeatherData.getRainToday());
+
+      json.putOpt("raining", currentWeatherData.isRaining());
+      json.putOpt("wind", currentWeatherData.getWindspeed());
+      json.putOpt("watt", currentWeatherData.getWatt());
+
+      json.put("location", currentWeatherData.getLocation());
+      json.put("location_short", currentWeatherData.getLocationShort());
+      json.putOpt("localtime", currentWeatherData.getLocalTime());
+
+      json.put("id", currentWeatherData.getId());
+      json.putOpt("forecast", currentWeatherData.getForecast());
+    } catch (JSONException ignored) {
+    }
+    return json;
+  }
+
   public JSONObject toJsonLegacy(UnformattedWeatherDTO currentWeatherData, boolean extended) {
     JSONObject json = new WeatherJSONObject();
     try {
@@ -217,6 +243,8 @@ public class JSONConverter {
 
     weatherDTO.setId(json.getString("id"));
     weatherDTO.setForecast(json.getString("forecast"));
+    weatherDTO.setLocation(json.getString("location"));
+    weatherDTO.setLocationShort(json.getString("location_short"));
 
     Number temperature = (Number) json.get("temperature");
     weatherDTO.setTemperature(temperature.floatValue());

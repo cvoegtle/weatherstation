@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server;
 
 import org.json.JSONObject;
+import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.WeatherLocation;
 import org.voegtle.weatherstation.server.request.CentralUrlParameter;
 import org.voegtle.weatherstation.server.request.WeatherUrl;
@@ -36,18 +37,39 @@ public class CentralServlet extends AbstractServlet {
 
     ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
-    for (String locationIdentifier : param.getLocations()) {
-      log.info("Location: " + locationIdentifier);
-      WeatherLocation location = locations.get(locationIdentifier);
-      if (location != null) {
-        WeatherUrl url = new WeatherUrl(location, param);
-        log.info("fetch data from " + url);
-        fetchWeatherData(collectedWeatherData, url);
+    if (param.isExperimental()) {
+      log.info("serving request experimental");
+      HashMap<String, CacheWeatherDTO> cacheWeatherDTOs = pm.fetchCacheWeatherDTO(param.getLocations());
+      for (String id: param.getLocations()) {
+        CacheWeatherDTO dto = cacheWeatherDTOs.get(id);
+        if (dto != null) {
+          sanitize(dto, param);
+          JSONObject json = jsonConverter.toJson(dto);
+          collectedWeatherData.add(json);
+        }
+      }
+    } else {
+      for (String locationIdentifier : param.getLocations()) {
+        log.info("Location: " + locationIdentifier);
+        WeatherLocation location = locations.get(locationIdentifier);
+        if (location != null) {
+          WeatherUrl url = new WeatherUrl(location, param);
+          log.info("fetch data from " + url);
+          fetchWeatherData(collectedWeatherData, url);
+        }
       }
     }
 
     writeResponse(response, collectedWeatherData, param.isUtf8() ? "UTF-8" : "ISO-8859-1");
 
+  }
+
+  private void sanitize(CacheWeatherDTO dto, CentralUrlParameter param) {
+    WeatherLocation location = locations.get(dto.getId());
+    if (!isReadSecretValid(location.getReadHash(), param.getSecret())) {
+      dto.setInsideHumidity(null);
+      dto.setInsideTemperature(null);
+    }
   }
 
   private void fetchWeatherData(ArrayList<JSONObject> collectedWeatherData, WeatherUrl weatherUrl) {

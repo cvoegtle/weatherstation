@@ -1,18 +1,19 @@
 package org.voegtle.weatherstation.server.persistence;
 
-import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class CacheWeatherDTO extends UnformattedWeatherDTO {
+public class CacheWeatherDTO implements Serializable {
 
   @Id
   private String id;
   private Date time;
   private String localTime;
+  private String location;
+  private String locationShort;
   private Float temperature;
   private Float insideTemperature;
   private Float humidity;
@@ -129,5 +130,21 @@ public class CacheWeatherDTO extends UnformattedWeatherDTO {
 
   public void setForecast(String forecast) {
     this.forecast = forecast;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getLocationShort() {
+    return locationShort;
+  }
+
+  public void setLocationShort(String locationShort) {
+    this.locationShort = locationShort;
   }
 }

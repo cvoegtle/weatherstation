@@ -361,4 +361,17 @@ public class PersistenceManager {
     return null;
   }
 
+  public  HashMap<String, CacheWeatherDTO> fetchCacheWeatherDTO(List<String> locations) {
+    HashMap<String, CacheWeatherDTO> result = new  HashMap<>();
+    EntityManager em = factory.createEntityManager();
+    Query q = em.createQuery("SELECT cwd FROM CacheWeatherDTO cwd WHERE cwd.id IN (:locations)");
+    q.setParameter("locations", locations);
+    @SuppressWarnings("unchecked")
+    List<CacheWeatherDTO> queryResult = (List<CacheWeatherDTO>)(q.getResultList());
+    for (CacheWeatherDTO dto : queryResult){
+      result.put(dto.getId(), dto);
+    }
+    return result;
+  }
+
 }

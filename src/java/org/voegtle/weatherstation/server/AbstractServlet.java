@@ -123,8 +123,14 @@ public abstract class AbstractServlet extends HttpServlet {
         (StringUtil.isNotEmpty(secret) && secretHash.equals(HashService.calculateHash(secret))));
   }
 
+
+
   protected boolean isReadSecretValid(String secret) {
     String readHash = locationProperties.getReadHash();
+    return isReadSecretValid(readHash, secret);
+  }
+
+  protected boolean isReadSecretValid(String readHash, String secret) {
     return (StringUtil.isEmpty(readHash) ||
         (StringUtil.isNotEmpty(secret) && readHash.equals(HashService.calculateHash(secret))));
   }
