@@ -281,6 +281,8 @@ public class JSONConverter {
       weatherDTO.setRainToday(rainToday.floatValue());
     }
 
+    weatherDTO.setRaining(json.getBoolean("raining"));
+
     if (json.has("wind")) {
       Number wind = (Number)json.get("wind");
       weatherDTO.setWindspeed(wind.floatValue());

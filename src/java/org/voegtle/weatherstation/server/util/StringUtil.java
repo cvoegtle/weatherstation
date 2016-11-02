@@ -22,4 +22,10 @@ public class StringUtil {
     return urlencoded;
   }
 
+  public static int compare(String str1, String str2) {
+    if (str1 == null) {
+      return str2 == null ? 0 : -1;
+    }
+    return str1.compareTo(str2);
+  }
 }

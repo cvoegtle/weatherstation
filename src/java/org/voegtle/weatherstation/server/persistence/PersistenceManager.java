@@ -4,6 +4,7 @@ import org.voegtle.weatherstation.server.image.Image;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class PersistenceManager {
   private static final String PERSISTENCE_UNIT_NAME = "transactions-optional";
@@ -166,11 +167,19 @@ public class PersistenceManager {
     em.close();
   }
 
+  private static final Logger log = Logger.getLogger(PersistenceManager.class.getName());
   public void makePersistant(CacheWeatherDTO cacheWeatherDTO) {
     EntityManager em = factory.createEntityManager();
 
+    CacheWeatherDTO existingDTO = em.find(CacheWeatherDTO.class, cacheWeatherDTO.getId());
     em.getTransaction().begin();
-    em.persist(cacheWeatherDTO);
+    if (existingDTO == null) {
+      log.info("create new  CacheWeatherDTO");
+      em.persist(cacheWeatherDTO);
+    } else {
+      log.info("updating existing CacheWeatherDTO");
+      existingDTO.copyFrom(cacheWeatherDTO);
+    }
     em.getTransaction().commit();
 
     em.close();

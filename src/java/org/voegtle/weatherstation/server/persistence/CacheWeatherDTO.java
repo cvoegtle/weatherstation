@@ -25,6 +25,30 @@ public class CacheWeatherDTO implements Serializable {
   private Float watt;
   private String forecast;
 
+  public void copyFrom(CacheWeatherDTO dto) {
+
+    // copy only values that might change
+    this.time = dto.time;
+    this.localTime = dto.localTime;
+    this.temperature = dto.temperature;
+    if (dto.insideTemperature != null) {
+      this.insideTemperature = dto.insideTemperature;
+    }
+    this.humidity = dto.humidity;
+    if (dto.insideHumidity != null) {
+      this.insideHumidity = dto.insideHumidity;
+    }
+    this.raining = dto.raining;
+    this.rainLastHour = dto.rainLastHour;
+    this.rainToday = dto.rainToday;
+    if (dto.windspeed != null) {
+      this.windspeed = dto.windspeed;
+    }
+    if (dto.watt != null) {
+      this.watt = dto.watt;
+    }
+  }
+
   public String getId() {
     return id;
   }
