@@ -1,5 +1,8 @@
 package org.voegtle.weatherstation.server.persistence;
 
+import org.voegtle.weatherstation.server.util.MathUtil;
+import org.voegtle.weatherstation.server.util.StringUtil;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -29,22 +32,38 @@ public class CacheWeatherDTO implements Serializable {
 
     // copy only values that might change
     this.time = dto.time;
-    this.localTime = dto.localTime;
-    this.temperature = dto.temperature;
-    if (dto.insideTemperature != null) {
+    if (StringUtil.compare(this.localTime, dto.localTime) != 0) {
+      this.localTime = dto.localTime;
+    }
+
+    if (!MathUtil.moreOrLessEqual(this.temperature, dto.temperature)) {
+      this.temperature = dto.temperature;
+    }
+
+    if (!MathUtil.moreOrLessEqual(this.insideTemperature, dto.insideTemperature)) {
       this.insideTemperature = dto.insideTemperature;
     }
-    this.humidity = dto.humidity;
-    if (dto.insideHumidity != null) {
+    if (!MathUtil.moreOrLessEqual(this.humidity, dto.humidity)) {
+      this.humidity = dto.humidity;
+    }
+    if (!MathUtil.moreOrLessEqual(this.insideHumidity, dto.insideHumidity)) {
       this.insideHumidity = dto.insideHumidity;
     }
-    this.raining = dto.raining;
-    this.rainLastHour = dto.rainLastHour;
-    this.rainToday = dto.rainToday;
-    if (dto.windspeed != null) {
+
+    if (this.raining != dto.raining) {
+      this.raining = dto.raining;
+    }
+
+    if (!MathUtil.moreOrLessEqual(this.rainLastHour, dto.rainLastHour)) {
+      this.rainLastHour = dto.rainLastHour;
+    }
+    if (!MathUtil.moreOrLessEqual(this.rainToday, dto.rainToday)) {
+      this.rainToday = dto.rainToday;
+    }
+    if (!MathUtil.moreOrLessEqual(this.windspeed, dto.windspeed)) {
       this.windspeed = dto.windspeed;
     }
-    if (dto.watt != null) {
+    if (!MathUtil.moreOrLessEqual(this.watt, dto.watt)) {
       this.watt = dto.watt;
     }
   }
