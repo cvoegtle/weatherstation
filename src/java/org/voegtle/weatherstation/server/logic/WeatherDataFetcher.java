@@ -46,8 +46,8 @@ public class WeatherDataFetcher {
   public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized) {
     SmoothedWeatherDataSet today = getFirstDataSetOfToday();
     WeatherDataSet latest = pm.fetchYoungestDataSet();
-    SmoothedWeatherDataSet fifteenMinutesBefore = pm.fetchDataSetMinutesBefore(latest.getTimestamp(), 15);
-    SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetMinutesBefore(latest.getTimestamp(), 60);
+    SmoothedWeatherDataSet fifteenMinutesBefore = pm.fetchDataSetMinutesBefore(new Date(), 15);
+    SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetMinutesBefore(new Date(), 60);
 
     UnformattedWeatherDTO dto = new UnformattedWeatherDTO();
     dto.setTime(latest.getTimestamp());
@@ -67,11 +67,11 @@ public class WeatherDataFetcher {
       dto.setInsideHumidity(latest.getInsideHumidity());
     }
 
-    if (oneHourBefore != null && oneHourBefore.getRainCounter() != null) {
+    if (SmoothedWeatherDataSet.hasRainCounter(oneHourBefore)) {
       dto.setRainLastHour(calculateRain(latest.getRainCounter(), oneHourBefore.getRainCounter()));
     }
 
-    if (today != null && today.getRainCounter() != null) {
+    if (SmoothedWeatherDataSet.hasRainCounter(today)) {
       dto.setRainToday(calculateRain(latest.getRainCounter(), today.getRainCounter()));
     }
 
@@ -83,7 +83,7 @@ public class WeatherDataFetcher {
     if (latest.isRaining() != null) {
       raining = latest.isRaining();
     }
-    if (latest.getRainCounter() != null && fifteenMinutesBefore.getRainCounter() != null) {
+    if (latest.getRainCounter() != null && SmoothedWeatherDataSet.hasRainCounter(fifteenMinutesBefore)) {
       raining = raining || (latest.getRainCounter() - fifteenMinutesBefore.getRainCounter()) > 0;
     }
     return raining;
@@ -123,7 +123,7 @@ public class WeatherDataFetcher {
     if (todaysDataSets.size() > 0) {
       SmoothedWeatherDataSet firstSet = todaysDataSets.get(0);
       WeatherDataSet latest = pm.fetchYoungestDataSet();
-      SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetMinutesBefore(latest.getTimestamp(), 60);
+      SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetMinutesBefore(new Date(), 60);
       stats.setRainLastHour(calculateRain(latest, oneHourBefore));
 
       stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet));

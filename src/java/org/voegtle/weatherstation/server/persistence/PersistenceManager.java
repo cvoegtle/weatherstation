@@ -194,7 +194,7 @@ public class PersistenceManager {
     q.setParameter("referenceTime", referenceTime, TemporalType.DATE);
 
     SmoothedWeatherDataSet result = selectFirstSmoothedResult(q);
-    log.warning("found dataset: " + result.getTimestamp());
+    log.info("found dataset: " + result.getTimestamp());
     em.close();
 
     return result;

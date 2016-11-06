@@ -37,6 +37,10 @@ public class SmoothedWeatherDataSet {
   @Transient
   private int countWatt = 0;
 
+  public static boolean hasRainCounter(SmoothedWeatherDataSet sds) {
+    return sds != null && sds.getRainCounter() != null;
+  }
+
   public SmoothedWeatherDataSet() {
     timestamp = new Date();
   }
