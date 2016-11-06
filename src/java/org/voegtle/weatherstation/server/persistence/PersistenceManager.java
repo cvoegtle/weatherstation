@@ -187,14 +187,17 @@ public class PersistenceManager {
   }
 
   public SmoothedWeatherDataSet fetchDataSetMinutesBefore(Date referenceDate, int minutes) {
-    Calendar referenceTime = DateUtil.minutesBefore(referenceDate, minutes);
+    Calendar minAge = DateUtil.minutesBefore(referenceDate, minutes);
+    Calendar maxAge = DateUtil.minutesBefore(referenceDate, minutes+30);
 
     EntityManager em = factory.createEntityManager();
-    Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :referenceTime ORDER by wds.timestamp desc");
-    q.setParameter("referenceTime", referenceTime, TemporalType.DATE);
+    Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :minAge AND  wds.timestamp > :maxAge ORDER by wds.timestamp desc");
+    q.setParameter("minAge", minAge, TemporalType.DATE);
+    q.setParameter("maxAge", maxAge, TemporalType.DATE);
+
 
     SmoothedWeatherDataSet result = selectFirstSmoothedResult(q);
-    log.info("found dataset: " + result.getTimestamp());
+    log.info("found dataset: " + (result == null ? null : result.getTimestamp()));
     em.close();
 
     return result;
