@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server.persistence;
 
 import org.voegtle.weatherstation.server.image.Image;
+import org.voegtle.weatherstation.server.util.DateUtil;
 
 import javax.persistence.*;
 import java.util.*;
@@ -185,19 +186,15 @@ public class PersistenceManager {
     em.close();
   }
 
-  public SmoothedWeatherDataSet fetchDataSetOneHourBefore(Date referenceDate) {
-    Calendar oneHourBefore = Calendar.getInstance();
-    if (referenceDate != null) {
-      oneHourBefore.setTime(referenceDate);
-    }
-
-    oneHourBefore.add(Calendar.HOUR_OF_DAY, -1);
+  public SmoothedWeatherDataSet fetchDataSetMinutesBefore(Date referenceDate, int minutes) {
+    Calendar referenceTime = DateUtil.minutesBefore(referenceDate, minutes);
 
     EntityManager em = factory.createEntityManager();
-    Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp > :oneHourBefore ORDER by wds.timestamp");
-    q.setParameter("oneHourBefore", oneHourBefore, TemporalType.DATE);
+    Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :referenceTime ORDER by wds.timestamp desc");
+    q.setParameter("referenceTime", referenceTime, TemporalType.DATE);
 
     SmoothedWeatherDataSet result = selectFirstSmoothedResult(q);
+    log.warning("found dataset: " + result.getTimestamp());
     em.close();
 
     return result;
@@ -350,14 +347,25 @@ public class PersistenceManager {
     return null;
   }
 
+
   private SmoothedWeatherDataSet selectFirstSmoothedResult(Query q) {
-    q.setMaxResults(1);
-    @SuppressWarnings("rawtypes")
-    List results = q.getResultList();
-    if (results.size() > 0) {
-      return (SmoothedWeatherDataSet) results.get(0);
+    List<SmoothedWeatherDataSet> list = selectNumberOfSmoothedResult(q, 1);
+    if (list.size()>0) {
+      return list.get(0);
     }
     return null;
+  }
+
+
+  private List<SmoothedWeatherDataSet> selectNumberOfSmoothedResult(Query q, int number) {
+    ArrayList<SmoothedWeatherDataSet> list = new ArrayList<>();
+    q.setMaxResults(number);
+    @SuppressWarnings("rawtypes")
+    List results = q.getResultList();
+    for (Object result : results) {
+      list.add((SmoothedWeatherDataSet) result);
+    }
+    return list;
   }
 
   private AggregatedWeatherDataSet selectFirstAggregatedResult(Query q) {

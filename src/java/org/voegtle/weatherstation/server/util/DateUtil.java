@@ -165,4 +165,15 @@ public class DateUtil {
 
     return cal.getTime();
   }
+
+  public static Calendar minutesBefore(Date referenceDate, int minutes) {
+    Calendar timeBefore = Calendar.getInstance();
+    if (referenceDate != null) {
+      timeBefore.setTime(referenceDate);
+    }
+
+    timeBefore.add(Calendar.MINUTE, -(Math.abs(minutes)));
+    return timeBefore;
+  }
+
 }
