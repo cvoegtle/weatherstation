@@ -55,7 +55,7 @@ public class WeatherDataFetcher {
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
 
-    boolean raining = latest.isRaining() || (latest.getRainCounter() - fifteenMinutesBefore.getRainCounter()) > 0;
+    boolean raining = isRaining(latest, fifteenMinutesBefore);
     dto.setRaining(raining);
 
     if (locationProperties.isWindRelevant()) {
@@ -76,6 +76,17 @@ public class WeatherDataFetcher {
     }
 
     return dto;
+  }
+
+  private boolean isRaining(WeatherDataSet latest, SmoothedWeatherDataSet fifteenMinutesBefore) {
+    boolean raining = false;
+    if (latest.isRaining() != null) {
+      raining = latest.isRaining();
+    }
+    if (latest.getRainCounter() != null && fifteenMinutesBefore.getRainCounter() != null) {
+      raining = raining || (latest.getRainCounter() - fifteenMinutesBefore.getRainCounter()) > 0;
+    }
+    return raining;
   }
 
   public Statistics fetchStatistics() {
