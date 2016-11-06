@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CentralServlet extends AbstractServlet {
   private static final int TIMEOUT = 10000;
@@ -39,14 +40,11 @@ public class CentralServlet extends AbstractServlet {
 
     if (param.isExperimental()) {
       log.info("serving request experimental");
-      HashMap<String, CacheWeatherDTO> cacheWeatherDTOs = pm.fetchCacheWeatherDTO(param.getLocations());
-      for (String id: param.getLocations()) {
-        CacheWeatherDTO dto = cacheWeatherDTOs.get(id);
-        if (dto != null) {
+      List<CacheWeatherDTO> cacheWeatherDTOs = pm.fetchCacheWeatherDTO(param.getLocations());
+      for (CacheWeatherDTO dto : cacheWeatherDTOs) {
           sanitize(dto, param);
           JSONObject json = jsonConverter.toJson(dto);
           collectedWeatherData.add(json);
-        }
       }
     } else {
       for (String locationIdentifier : param.getLocations()) {

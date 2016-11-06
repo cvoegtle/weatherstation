@@ -1,17 +1,10 @@
 package org.voegtle.weatherstation.server.persistence;
 
-import org.voegtle.weatherstation.server.util.MathUtil;
-import org.voegtle.weatherstation.server.util.StringUtil;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
 public class CacheWeatherDTO implements Serializable {
 
-  @Id
   private String id;
   private Date time;
   private String localTime;
@@ -20,52 +13,33 @@ public class CacheWeatherDTO implements Serializable {
   private Float temperature;
   private Float insideTemperature;
   private Float humidity;
+  private Float insideHumidity;
   private Boolean raining;
   private Float rainLastHour;
   private Float rainToday;
   private Float windspeed;
-  private Float insideHumidity;
   private Float watt;
   private String forecast;
 
-  public void copyFrom(CacheWeatherDTO dto) {
+  public CacheWeatherDTO() {
+  }
 
-    // copy only values that might change
-    this.time = dto.time;
-    if (StringUtil.compare(this.localTime, dto.localTime) != 0) {
-      this.localTime = dto.localTime;
-    }
-
-    if (!MathUtil.moreOrLessEqual(this.temperature, dto.temperature)) {
-      this.temperature = dto.temperature;
-    }
-
-    if (!MathUtil.moreOrLessEqual(this.insideTemperature, dto.insideTemperature)) {
-      this.insideTemperature = dto.insideTemperature;
-    }
-    if (!MathUtil.moreOrLessEqual(this.humidity, dto.humidity)) {
-      this.humidity = dto.humidity;
-    }
-    if (!MathUtil.moreOrLessEqual(this.insideHumidity, dto.insideHumidity)) {
-      this.insideHumidity = dto.insideHumidity;
-    }
-
-    if (this.raining != dto.raining) {
-      this.raining = dto.raining;
-    }
-
-    if (!MathUtil.moreOrLessEqual(this.rainLastHour, dto.rainLastHour)) {
-      this.rainLastHour = dto.rainLastHour;
-    }
-    if (!MathUtil.moreOrLessEqual(this.rainToday, dto.rainToday)) {
-      this.rainToday = dto.rainToday;
-    }
-    if (!MathUtil.moreOrLessEqual(this.windspeed, dto.windspeed)) {
-      this.windspeed = dto.windspeed;
-    }
-    if (!MathUtil.moreOrLessEqual(this.watt, dto.watt)) {
-      this.watt = dto.watt;
-    }
+  public CacheWeatherDTO(CacheStatic cacheStatic, CacheVolatile cacheVolatile) {
+    this.id = cacheVolatile.getId();
+    this.time = cacheVolatile.getTime();
+    this.localTime = cacheVolatile.getLocalTime();
+    this.location = cacheStatic.getLocation();
+    this.locationShort = cacheStatic.getLocationShort();
+    this.temperature = cacheVolatile.getTemperature();
+    this.insideTemperature = cacheVolatile.getInsideTemperature();
+    this.humidity = cacheVolatile.getHumidity();
+    this.insideHumidity = cacheVolatile.getInsideHumidity();
+    this.raining = cacheVolatile.getRaining();
+    this.rainLastHour = cacheVolatile.getRainLastHour();
+    this.rainToday = cacheVolatile.getRainToday();
+    this.windspeed = cacheVolatile.getWindspeed();
+    this.watt = cacheVolatile.getWatt();
+    this.forecast = cacheStatic.getForecast();
   }
 
   public String getId() {

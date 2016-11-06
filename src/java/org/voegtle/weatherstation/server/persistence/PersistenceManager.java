@@ -172,14 +172,26 @@ public class PersistenceManager {
   public void makePersistant(CacheWeatherDTO cacheWeatherDTO) {
     EntityManager em = factory.createEntityManager();
 
-    CacheWeatherDTO existingDTO = em.find(CacheWeatherDTO.class, cacheWeatherDTO.getId());
     em.getTransaction().begin();
-    if (existingDTO == null) {
-      log.info("create new  CacheWeatherDTO");
-      em.persist(cacheWeatherDTO);
+
+    CacheStatic existingStatic = em.find(CacheStatic.class, cacheWeatherDTO.getId());
+    if (existingStatic == null || existingStatic.copyFrom(cacheWeatherDTO)) {
+      log.info("create new CacheStatic");
+      CacheStatic newCacheStatic = new CacheStatic();
+      newCacheStatic.copyFrom(cacheWeatherDTO);
+      em.persist(newCacheStatic);
+    }
+
+    em.getTransaction().commit();
+
+    em.getTransaction().begin();
+    CacheVolatile cacheVolatile = em.find(CacheVolatile.class, cacheWeatherDTO.getId());
+    if (cacheVolatile == null) {
+      cacheVolatile = new CacheVolatile();
+      cacheVolatile.copyFrom(cacheWeatherDTO);
+      em.persist(cacheVolatile);
     } else {
-      log.info("updating existing CacheWeatherDTO");
-      existingDTO.copyFrom(cacheWeatherDTO);
+      cacheVolatile.copyFrom(cacheWeatherDTO);
     }
     em.getTransaction().commit();
 
@@ -381,17 +393,46 @@ public class PersistenceManager {
     return null;
   }
 
-  public  HashMap<String, CacheWeatherDTO> fetchCacheWeatherDTO(List<String> locations) {
-    HashMap<String, CacheWeatherDTO> result = new  HashMap<>();
+  public List<CacheWeatherDTO> fetchCacheWeatherDTO(List<String> locations) {
+    HashMap<String, CacheStatic> staticHashMap = fetchCacheStatic(locations);
+    HashMap<String, CacheVolatile> volatileHashMap = fetchCacheVolatile(locations);
+
+    ArrayList<CacheWeatherDTO> result = new ArrayList<>();
+    for (String location : locations) {
+      CacheStatic cacheStatic = staticHashMap.get(location);
+      CacheVolatile cacheVolatile = volatileHashMap.get(location);
+      if (cacheStatic != null && cacheVolatile != null) {
+        result.add(new CacheWeatherDTO(cacheStatic, cacheVolatile));
+      }
+    }
+    return result;
+  }
+
+  public  HashMap<String, CacheStatic> fetchCacheStatic(List<String> locations) {
+    HashMap<String, CacheStatic> result = new  HashMap<>();
     EntityManager em = factory.createEntityManager();
-    Query q = em.createQuery("SELECT cwd FROM CacheWeatherDTO cwd WHERE cwd.id IN (:locations)");
-    q.setParameter("locations", locations);
+    Query qs = em.createQuery("SELECT cs FROM CacheStatic cs WHERE cs.id IN (:locations)");
+    qs.setParameter("locations", locations);
     @SuppressWarnings("unchecked")
-    List<CacheWeatherDTO> queryResult = (List<CacheWeatherDTO>)(q.getResultList());
-    for (CacheWeatherDTO dto : queryResult){
+    List<CacheStatic> queryResult = (List<CacheStatic>)(qs.getResultList());
+    for (CacheStatic dto : queryResult){
       result.put(dto.getId(), dto);
     }
     return result;
   }
+
+  public  HashMap<String, CacheVolatile> fetchCacheVolatile(List<String> locations) {
+    HashMap<String, CacheVolatile> result = new  HashMap<>();
+    EntityManager em = factory.createEntityManager();
+    Query qs = em.createQuery("SELECT cs FROM CacheVolatile cs WHERE cs.id IN (:locations)");
+    qs.setParameter("locations", locations);
+    @SuppressWarnings("unchecked")
+    List<CacheVolatile> queryResult = (List<CacheVolatile>)(qs.getResultList());
+    for (CacheVolatile dto : queryResult){
+      result.put(dto.getId(), dto);
+    }
+    return result;
+  }
+
 
 }
