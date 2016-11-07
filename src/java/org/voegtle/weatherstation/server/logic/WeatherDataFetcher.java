@@ -46,7 +46,7 @@ public class WeatherDataFetcher {
   public UnformattedWeatherDTO getLatestWeatherDataUnformatted(boolean authorized) {
     SmoothedWeatherDataSet today = getFirstDataSetOfToday();
     WeatherDataSet latest = pm.fetchYoungestDataSet();
-    SmoothedWeatherDataSet fifteenMinutesBefore = pm.fetchDataSetMinutesBefore(new Date(), 15);
+    SmoothedWeatherDataSet twentyMinutesBefore = pm.fetchDataSetMinutesBefore(new Date(), 20);
     SmoothedWeatherDataSet oneHourBefore = pm.fetchDataSetMinutesBefore(new Date(), 60);
 
     UnformattedWeatherDTO dto = new UnformattedWeatherDTO();
@@ -55,7 +55,7 @@ public class WeatherDataFetcher {
     dto.setTemperature(latest.getOutsideTemperature());
     dto.setHumidity(latest.getOutsideHumidity());
 
-    boolean raining = isRaining(latest, fifteenMinutesBefore);
+    boolean raining = isRaining(latest, twentyMinutesBefore);
     dto.setRaining(raining);
 
     if (locationProperties.isWindRelevant()) {
