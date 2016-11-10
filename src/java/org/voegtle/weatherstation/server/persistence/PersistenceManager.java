@@ -169,39 +169,10 @@ public class PersistenceManager {
   }
 
   private static final Logger log = Logger.getLogger(PersistenceManager.class.getName());
-  public void makePersistant(CacheWeatherDTO cacheWeatherDTO) {
-    EntityManager em = factory.createEntityManager();
-
-//    em.getTransaction().begin();
-
-//    CacheStatic existingStatic = em.find(CacheStatic.class, cacheWeatherDTO.getId());
-//    if (existingStatic == null || existingStatic.copyFrom(cacheWeatherDTO)) {
-//      log.info("create new CacheStatic");
-//      CacheStatic newCacheStatic = new CacheStatic();
-//      newCacheStatic.copyFrom(cacheWeatherDTO);
-//      em.persist(newCacheStatic);
-//    }
-
-//    em.getTransaction().commit();
-
-    em.getTransaction().begin();
-    CacheVolatile cacheVolatile = em.find(CacheVolatile.class, cacheWeatherDTO.getId());
-    if (cacheVolatile == null) {
-      log.info("create new CacheVolatile");
-      cacheVolatile = new CacheVolatile();
-      cacheVolatile.copyFrom(cacheWeatherDTO);
-      em.persist(cacheVolatile);
-    } else {
-      cacheVolatile.copyFrom(cacheWeatherDTO);
-    }
-    em.getTransaction().commit();
-
-    em.close();
-  }
 
   public SmoothedWeatherDataSet fetchDataSetMinutesBefore(Date referenceDate, int minutes) {
     Calendar minAge = DateUtil.minutesBefore(referenceDate, minutes);
-    Calendar maxAge = DateUtil.minutesBefore(referenceDate, minutes+30);
+    Calendar maxAge = DateUtil.minutesBefore(referenceDate, minutes + 30);
 
     EntityManager em = factory.createEntityManager();
     Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :minAge AND  wds.timestamp > :maxAge ORDER by wds.timestamp desc");
@@ -366,12 +337,11 @@ public class PersistenceManager {
 
   private SmoothedWeatherDataSet selectFirstSmoothedResult(Query q) {
     List<SmoothedWeatherDataSet> list = selectNumberOfSmoothedResult(q, 1);
-    if (list.size()>0) {
+    if (list.size() > 0) {
       return list.get(0);
     }
     return null;
   }
-
 
   private List<SmoothedWeatherDataSet> selectNumberOfSmoothedResult(Query q, int number) {
     ArrayList<SmoothedWeatherDataSet> list = new ArrayList<>();
@@ -393,47 +363,5 @@ public class PersistenceManager {
     }
     return null;
   }
-
-  public List<CacheWeatherDTO> fetchCacheWeatherDTO(List<String> locations) {
-    HashMap<String, CacheStatic> staticHashMap = fetchCacheStatic(locations);
-    HashMap<String, CacheVolatile> volatileHashMap = fetchCacheVolatile(locations);
-
-    ArrayList<CacheWeatherDTO> result = new ArrayList<>();
-    for (String location : locations) {
-      CacheStatic cacheStatic = staticHashMap.get(location);
-      CacheVolatile cacheVolatile = volatileHashMap.get(location);
-      if (cacheStatic != null && cacheVolatile != null) {
-        result.add(new CacheWeatherDTO(cacheStatic, cacheVolatile));
-      }
-    }
-    return result;
-  }
-
-  public  HashMap<String, CacheStatic> fetchCacheStatic(List<String> locations) {
-    HashMap<String, CacheStatic> result = new  HashMap<>();
-    EntityManager em = factory.createEntityManager();
-    Query qs = em.createQuery("SELECT cs FROM CacheStatic cs WHERE cs.id IN (:locations)");
-    qs.setParameter("locations", locations);
-    @SuppressWarnings("unchecked")
-    List<CacheStatic> queryResult = (List<CacheStatic>)(qs.getResultList());
-    for (CacheStatic dto : queryResult){
-      result.put(dto.getId(), dto);
-    }
-    return result;
-  }
-
-  public  HashMap<String, CacheVolatile> fetchCacheVolatile(List<String> locations) {
-    HashMap<String, CacheVolatile> result = new  HashMap<>();
-    EntityManager em = factory.createEntityManager();
-    Query qs = em.createQuery("SELECT cs FROM CacheVolatile cs WHERE cs.id IN (:locations)");
-    qs.setParameter("locations", locations);
-    @SuppressWarnings("unchecked")
-    List<CacheVolatile> queryResult = (List<CacheVolatile>)(qs.getResultList());
-    for (CacheVolatile dto : queryResult){
-      result.put(dto.getId(), dto);
-    }
-    return result;
-  }
-
 
 }

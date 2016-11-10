@@ -6,6 +6,10 @@ import org.voegtle.weatherstation.server.persistence.WeatherLocation;
 import org.voegtle.weatherstation.server.request.CentralUrlParameter;
 import org.voegtle.weatherstation.server.request.WeatherUrl;
 
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,16 +22,27 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CentralServlet extends AbstractServlet {
   private static final int TIMEOUT = 10000;
-  HashMap<String, WeatherLocation> locations;
+  private HashMap<String, WeatherLocation> locations;
+  private Cache cache;
 
   @Override
   public void init() throws ServletException {
     super.init();
 
     locations = pm.fetchWeatherLocations();
+
+    try {
+      CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+      Map properties = new HashMap<>();
+      cache = cacheFactory.createCache(properties);
+    } catch (CacheException e) {
+      log.severe("CentralServlet: Could not instantiate Cache");
+    }
+
   }
 
   @Override
@@ -40,7 +55,7 @@ public class CentralServlet extends AbstractServlet {
 
     if (param.isExperimental()) {
       log.info("serving request experimental");
-      List<CacheWeatherDTO> cacheWeatherDTOs = pm.fetchCacheWeatherDTO(param.getLocations());
+      List<CacheWeatherDTO> cacheWeatherDTOs = fetchLocationsFromCache(param.getLocations());
       for (CacheWeatherDTO dto : cacheWeatherDTOs) {
           sanitize(dto, param);
           JSONObject json = jsonConverter.toJson(dto);
@@ -60,6 +75,17 @@ public class CentralServlet extends AbstractServlet {
 
     writeResponse(response, collectedWeatherData, param.isUtf8() ? "UTF-8" : "ISO-8859-1");
 
+  }
+
+  private List<CacheWeatherDTO> fetchLocationsFromCache(List<String> locations) {
+    ArrayList<CacheWeatherDTO> result = new ArrayList<>();
+    for (String location : locations) {
+      CacheWeatherDTO dto = (CacheWeatherDTO)cache.get(location);
+      if (dto != null) {
+        result.add(dto);
+      }
+    }
+    return result;
   }
 
   private void sanitize(CacheWeatherDTO dto, CentralUrlParameter param) {
