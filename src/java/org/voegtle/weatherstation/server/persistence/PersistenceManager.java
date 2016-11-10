@@ -172,21 +172,22 @@ public class PersistenceManager {
   public void makePersistant(CacheWeatherDTO cacheWeatherDTO) {
     EntityManager em = factory.createEntityManager();
 
-    em.getTransaction().begin();
+//    em.getTransaction().begin();
 
-    CacheStatic existingStatic = em.find(CacheStatic.class, cacheWeatherDTO.getId());
-    if (existingStatic == null || existingStatic.copyFrom(cacheWeatherDTO)) {
-      log.info("create new CacheStatic");
-      CacheStatic newCacheStatic = new CacheStatic();
-      newCacheStatic.copyFrom(cacheWeatherDTO);
-      em.persist(newCacheStatic);
-    }
+//    CacheStatic existingStatic = em.find(CacheStatic.class, cacheWeatherDTO.getId());
+//    if (existingStatic == null || existingStatic.copyFrom(cacheWeatherDTO)) {
+//      log.info("create new CacheStatic");
+//      CacheStatic newCacheStatic = new CacheStatic();
+//      newCacheStatic.copyFrom(cacheWeatherDTO);
+//      em.persist(newCacheStatic);
+//    }
 
-    em.getTransaction().commit();
+//    em.getTransaction().commit();
 
     em.getTransaction().begin();
     CacheVolatile cacheVolatile = em.find(CacheVolatile.class, cacheWeatherDTO.getId());
     if (cacheVolatile == null) {
+      log.info("create new CacheStatic");
       cacheVolatile = new CacheVolatile();
       cacheVolatile.copyFrom(cacheWeatherDTO);
       em.persist(cacheVolatile);
