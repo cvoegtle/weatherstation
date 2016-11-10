@@ -76,7 +76,7 @@ function fetchAllWeatherData(processWeatherData:Function, reportConnectionProble
   ajaxRequest.onerror = reportConnectionProblem;
 
 
-  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&type=current", true);
+  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&experimental&type=current", true);
   ajaxRequest.send();
 
 //    processWeatherData(singleTestdaten);
