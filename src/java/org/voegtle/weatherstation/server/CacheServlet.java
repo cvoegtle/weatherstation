@@ -39,7 +39,6 @@ public class CacheServlet extends AbstractInputServlet {
       CacheWeatherDTO cacheWeatherDTO = new JSONConverter(locationProperties).decodeWeatherDTO(encodedWeatherData);
 
       cache.put(cacheWeatherDTO.getId(), cacheWeatherDTO);
-      pm.makePersistant(cacheWeatherDTO);
 
       returnResult(resp, "ACK");
     } catch (JSONException e) {
