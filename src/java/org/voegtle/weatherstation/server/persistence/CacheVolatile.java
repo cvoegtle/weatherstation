@@ -1,5 +1,8 @@
 package org.voegtle.weatherstation.server.persistence;
 
+import org.voegtle.weatherstation.server.util.MathUtil;
+import org.voegtle.weatherstation.server.util.StringUtil;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
@@ -22,23 +25,45 @@ public class CacheVolatile {
   private Float watt;
 
   public void copyFrom(CacheWeatherDTO dto) {
-    this.id = dto.getId();
-    // copy only values that might change
+    if (StringUtil.isEmpty(this.id)) {
+      this.id = dto.getId();
+    }
+
     this.time = dto.getTime();
-    this.localTime = dto.getLocalTime();
+    if (StringUtil.compare(this.localTime, dto.getLocalTime()) != 0) {
+      this.localTime = dto.getLocalTime();
+    }
 
-    this.temperature = dto.getTemperature();
+    if (!MathUtil.moreOrLessEqual(this.temperature, dto.getTemperature())) {
+      this.temperature = dto.getTemperature();
+    }
 
-    this.insideTemperature = dto.getInsideTemperature();
-    this.humidity = dto.getHumidity();
-    this.insideHumidity = dto.getInsideHumidity();
+    if (!MathUtil.moreOrLessEqual(this.insideTemperature, dto.getInsideTemperature())) {
+      this.insideTemperature = dto.getInsideTemperature();
+    }
+    if (!MathUtil.moreOrLessEqual(this.humidity, dto.getHumidity())) {
+      this.humidity = dto.getHumidity();
+    }
+    if (!MathUtil.moreOrLessEqual(this.insideHumidity, dto.getInsideHumidity())) {
+      this.insideHumidity = dto.getInsideHumidity();
+    }
 
-    this.raining = dto.getRaining();
+    if (this.raining != dto.getRaining()) {
+      this.raining = dto.getRaining();
+    }
 
-    this.rainLastHour = dto.getRainLastHour();
-    this.rainToday = dto.getRainToday();
-    this.windspeed = dto.getWindspeed();
-    this.watt = dto.getWatt();
+    if (!MathUtil.moreOrLessEqual(this.rainLastHour, dto.getRainLastHour())) {
+      this.rainLastHour = dto.getRainLastHour();
+    }
+    if (!MathUtil.moreOrLessEqual(this.rainToday, dto.getRainToday())) {
+      this.rainToday = dto.getRainToday();
+    }
+    if (!MathUtil.moreOrLessEqual(this.windspeed, dto.getWindspeed())) {
+      this.windspeed = dto.getWindspeed();
+    }
+    if (!MathUtil.moreOrLessEqual(this.watt, dto.getWatt())) {
+      this.watt = dto.getWatt();
+    }
   }
 
 

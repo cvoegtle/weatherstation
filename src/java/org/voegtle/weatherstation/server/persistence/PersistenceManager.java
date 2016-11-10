@@ -187,7 +187,7 @@ public class PersistenceManager {
     em.getTransaction().begin();
     CacheVolatile cacheVolatile = em.find(CacheVolatile.class, cacheWeatherDTO.getId());
     if (cacheVolatile == null) {
-      log.info("create new CacheStatic");
+      log.info("create new CacheVolatile");
       cacheVolatile = new CacheVolatile();
       cacheVolatile.copyFrom(cacheWeatherDTO);
       em.persist(cacheVolatile);
