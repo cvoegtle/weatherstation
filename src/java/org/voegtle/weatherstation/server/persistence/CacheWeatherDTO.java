@@ -24,34 +24,12 @@ public class CacheWeatherDTO implements Serializable {
   public CacheWeatherDTO() {
   }
 
-  public CacheWeatherDTO(CacheStatic cacheStatic, CacheVolatile cacheVolatile) {
-    this.id = cacheVolatile.getId();
-    this.time = cacheVolatile.getTime();
-    this.localTime = cacheVolatile.getLocalTime();
-    this.location = cacheStatic.getLocation();
-    this.locationShort = cacheStatic.getLocationShort();
-    this.temperature = cacheVolatile.getTemperature();
-    this.insideTemperature = cacheVolatile.getInsideTemperature();
-    this.humidity = cacheVolatile.getHumidity();
-    this.insideHumidity = cacheVolatile.getInsideHumidity();
-    this.raining = cacheVolatile.getRaining();
-    this.rainLastHour = cacheVolatile.getRainLastHour();
-    this.rainToday = cacheVolatile.getRainToday();
-    this.windspeed = cacheVolatile.getWindspeed();
-    this.watt = cacheVolatile.getWatt();
-    this.forecast = cacheStatic.getForecast();
-  }
-
   public String getId() {
     return id;
   }
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public Boolean getRaining() {
-    return raining;
   }
 
   public Date getTime() {

@@ -21,7 +21,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CentralServlet extends AbstractServlet {
@@ -54,13 +53,9 @@ public class CentralServlet extends AbstractServlet {
     ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
     if (param.isExperimental()) {
-      log.info("serving request experimental");
-      List<CacheWeatherDTO> cacheWeatherDTOs = fetchLocationsFromCache(param.getLocations());
-      for (CacheWeatherDTO dto : cacheWeatherDTOs) {
-          sanitize(dto, param);
-          JSONObject json = jsonConverter.toJson(dto);
-          collectedWeatherData.add(json);
-      }
+      log.info("start experimental");
+      collectedWeatherData = fetchLocationsFromCache(param);
+      log.info("stop experimental");
     } else {
       for (String locationIdentifier : param.getLocations()) {
         log.info("Location: " + locationIdentifier);
@@ -77,12 +72,14 @@ public class CentralServlet extends AbstractServlet {
 
   }
 
-  private List<CacheWeatherDTO> fetchLocationsFromCache(List<String> locations) {
-    ArrayList<CacheWeatherDTO> result = new ArrayList<>();
-    for (String location : locations) {
+  private ArrayList<JSONObject> fetchLocationsFromCache(CentralUrlParameter param) {
+    ArrayList<JSONObject> result = new ArrayList<>();
+
+    for (String location : param.getLocations()) {
       CacheWeatherDTO dto = (CacheWeatherDTO)cache.get(location);
       if (dto != null) {
-        result.add(dto);
+        sanitize(dto, param);
+        result.add(jsonConverter.toJson(dto));
       }
     }
     return result;
