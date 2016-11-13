@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.WeatherLocation;
 import org.voegtle.weatherstation.server.request.CentralUrlParameter;
+import org.voegtle.weatherstation.server.request.DataType;
 import org.voegtle.weatherstation.server.request.WeatherUrl;
 
 import javax.cache.Cache;
@@ -52,7 +53,7 @@ public class CentralServlet extends AbstractServlet {
 
     ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
-    if (param.isExperimental()) {
+    if (param.isNewFormat() && param.getType().equals(DataType.CURRENT)) {
       log.info("start experimental");
       collectedWeatherData = fetchLocationsFromCache(param);
       log.info("stop experimental");
