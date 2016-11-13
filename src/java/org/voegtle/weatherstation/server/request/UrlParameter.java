@@ -19,7 +19,7 @@ public class UrlParameter extends AbstractUrlParameter {
   private final String secret;
 
   private final boolean extended;
-  private final boolean newFormat;
+  protected boolean newFormat;
 
   public UrlParameter(final HttpServletRequest request, DateUtil dateUtil, DataType defaultDataType) {
     super(request, dateUtil);

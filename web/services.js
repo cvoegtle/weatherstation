@@ -59,7 +59,7 @@ function fetchAllWeatherData(processWeatherData, reportConnectionProblem, urlPar
         processWeatherData(weatherData);
     };
     ajaxRequest.onerror = reportConnectionProblem;
-    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&type=current", true);
+    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&build=web&type=current", true);
     ajaxRequest.send();
 }
 function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
@@ -69,7 +69,7 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
         processWeatherData(weatherData);
     };
     ajaxRequest.onerror = reportConnectionProblem;
-    ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&new", true);
+    ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&new&build=web", true);
     ajaxRequest.send();
 }
 function getOptionalNumber(value, unit) {

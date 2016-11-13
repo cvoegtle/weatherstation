@@ -76,7 +76,7 @@ function fetchAllWeatherData(processWeatherData:Function, reportConnectionProble
   ajaxRequest.onerror = reportConnectionProblem;
 
 
-  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&new&type=current", true);
+  ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&build=web&type=current", true);
   ajaxRequest.send();
 }
 
@@ -90,7 +90,7 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
   };
   ajaxRequest.onerror = reportConnectionProblem;
 
-  ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&new", true);
+  ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&new&build=web", true);
   ajaxRequest.send();
 }
 
