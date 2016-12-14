@@ -51,7 +51,7 @@ public class CentralServlet extends AbstractServlet {
 
     CentralUrlParameter param = new CentralUrlParameter(request);
 
-    log.info("request from IP" + request.getRemoteAddr() + " with client version=" +param.getBuildNumber());
+    log.info("request from IP " + request.getRemoteAddr() + " with client version=" +param.getBuildNumber());
 
     ArrayList<JSONObject> collectedWeatherData = new ArrayList<>();
 
