@@ -21,6 +21,7 @@ public class WeatherDataImporter {
   private final Date importedUntil;
   private final DataIndicies dataIndicies;
   private LocationProperties locationProperties;
+  private int persisted;
 
   public WeatherDataImporter(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
@@ -34,19 +35,18 @@ public class WeatherDataImporter {
     String result;
     try {
       log.info("Number of lines: " + lines.size());
-      boolean persisted = false;
       DataParser parser = new DataParser(dateUtil, dataIndicies);
       List<WeatherDataSet> dataSets = parser.parse(lines);
       log.info("Number of valid datasets: " + dataSets.size());
       for (WeatherDataSet dataSet : dataSets) {
         if (isNotOutdated(dataSet)) {
           if (pm.makePersitant(dataSet)) {
-            persisted = true;
+            persisted++;
           }
         }
       }
 
-      if (persisted) {
+      if (persisted > 0) {
         new WeatherDataSmoother(pm, dateUtil).smoothWeatherData();
         new WeatherDataAggregator(pm, dateUtil).aggregateWeatherData();
         new WeatherDataForwarder(pm, locationProperties).forwardLastDataset();
@@ -54,7 +54,7 @@ public class WeatherDataImporter {
         log.warning("no dataset has been persisted");
       }
 
-      result = persisted ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
+      result = persisted > 0 ? ResponseCode.ACKNOWLEDGE : ResponseCode.IGNORED;
     } catch (ParseException ex) {
       log.log(Level.SEVERE, "parsing failed", ex);
       result = ResponseCode.PARSE_ERROR;
@@ -85,4 +85,7 @@ public class WeatherDataImporter {
     return lastImport;
   }
 
+  public int getPersisted() {
+    return persisted;
+  }
 }

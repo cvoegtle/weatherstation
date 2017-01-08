@@ -1,7 +1,9 @@
 package org.voegtle.weatherstation.server;
 
+import org.voegtle.weatherstation.server.logic.HealthProvider;
 import org.voegtle.weatherstation.server.logic.WeatherDataImporter;
 import org.voegtle.weatherstation.server.parser.DataLine;
+import org.voegtle.weatherstation.server.persistence.HealthDTO;
 import org.voegtle.weatherstation.server.request.IncomingUrlParameter;
 import org.voegtle.weatherstation.server.request.ResponseCode;
 
@@ -21,9 +23,18 @@ public class UploadServlet extends AbstractInputServlet {
     IncomingUrlParameter param = new IncomingUrlParameter(request, locationProperties.getDateUtil());
     if (isSecretValid(param.getSecret())) {
       if (isCorrectLocation(param.getLocation())) {
+        HealthProvider hp = new HealthProvider(pm, locationProperties);
+        HealthDTO health = hp.get();
+        health.incrementRequests();
+
         ArrayList<DataLine> lines = readInputLines(getContentStream(request, "$1"));
+        health.incrementLines(lines.size());
+
         WeatherDataImporter importer = new WeatherDataImporter(pm, locationProperties);
         result = importer.doImport(lines);
+
+        health.incrementPersisted(importer.getPersisted());
+        hp.update(health);
       } else {
         result = ResponseCode.WRONG_LOCATION;
       }

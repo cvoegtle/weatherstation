@@ -364,4 +364,29 @@ public class PersistenceManager {
     return null;
   }
 
+  public Health selectHealth(Date day) {
+    EntityManager em = factory.createEntityManager();
+    return selectHealth(em, day);
+  }
+
+  private  Health selectHealth(EntityManager em, Date day) {
+    Query q = em.createQuery("SELECT h from  Health h where h.day = :day");
+    q.setParameter("day", day, TemporalType.DATE);
+    List resultList = q.getResultList();
+    if (resultList.size() > 0) {
+      return ((Health) resultList.get(0));
+    }
+    return new Health(day);
+  }
+
+  public void makePersistant(HealthDTO dto) {
+    EntityManager em = factory.createEntityManager();
+    Health health = selectHealth(em, dto.getDay());
+    health.fromDTO(dto);
+    em.getTransaction().begin();
+    em.persist(health);
+    em.getTransaction().commit();
+
+    em.close();
+  }
 }
