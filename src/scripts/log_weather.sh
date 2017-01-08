@@ -12,7 +12,8 @@ wetter=/home/pi/wetter
 
 while true
 do
-  socat /dev/ttyUSB0,b9600 STDOUT | \
+  usbdevice=`ls /dev/ttyUSB*`
+  socat -T3600 ${usbdevice},b9600 STDOUT | \
   while read line
   do
     if [[ "${line%%;*}" == '$1' ]] ; then
