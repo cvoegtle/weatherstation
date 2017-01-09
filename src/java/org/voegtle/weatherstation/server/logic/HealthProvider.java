@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server.logic;
 
-import org.voegtle.weatherstation.server.persistence.Health;
 import org.voegtle.weatherstation.server.persistence.HealthDTO;
 import org.voegtle.weatherstation.server.persistence.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.PersistenceManager;
@@ -23,11 +22,12 @@ public class HealthProvider {
 
   private DateUtil dateUtil;
 
-  private Health health;
+  private AdminNotifier notifier;
 
   public HealthProvider(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
     this.dateUtil = locationProperties.getDateUtil();
+    this.notifier = new AdminNotifier(locationProperties);
     try {
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
       Map properties = new HashMap<>();
@@ -49,6 +49,7 @@ public class HealthProvider {
   public void update(HealthDTO health) {
     cache.put(HEALTH, health);
     pm.makePersistant(health);
+//    notifier.notifiy(health);
   }
 
   private boolean isOutdated(HealthDTO health, Date today) {

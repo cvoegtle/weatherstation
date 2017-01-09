@@ -151,6 +151,13 @@ public class DateUtil {
     return sdf.format(date);
   }
 
+  public String formatAsDate(Date day) {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    sdf.setTimeZone(timezone);
+    return sdf.format(day);
+  }
+
+
 
   private int getTimeOffset(Date date, TimeZone tz) {
     return tz.getOffset(date.getTime()) / 3600000;
