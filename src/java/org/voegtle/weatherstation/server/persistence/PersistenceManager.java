@@ -389,4 +389,22 @@ public class PersistenceManager {
 
     em.close();
   }
+
+  public void makePersistant(Contact contact) {
+    EntityManager em = factory.createEntityManager();
+    em.getTransaction().begin();
+    em.persist(contact);
+    em.getTransaction().commit();
+  }
+
+  public List<Contact> fetchContacts() {
+    ArrayList<Contact> contacts = new ArrayList<>();
+    EntityManager em = factory.createEntityManager();
+    Query q = em.createQuery("SELECT c from Contact c");
+    List results = q.getResultList();
+    for (Object result : results) {
+      contacts.add((Contact)result);
+    }
+    return contacts;
+  }
 }

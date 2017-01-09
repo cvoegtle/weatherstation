@@ -2,10 +2,7 @@ package org.voegtle.weatherstation.server;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.voegtle.weatherstation.server.persistence.LocationProperties;
-import org.voegtle.weatherstation.server.persistence.PersistenceManager;
-import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
-import org.voegtle.weatherstation.server.persistence.WeatherLocation;
+import org.voegtle.weatherstation.server.persistence.*;
 import org.voegtle.weatherstation.server.util.HashService;
 import org.voegtle.weatherstation.server.util.JSONConverter;
 import org.voegtle.weatherstation.server.util.StringUtil;
@@ -24,8 +21,8 @@ public abstract class AbstractServlet extends HttpServlet {
   private static final String MIME_TYPE_APPLICATION_JSON = "application/json";
 
   protected final PersistenceManager pm = new PersistenceManager();
-  protected LocationProperties locationProperties;
-  protected JSONConverter jsonConverter;
+  LocationProperties locationProperties;
+  JSONConverter jsonConverter;
 
   @Override
   public void init() throws ServletException {
@@ -37,8 +34,20 @@ public abstract class AbstractServlet extends HttpServlet {
 //    LocationProperties lp = createLocationProperties();
 //    pm.makePersistant(lp);
 
+//    Contact contact = createContact();
+//    pm.makePersistant(contact);
+
     locationProperties = pm.fetchLocationProperties();
     jsonConverter = new JSONConverter(locationProperties);
+  }
+
+  private Contact createContact() {
+    Contact contact = new Contact();
+    contact.setMailAdress("christian@voegtle.org");
+    contact.setName("Christian Vögtle");
+    contact.setReceiveDailyStatus(true);
+    contact.setReceiveIncidentReports(true);
+    return contact;
   }
 
   private LocationProperties createLocationProperties() {
@@ -64,12 +73,12 @@ public abstract class AbstractServlet extends HttpServlet {
     return location;
   }
 
-  protected void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list, boolean extended) {
+  void returnDetailedResult(HttpServletResponse response, List<SmoothedWeatherDataSet> list, boolean extended) {
     List<JSONObject> jsonObjects = jsonConverter.toJson(list, extended);
     writeResponse(response, jsonObjects);
   }
 
-  protected void writeResponse(HttpServletResponse response, JSONObject jsonObject) {
+  void writeResponse(HttpServletResponse response, JSONObject jsonObject) {
     try {
       PrintWriter out = response.getWriter();
       response.setContentType(MIME_TYPE_APPLICATION_JSON);
@@ -82,11 +91,11 @@ public abstract class AbstractServlet extends HttpServlet {
     }
   }
 
-  protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects) {
+  void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects) {
     writeResponse(response, jsonObjects, "ISO-8859-1");
   }
 
-  protected void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects, String encoding) {
+  void writeResponse(HttpServletResponse response, List<JSONObject> jsonObjects, String encoding) {
     JSONArray jsonArray = new JSONArray(jsonObjects);
     try {
       response.setCharacterEncoding(encoding);
@@ -101,7 +110,7 @@ public abstract class AbstractServlet extends HttpServlet {
     }
   }
 
-  protected void returnResult(HttpServletResponse response, String result) {
+  void returnResult(HttpServletResponse response, String result) {
     PrintWriter out;
     try {
       out = response.getWriter();
@@ -113,11 +122,11 @@ public abstract class AbstractServlet extends HttpServlet {
     }
   }
 
-  protected boolean isCorrectLocation(String location) {
+  boolean isCorrectLocation(String location) {
     return StringUtil.isNotEmpty(location) && location.equals(locationProperties.getLocation());
   }
 
-  protected boolean isSecretValid(String secret) {
+  boolean isSecretValid(String secret) {
     String secretHash = locationProperties.getSecretHash();
     return (StringUtil.isEmpty(secretHash) ||
         (StringUtil.isNotEmpty(secret) && secretHash.equals(HashService.calculateHash(secret))));
@@ -125,12 +134,12 @@ public abstract class AbstractServlet extends HttpServlet {
 
 
 
-  protected boolean isReadSecretValid(String secret) {
+  boolean isReadSecretValid(String secret) {
     String readHash = locationProperties.getReadHash();
     return isReadSecretValid(readHash, secret);
   }
 
-  protected boolean isReadSecretValid(String readHash, String secret) {
+  boolean isReadSecretValid(String readHash, String secret) {
     return (StringUtil.isEmpty(readHash) ||
         (StringUtil.isNotEmpty(secret) && readHash.equals(HashService.calculateHash(secret))));
   }

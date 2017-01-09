@@ -69,6 +69,18 @@
     <url-pattern>/weatherstation/read</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>reporting</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.ReportingServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>reporting</servlet-name>
+    <url-pattern>/weatherstation/report</url-pattern>
+  </servlet-mapping>
+
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

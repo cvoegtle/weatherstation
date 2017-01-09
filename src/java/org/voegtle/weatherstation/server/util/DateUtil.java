@@ -57,7 +57,7 @@ public class DateUtil {
   }
 
   public Date getYesterday() {
-    Calendar cal = Calendar.getInstance();
+    Calendar cal = Calendar.getInstance(Locale.GERMANY);
     cal.setTime(fromGMTtoLocal(cal.getTime()));
     removeTimeFraction(cal);
 

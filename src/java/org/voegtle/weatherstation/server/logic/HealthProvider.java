@@ -22,15 +22,12 @@ public class HealthProvider {
 
   private DateUtil dateUtil;
 
-  private AdminNotifier notifier;
-
   public HealthProvider(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
     this.dateUtil = locationProperties.getDateUtil();
-    this.notifier = new AdminNotifier(locationProperties);
     try {
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-      Map properties = new HashMap<>();
+      Map<String, HealthDTO> properties = new HashMap<>();
       cache = cacheFactory.createCache(properties);
     } catch (CacheException e) {
       log.severe("CentralServlet: Could not instantiate Cache");
@@ -46,10 +43,13 @@ public class HealthProvider {
     return health;
   }
 
+  public HealthDTO get(Date day) {
+    return pm.selectHealth(day).toDTO();
+  }
+
   public void update(HealthDTO health) {
     cache.put(HEALTH, health);
     pm.makePersistant(health);
-//    notifier.notifiy(health);
   }
 
   private boolean isOutdated(HealthDTO health, Date today) {
