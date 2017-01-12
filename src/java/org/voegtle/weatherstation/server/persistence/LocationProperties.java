@@ -39,6 +39,9 @@ public class LocationProperties {
   private Integer indexInsideTemperature;
   private Integer indexInsideHumidity;
 
+  private Integer expectedDataSets;
+  private Integer expectedRequests;
+
   public LocationProperties() {
   }
 
@@ -183,5 +186,21 @@ public class LocationProperties {
     di.indexOutsideTemperature = indexOutsideTemperature;
 
     return di;
+  }
+
+  public Integer getExpectedDataSets() {
+    return expectedDataSets;
+  }
+
+  public void setExpectedDataSets(Integer expectedDataSet) {
+    this.expectedDataSets = expectedDataSet;
+  }
+
+  public Integer getExpectedRequests() {
+    return expectedRequests;
+  }
+
+  public void setExpectedRequests(Integer expectedRequests) {
+    this.expectedRequests = expectedRequests;
   }
 }

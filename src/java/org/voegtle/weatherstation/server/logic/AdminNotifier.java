@@ -22,11 +22,13 @@ public class AdminNotifier {
 
   private final PersistenceManager pm;
   private final DateUtil dateUtil;
+  private final LocationProperties locationProperties;
   private final HealthProvider healthProvider;
 
   public AdminNotifier(PersistenceManager pm, LocationProperties locationProperties) {
     this.pm = pm;
     this.dateUtil = locationProperties.getDateUtil();
+    this.locationProperties = locationProperties;
     this.healthProvider = new HealthProvider(pm, locationProperties);
   }
 
@@ -34,11 +36,13 @@ public class AdminNotifier {
     try {
       Properties props = new Properties();
       Session session = Session.getDefaultInstance(props, null);
+      HealthDTO health = healthProvider.get(dateUtil.getYesterday());
+
+      boolean isIncident = checkHealth(health);
 
       List<Contact> contacts = pm.fetchContacts();
       for (Contact contact : contacts) {
-        if (contact.isReceiveDailyStatus()) {
-          HealthDTO health = healthProvider.get(dateUtil.getYesterday());
+        if (contact.isReceiveDailyStatus() || (isIncident && contact.isReceiveIncidentReports())) {
           Message notification = new MimeMessage(session);
           createMessage(notification, contact, health);
           Transport.send(notification);
@@ -52,14 +56,24 @@ public class AdminNotifier {
     }
   }
 
+  private boolean checkHealth(HealthDTO health) {
+    Integer expectedDataSets = locationProperties.getExpectedDataSets();
+    Integer expectedRequests = locationProperties.getExpectedRequests();
+    return (((expectedDataSets - health.getPersisted()) / expectedDataSets) > 0.1) ||
+        (((expectedRequests - health.getRequests()) / expectedRequests) > 0.1);
+  }
+
   private void createMessage(Message notification, Contact contact, HealthDTO health) throws UnsupportedEncodingException, MessagingException {
     String appId = SystemProperty.applicationId.get();
     notification.setFrom(new InternetAddress("admin@" + appId + ".appspotmail.com", "Administrator"));
     notification.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getMailAdress(), contact.getName()));
-    notification.setSubject(appId + " - Statusbericht vom " + dateUtil.formatAsDate(health.getDay()));
-    String htmlBody = "Requests: " + health.getRequests() + "<br>" +
-        "Lines: " + health.getLines() + "<br>" +
-        "Persisted: " + health.getPersisted();
+
+    String subject = appId + " - Statusbericht vom " + dateUtil.formatAsDate(health.getDay());
+    notification.setSubject(subject);
+    String htmlBody = "<h1>" + subject + "</h1>" +
+        "<b>Requests:</b><br>" + health.getRequests() + " of expected " +locationProperties.getExpectedRequests() + " requests<br><br>" +
+        "<b>Lines</b><br>valid: " + health.getLines() + ", invalid: " + (health.getLines() - health.getPersisted()) + "<br>" +
+        "expected: " + locationProperties.getExpectedDataSets() + ", diff: " + (locationProperties.getExpectedDataSets() - health.getPersisted());
     Multipart mp = new MimeMultipart();
 
     MimeBodyPart htmlPart = new MimeBodyPart();

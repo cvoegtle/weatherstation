@@ -61,6 +61,8 @@ public abstract class AbstractServlet extends HttpServlet {
     lp.setReadHash("not set");
     lp.setIndexOutsideTemperature(19);
     lp.setIndexOutsideHumidity(20);
+    lp.setExpectedDataSets(494);
+    lp.setExpectedRequests(494);
     return lp;
   }
 
