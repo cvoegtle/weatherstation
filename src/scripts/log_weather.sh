@@ -39,6 +39,7 @@ do
       fi
     fi
   done
-  echo restart socat
+  restarttime=`date -Iseconds`
+  echo $restarttime restart socat rc: $? >>${wetter}/error.log
   sleep 10
 done
