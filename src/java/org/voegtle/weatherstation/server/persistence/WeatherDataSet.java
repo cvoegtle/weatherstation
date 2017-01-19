@@ -125,4 +125,8 @@ public class WeatherDataSet {
   public String toString() {
     return "WeatherDataSet={ TS=" + timestamp + ", OutT=" +outsideTemperature + ", OutH=" + outsideHumidity + ", valid=" +  isValid() + "}" ;
   }
+
+  public static boolean hasRainCounter(WeatherDataSet wds) {
+    return wds != null && wds.getRainCounter() != null;
+  }
 }

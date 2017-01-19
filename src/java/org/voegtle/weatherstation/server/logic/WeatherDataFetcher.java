@@ -71,7 +71,7 @@ public class WeatherDataFetcher {
       dto.setRainLastHour(calculateRain(latest.getRainCounter(), oneHourBefore.getRainCounter()));
     }
 
-    if (SmoothedWeatherDataSet.hasRainCounter(today)) {
+    if (SmoothedWeatherDataSet.hasRainCounter(today) && WeatherDataSet.hasRainCounter(latest)) {
       dto.setRainToday(calculateRain(latest.getRainCounter(), today.getRainCounter()));
     }
 
