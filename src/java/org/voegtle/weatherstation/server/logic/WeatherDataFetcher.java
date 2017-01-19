@@ -31,12 +31,12 @@ public class WeatherDataFetcher {
     return pm.fetchSmoothedWeatherDataInRange(begin, end);
   }
 
-  public List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
+  private List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
     Date today = dateUtil.getToday();
     return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today), null);
   }
 
-  public SmoothedWeatherDataSet getFirstDataSetOfToday() {
+  private SmoothedWeatherDataSet getFirstDataSetOfToday() {
     Date today = dateUtil.getToday();
     today = dateUtil.fromLocalToGMT(today);
     Date oneHourLater = dateUtil.incrementHour(today);
