@@ -45,7 +45,7 @@ public abstract class AbstractServlet extends HttpServlet {
     Contact contact = new Contact();
     contact.setMailAdress("christian@voegtle.org");
     contact.setName("Christian Vögtle");
-    contact.setReceiveDailyStatus(true);
+    contact.setReceiveDailyStatus(false);
     contact.setReceiveIncidentReports(true);
     return contact;
   }
