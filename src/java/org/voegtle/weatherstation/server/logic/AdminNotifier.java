@@ -51,7 +51,10 @@ public class AdminNotifier {
   private boolean checkHealth(HealthDTO health) {
     Integer expectedDataSets = locationProperties.getExpectedDataSets();
     Integer expectedRequests = locationProperties.getExpectedRequests();
-    return (((expectedDataSets - health.getPersisted()) / expectedDataSets) > 0.1) ||
-        (((expectedRequests - health.getRequests()) / expectedRequests) > 0.1);
+    int datasetFactor = (expectedDataSets - health.getPersisted()) / expectedDataSets;
+    int requestFactor = (expectedRequests - health.getRequests()) / expectedRequests;
+    boolean healthy = ( datasetFactor > 0.1) || (requestFactor > 0.1);
+    log.warning("Healthy: " + healthy + ", Requestfaktor: " + requestFactor + ", DatasetFaktor: " + datasetFactor);
+    return healthy;
   }
 }
