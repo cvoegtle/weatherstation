@@ -12,6 +12,7 @@ public class UrlParameter extends AbstractUrlParameter {
   private static final String PARAM_NEW = "new";
   private static final String PARAM_EXTENDED = "ext";
   private static final String PARAM_TYPE = "type";
+  private static final String PARAM_LOCAL_TIMEZONE = "local_timezone";
 
   private final DataType type;
   private final Date begin;
@@ -19,13 +20,15 @@ public class UrlParameter extends AbstractUrlParameter {
   private final String secret;
 
   private final boolean extended;
+  private final boolean localTimezone;
   protected boolean newFormat;
 
   public UrlParameter(final HttpServletRequest request, DateUtil dateUtil, DataType defaultDataType) {
     super(request, dateUtil);
     this.type = getUrlParameterType(PARAM_TYPE, defaultDataType);
-    this.begin = getUrlParameterDate(PARAM_BEGIN);
-    this.end = getUrlParameterDate(PARAM_END);
+    this.localTimezone = getUrlParameterBoolean(PARAM_LOCAL_TIMEZONE);
+    this.begin = getUrlParameterDate(PARAM_BEGIN, localTimezone);
+    this.end = getUrlParameterDate(PARAM_END, localTimezone);
     this.secret = getUrlParameter(PARAM_SECRET);
     this.newFormat = getUrlParameterBoolean(PARAM_NEW);
     this.extended = getUrlParameterBoolean(PARAM_EXTENDED);
@@ -55,4 +58,7 @@ public class UrlParameter extends AbstractUrlParameter {
     return type;
   }
 
+  public boolean isLocalTimezone() {
+    return localTimezone;
+  }
 }

@@ -32,7 +32,7 @@ abstract class AbstractUrlParameter {
     return param != null;
   }
 
-  protected Date getUrlParameterDate(String paramName) {
+  protected Date getUrlParameterDate(String paramName, boolean localTimezone) {
     String param = request.getParameter(paramName);
     if (StringUtil.isEmpty(param)) {
       return null;
@@ -42,7 +42,12 @@ abstract class AbstractUrlParameter {
     Date result;
     try {
       result = sdf.parse(param);
-      result = dateUtil.fromCESTtoGMT(result);
+      if (localTimezone) {
+        result = dateUtil.fromLocalToGMT(result);
+        result = dateUtil.fromGMTtoCEST(result);
+      } else {
+        result = dateUtil.fromCESTtoGMT(result);
+      }
     } catch (ParseException e) {
       result = null;
     }

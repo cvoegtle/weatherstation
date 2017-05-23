@@ -30,10 +30,13 @@ public class DateUtil {
   }
 
   public Date fromLocalToGMT(Date date) {
-    Calendar cal = Calendar.getInstance(Locale.UK);
-    cal.setTime(date);
-    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, timezone));
-    return cal.getTime();
+    if (date != null) {
+      Calendar cal = Calendar.getInstance(Locale.UK);
+      cal.setTime(date);
+      cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, timezone));
+      return cal.getTime();
+    }
+    return null;
   }
 
   public Date fromGMTtoLocal(Date date){
