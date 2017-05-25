@@ -12,16 +12,6 @@
         <sourceRoots />
       </configuration>
     </facet>
-    <facet type="google-app-engine" name="Google App Engine">
-      <configuration>
-        <sdk-home-path>$USER_HOME$/Google Developer/appengine-java-sdk-1.9.46</sdk-home-path>
-        <run-enhancer-on-make>true</run-enhancer-on-make>
-        <files-to-enhance>
-          <file path="$MODULE_DIR$/src" />
-        </files-to-enhance>
-        <persistence-api>JPA</persistence-api>
-      </configuration>
-    </facet>
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
@@ -32,6 +22,9 @@
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/web/META-INF/persistence.xml" />
       </configuration>
     </facet>
+    <facet type="app-engine-standard" name="Google App Engine">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -41,6 +34,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="AppEngine API 1.9.46" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-endpoints:Release" level="project" />
+    <orderEntry type="library" name="javax.servlet:servlet-api:2.5" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-api-1.0-sdk:Release" level="project" />
+    <orderEntry type="library" name="com.google.appengine.orm:datanucleus-appengine:1.0.10" level="project" />
+    <orderEntry type="library" name="org.apache.geronimo.specs:geronimo-jpa_3.0_spec:1.1.1" level="project" />
+    <orderEntry type="library" name="org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
+    <orderEntry type="library" name="javax.jdo:jdo2-api:2.3-eb" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-jsr107cache:1.9.53" level="project" />
+    <orderEntry type="library" name="net.sf.jsr107cache:jsr107cache:1.1" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-endpoints-deps:1.9.53" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-endpoints:1.9.53" level="project" />
+    <orderEntry type="library" name="com.google.appengine:appengine-api-labs:1.9.53" level="project" />
+    <orderEntry type="library" name="org.datanucleus:datanucleus-core:1.1.5" level="project" />
+    <orderEntry type="library" name="org.datanucleus:datanucleus-jpa:1.1.5" level="project" />
   </component>
 </module>

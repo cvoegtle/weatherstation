@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="org.datanucleus:datanucleus-core:1.1.5" type="repository">
+    <properties maven-id="org.datanucleus:datanucleus-core:1.1.5" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/datanucleus/datanucleus-core/1.1.5/datanucleus-core-1.1.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/jdo/jdo2-api/2.3-20090302111651/jdo2-api-2.3-20090302111651.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/javax/transaction/transaction-api/1.1/transaction-api-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

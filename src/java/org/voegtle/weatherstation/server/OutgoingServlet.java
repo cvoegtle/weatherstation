@@ -44,6 +44,8 @@ public class OutgoingServlet extends AbstractServlet {
     } else if (param.getBegin() != null) {
       Date begin = locationProperties.getDateUtil().fromLocalToGMT(param.getBegin());
       Date end = locationProperties.getDateUtil().fromLocalToGMT(param.getEnd());
+      log.info("begin: " + begin + " end: " + end);
+
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(begin, end);
       returnDetailedResult(response, result, authorized);
     }
