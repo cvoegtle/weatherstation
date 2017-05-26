@@ -3,8 +3,6 @@
     <properties maven-id="javax.jdo:jdo2-api:2.3-eb" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/javax/jdo/jdo2-api/2.3-eb/jdo2-api-2.3-eb.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/javax/transaction/transaction-api/1.1/transaction-api-1.1.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-jpa_3.0_spec/1.0/geronimo-jpa_3.0_spec-1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

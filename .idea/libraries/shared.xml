@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="shared">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.53/lib/shared" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Google Developer/appengine-java-sdk-1.9.53/lib/shared" recursive="false" />
+  </library>
+</component>
