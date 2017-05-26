@@ -9,13 +9,13 @@ import org.voegtle.weatherstation.server.persistence.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.SmoothedWeatherDataSet;
 import org.voegtle.weatherstation.server.request.DataType;
 import org.voegtle.weatherstation.server.request.OutgoingUrlParameter;
+import org.voegtle.weatherstation.server.util.DateUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class OutgoingServlet extends AbstractServlet {
@@ -42,9 +42,11 @@ public class OutgoingServlet extends AbstractServlet {
       Statistics stats = weatherDataFetcher.fetchStatistics();
       writeResponse(response, jsonConverter.toJson(stats, param.isNewFormat()));
     } else if (param.getBegin() != null) {
-      Date begin = locationProperties.getDateUtil().fromLocalToGMT(param.getBegin());
-      Date end = locationProperties.getDateUtil().fromLocalToGMT(param.getEnd());
-      List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(begin, end);
+      List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
+      log.info("begin: " + param.getBegin() + " end: " + param.getEnd() + " localTZ: " +  param.isLocalTimezone() +
+          " localTimezone: " + locationProperties.getDateUtil().getTimezone().getDisplayName() +
+      " CEST: " + DateUtil.getTzCEST().getDisplayName());
+
       returnDetailedResult(response, result, authorized);
     }
 

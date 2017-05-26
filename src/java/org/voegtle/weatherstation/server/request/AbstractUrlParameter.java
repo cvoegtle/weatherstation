@@ -44,7 +44,6 @@ abstract class AbstractUrlParameter {
       result = sdf.parse(param);
       if (localTimezone) {
         result = dateUtil.fromLocalToGMT(result);
-        result = dateUtil.fromGMTtoCEST(result);
       } else {
         result = dateUtil.fromCESTtoGMT(result);
       }

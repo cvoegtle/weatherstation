@@ -186,4 +186,12 @@ public class DateUtil {
     return timeBefore;
   }
 
+
+  public TimeZone getTimezone() {
+    return timezone;
+  }
+
+  public static TimeZone getTzCEST() {
+    return tzCEST;
+  }
 }
