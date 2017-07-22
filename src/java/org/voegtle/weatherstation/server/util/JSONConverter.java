@@ -46,6 +46,10 @@ public class JSONConverter {
 
       json.put("id", locationProperties.getLocation());
       json.putOpt("forecast", locationProperties.getWeatherForecast());
+
+      json.putOpt("laditude", locationProperties.getLatitude());
+      json.putOpt("longitude", locationProperties.getLongitude());
+
     } catch (JSONException ignored) {
     }
     return json;
@@ -72,6 +76,10 @@ public class JSONConverter {
 
       json.put("id", currentWeatherData.getId());
       json.putOpt("forecast", currentWeatherData.getForecast());
+
+      json.putOpt("laditude", currentWeatherData.getLatitude());
+      json.putOpt("longitude", currentWeatherData.getLongitude());
+
     } catch (JSONException ignored) {
     }
     return json;
@@ -288,6 +296,16 @@ public class JSONConverter {
     if (json.has("wind")) {
       Number wind = (Number)json.get("wind");
       weatherDTO.setWindspeed(wind.floatValue());
+    }
+
+    if (json.has("laditude")) {
+      Number latitude = (Number)json.get("laditude");
+      weatherDTO.setLatitude(latitude.floatValue());
+    }
+
+    if (json.has("longitude")) {
+      Number longitude = (Number)json.get("longitude");
+      weatherDTO.setLongitude(longitude.floatValue());
     }
     return weatherDTO;
   }

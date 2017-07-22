@@ -4,7 +4,7 @@
        oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages -->
   <application>shenzhenwetter</application>
   <module>default</module>
-  <version>50</version>
+  <version>51</version>
 
   <!--
     Allows App Engine to send multiple requests to one instance in parallel:

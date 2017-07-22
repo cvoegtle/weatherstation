@@ -20,6 +20,8 @@ public class CacheWeatherDTO implements Serializable {
   private Float windspeed;
   private Float watt;
   private String forecast;
+  private Float latitude;
+  private Float longitude;
 
   public CacheWeatherDTO() {
   }
@@ -141,5 +143,21 @@ public class CacheWeatherDTO implements Serializable {
 
   public void setLocationShort(String locationShort) {
     this.locationShort = locationShort;
+  }
+
+  public Float getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(Float latitude) {
+    this.latitude = latitude;
+  }
+
+  public Float getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(Float longitude) {
+    this.longitude = longitude;
   }
 }

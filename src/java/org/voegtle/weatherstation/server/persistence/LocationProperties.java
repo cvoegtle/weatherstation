@@ -42,6 +42,9 @@ public class LocationProperties {
   private Integer expectedDataSets;
   private Integer expectedRequests;
 
+  private Float latitude;
+  private Float longitude;
+
   public LocationProperties() {
   }
 
@@ -202,5 +205,21 @@ public class LocationProperties {
 
   public void setExpectedRequests(Integer expectedRequests) {
     this.expectedRequests = expectedRequests;
+  }
+
+  public Float getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(Float latitude) {
+    this.latitude = latitude;
+  }
+
+  public Float getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(Float longitude) {
+    this.longitude = longitude;
   }
 }

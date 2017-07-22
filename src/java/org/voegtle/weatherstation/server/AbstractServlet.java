@@ -52,17 +52,19 @@ public abstract class AbstractServlet extends HttpServlet {
 
   private LocationProperties createLocationProperties() {
     LocationProperties lp = new LocationProperties();
-    lp.setLocation("shenzhen");
-    lp.setAddress("Shenzhen");
-    lp.setCityShortcut("SZ");
-    lp.setCity("Shenzhen");
+    lp.setLocation("instant");
+    lp.setAddress("Mobile Wetterstation");
+    lp.setCityShortcut("MO");
+    lp.setCity("Irgendwo in Deutschland");
     lp.setWeatherForecast("");
-    lp.setSecretHash("4ac1161eefcfb967e88c54041ac82364327ec75d55390abdfc773c03454572e8");
-    lp.setReadHash("not set");
-    lp.setIndexOutsideTemperature(19);
-    lp.setIndexOutsideHumidity(20);
-    lp.setExpectedDataSets(494);
-    lp.setExpectedRequests(494);
+    lp.setSecretHash("2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4");
+    lp.setReadHash("a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c");
+    lp.setIndexOutsideTemperature(6);
+    lp.setIndexOutsideHumidity(14);
+    lp.setExpectedDataSets(1000);
+    lp.setExpectedRequests(1000);
+    lp.setTimezone("Europe/Berlin");
+
     return lp;
   }
 

@@ -14,7 +14,7 @@
     </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$USER_HOME$/Google Developer/appengine-java-sdk-1.9.53</sdk-home-path>
+        <sdk-home-path>$USER_HOME$/Google_Developer/appengine-java-sdk-1.9.53</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src" />
