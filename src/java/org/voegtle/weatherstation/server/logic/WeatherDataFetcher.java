@@ -98,7 +98,6 @@ public class WeatherDataFetcher {
 
   private void buildHistoricStatistics(Statistics stats) {
     Date yesterday = dateUtil.getYesterday();
-    log.warning("Yesterday: " + yesterday);
     List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
 
     int day = 1;

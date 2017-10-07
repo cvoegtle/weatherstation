@@ -305,4 +305,38 @@ public class AggregatedWeatherDataSet {
   public void setKwh(Double kwh) {
     this.kwh = kwh;
   }
+
+  @Override
+  public String toString() {
+    return "AggregatedWeatherDataSet{" +
+        "date=" + date +
+        ", period=" + period +
+        ", finished=" + finished +
+        ", timeOfMinimum=" + timeOfMinimum +
+        ", timeOfMaximum=" + timeOfMaximum +
+        ", outsideTemperatureMin=" + outsideTemperatureMin +
+        ", outsideTemperatureMax=" + outsideTemperatureMax +
+        ", outsideTemperatureAverage=" + outsideTemperatureAverage +
+        ", outsideTemperatureCounter=" + outsideTemperatureCounter +
+        ", outsideHumidityMin=" + outsideHumidityMin +
+        ", outsideHumidityMax=" + outsideHumidityMax +
+        ", outsideHumidityAverage=" + outsideHumidityAverage +
+        ", outsideHumidityCounter=" + outsideHumidityCounter +
+        ", insideTemperatureMin=" + insideTemperatureMin +
+        ", insideTemperatureMax=" + insideTemperatureMax +
+        ", insideTemperatureAverage=" + insideTemperatureAverage +
+        ", insideTemperatureCounter=" + insideTemperatureCounter +
+        ", insideHumidityMin=" + insideHumidityMin +
+        ", insideHumidityMax=" + insideHumidityMax +
+        ", insideHumidityAverage=" + insideHumidityAverage +
+        ", insideHumidityCounter=" + insideHumidityCounter +
+        ", windspeedMin=" + windspeedMin +
+        ", windspeedMax=" + windspeedMax +
+        ", windspeedAverage=" + windspeedAverage +
+        ", windspeedCounter=" + windspeedCounter +
+        ", rainCounter=" + rainCounter +
+        ", rainDays=" + rainDays +
+        ", kwh=" + kwh +
+        '}';
+  }
 }
