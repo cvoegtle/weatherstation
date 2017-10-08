@@ -5,14 +5,14 @@ public class Statistics {
     lastHour, today, yesterday, last7days, last30days;
 
     public static TimeRange byDay(int day) {
-      TimeRange range = null;
+      TimeRange range;
       if (day == 0) {
         range = today;
       } else if (day == 1) {
         range = yesterday;
       } else if (day <= 7) {
         range = last7days;
-      } else if (day <= 30) {
+      } else {
         range = last30days;
       }
       return range;
