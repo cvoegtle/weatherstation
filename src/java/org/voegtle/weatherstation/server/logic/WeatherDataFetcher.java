@@ -10,11 +10,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class WeatherDataFetcher {
-  private static final Logger log = Logger.getLogger(WeatherDataFetcher.class.getName());
-
   private final PersistenceManager pm;
   private final DateUtil dateUtil;
   private final LocationProperties locationProperties;
