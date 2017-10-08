@@ -6,7 +6,9 @@ import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
 import org.voegtle.weatherstation.server.persistence.*;
 import org.voegtle.weatherstation.server.util.DateUtil;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -98,8 +100,8 @@ public class WeatherDataFetcher {
 
   private void buildHistoricStatistics(Statistics stats) {
     Date yesterday = dateUtil.getYesterday();
-    List<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
-
+    Collection<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
+    dataSets = removeDuplicates(dataSets);
     int day = 1;
     for (AggregatedWeatherDataSet dataSet : dataSets) {
       Statistics.TimeRange range = Statistics.TimeRange.byDay(day++);
@@ -114,6 +116,14 @@ public class WeatherDataFetcher {
       stats.setTemperature(range, dataSet.getOutsideTemperatureMax());
       stats.setTemperature(range, dataSet.getOutsideTemperatureMin());
     }
+  }
+
+  private Collection<AggregatedWeatherDataSet> removeDuplicates(Collection<AggregatedWeatherDataSet> dataSets) {
+    LinkedHashMap<Date, AggregatedWeatherDataSet> reducedList = new LinkedHashMap<>();
+    for (AggregatedWeatherDataSet dataSet : dataSets) {
+      reducedList.put(dataSet.getDate(), dataSet);
+    }
+    return reducedList.values();
   }
 
   private void buildTodaysStatistics(Statistics stats) {
