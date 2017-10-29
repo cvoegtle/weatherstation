@@ -55,5 +55,6 @@
     <orderEntry type="library" name="com.google.appengine:appengine-endpoints-deps:1.9.53" level="project" />
     <orderEntry type="library" name="javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="org.datanucleus:datanucleus-core:1.1.5" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>

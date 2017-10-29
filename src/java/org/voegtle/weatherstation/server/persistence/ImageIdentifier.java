@@ -35,7 +35,7 @@ public class ImageIdentifier {
   }
 
   public String asUrlParameter() {
-    if (StringUtil.isEmpty(zx)) {
+    if (StringUtil.INSTANCE.isEmpty(zx)) {
       return "?oid=" + oid + "&format=" + format;
     } else {
       return "&oid=" + oid + "&zx=" + zx;

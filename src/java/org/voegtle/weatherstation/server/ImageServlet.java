@@ -34,9 +34,9 @@ public class ImageServlet extends AbstractServlet {
       response.getWriter().write("ACK");
       response.getWriter().close();
     } else {
-      if (StringUtil.isNotEmpty(param.getOid())) {
+      if (StringUtil.INSTANCE.isNotEmpty(param.getOid())) {
         ImageIdentifier identifier;
-        if (StringUtil.isNotEmpty(param.getZx())) {
+        if (StringUtil.INSTANCE.isNotEmpty(param.getZx())) {
           identifier = new ImageIdentifier(param.getOid(), param.getZx());
         } else {
           identifier = new ImageIdentifier(param.getSheet(), param.getOid(), param.getFormat());

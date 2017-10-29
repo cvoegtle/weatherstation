@@ -15,7 +15,7 @@ public class ImageServers {
 
   public String get(Integer id) {
     String server = servers.get(id);
-    if (StringUtil.isEmpty(server)) {
+    if (StringUtil.INSTANCE.isEmpty(server)) {
       server = servers.get(0);
     }
     return server;

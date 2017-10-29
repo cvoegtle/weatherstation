@@ -171,8 +171,8 @@ public class PersistenceManager {
   private static final Logger log = Logger.getLogger(PersistenceManager.class.getName());
 
   public SmoothedWeatherDataSet fetchDataSetMinutesBefore(Date referenceDate, int minutes) {
-    Calendar minAge = DateUtil.minutesBefore(referenceDate, minutes);
-    Calendar maxAge = DateUtil.minutesBefore(referenceDate, minutes + 30);
+    Calendar minAge = DateUtil.Companion.minutesBefore(referenceDate, minutes);
+    Calendar maxAge = DateUtil.Companion.minutesBefore(referenceDate, minutes + 30);
 
     EntityManager em = factory.createEntityManager();
     Query q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :minAge AND  wds.timestamp > :maxAge ORDER by wds.timestamp desc");

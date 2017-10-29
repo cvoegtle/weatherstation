@@ -35,7 +35,7 @@ public class HealthProvider {
   }
 
   public HealthDTO get() {
-    Date today = dateUtil.getToday();
+    Date today = dateUtil.today();
     HealthDTO health = (HealthDTO)cache.get(HEALTH);
     if (health == null || isOutdated(health, today)) {
       health = pm.selectHealth(today).toDTO();

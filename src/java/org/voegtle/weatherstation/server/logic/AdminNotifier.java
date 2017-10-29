@@ -30,7 +30,7 @@ public class AdminNotifier {
 
   public void notifiy() {
     try {
-      HealthDTO health = healthProvider.get(dateUtil.getYesterday());
+      HealthDTO health = healthProvider.get(dateUtil.yesterday());
       boolean isIncident = checkHealth(health);
 
       List<Contact> contacts = pm.fetchContacts();

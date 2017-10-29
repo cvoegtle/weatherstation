@@ -93,7 +93,7 @@ public class DataParser {
 
   private Date getTimestamp(DataLine data) throws ParseException {
     String timeString = data.get(INDEX_DATE);
-    if (StringUtil.isEmpty(timeString)) {
+    if (StringUtil.INSTANCE.isEmpty(timeString)) {
       Calendar cal = Calendar.getInstance(Locale.GERMANY);
       cal.set(Calendar.MILLISECOND, 0);
       return cal.getTime();
@@ -102,7 +102,7 @@ public class DataParser {
   }
 
   private boolean isValid(DataLine data) {
-    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data.get(indexOutsideTemperature));
+    return data.size() > INDEX_DATE && StringUtil.INSTANCE.isNotEmpty(data.get(indexOutsideTemperature));
   }
 
   private static final String FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
@@ -113,28 +113,28 @@ public class DataParser {
   }
 
   private Float parseFloat(String val) {
-    if (StringUtil.isEmpty(val)) {
+    if (StringUtil.INSTANCE.isEmpty(val)) {
       return null;
     }
     return Float.parseFloat(val.replace(',', '.'));
   }
 
   private Double parseDouble(String val) {
-    if (StringUtil.isEmpty(val)) {
+    if (StringUtil.INSTANCE.isEmpty(val)) {
       return null;
     }
     return Double.parseDouble(val.replace(',', '.'));
   }
 
   private Integer parseInteger(String val) {
-    if (StringUtil.isEmpty(val)) {
+    if (StringUtil.INSTANCE.isEmpty(val)) {
       return null;
     }
     return Integer.parseInt(val);
   }
 
   private Boolean parseBoolean(String val) {
-    if (StringUtil.isEmpty(val)) {
+    if (StringUtil.INSTANCE.isEmpty(val)) {
       return null;
     }
     return "1".equals(val);

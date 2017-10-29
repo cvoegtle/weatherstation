@@ -34,7 +34,7 @@ abstract class AbstractUrlParameter {
 
   protected Date getUrlParameterDate(String paramName, boolean localTimezone) {
     String param = request.getParameter(paramName);
-    if (StringUtil.isEmpty(param)) {
+    if (StringUtil.INSTANCE.isEmpty(param)) {
       return null;
     }
 
@@ -60,7 +60,7 @@ abstract class AbstractUrlParameter {
 
   protected Integer getUrlParameterInteger(String paramName, Integer defaultValue) {
     String param = request.getParameter(paramName);
-    if (StringUtil.isNotEmpty(param)) {
+    if (StringUtil.INSTANCE.isNotEmpty(param)) {
       return new Integer(param);
     }
     return defaultValue;

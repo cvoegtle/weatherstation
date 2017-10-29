@@ -45,7 +45,7 @@ public class OutgoingServlet extends AbstractServlet {
       List<SmoothedWeatherDataSet> result = weatherDataFetcher.fetchSmoothedWeatherData(param.getBegin(), param.getEnd());
       log.info("begin: " + param.getBegin() + " end: " + param.getEnd() + " localTZ: " +  param.isLocalTimezone() +
           " localTimezone: " + locationProperties.getDateUtil().getTimezone().getDisplayName() +
-      " CEST: " + DateUtil.getTzCEST().getDisplayName());
+      " CEST: " + DateUtil.Companion.getTzCEST().getDisplayName());
 
       returnDetailedResult(response, result, authorized);
     }

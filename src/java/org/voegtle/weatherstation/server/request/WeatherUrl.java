@@ -14,10 +14,10 @@ public class WeatherUrl {
   }
 
   public WeatherUrl(WeatherLocation location, UrlParameter param) throws MalformedURLException {
-    boolean forwardSecret = StringUtil.isNotEmpty(param.getSecret()) && location.isForwardSecret();
+    boolean forwardSecret = StringUtil.INSTANCE.isNotEmpty(param.getSecret()) && location.isForwardSecret();
     url = new URL("https://" + location.getHost() + "/weatherstation/query?type=" + param.getType()
         + (param.isExtended() ? "&ext" : "") + (param.isNewFormat() ? "&new" : "")
-        + (forwardSecret ? "&secret=" + StringUtil.urlEncode(param.getSecret()) : ""));
+        + (forwardSecret ? "&secret=" + StringUtil.INSTANCE.urlEncode(param.getSecret()) : ""));
   }
 
   public URL getUrl() {
