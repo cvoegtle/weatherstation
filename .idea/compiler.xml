@@ -12,8 +12,8 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
-      <module name="weatherstation_main" target="1.8" />
-      <module name="weatherstation_test" target="1.8" />
+      <module name="weatherstation_main" target="1.7" />
+      <module name="weatherstation_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
