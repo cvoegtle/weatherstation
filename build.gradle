@@ -51,6 +51,8 @@ appengine {  // App Engine tasks configuration
 
 
     deploy {   // deploy configuration
+        // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
+        // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
         version = '52'
         project = 'instantwetter'
         stopPreviousVersion = false
@@ -76,8 +78,6 @@ task datanucleusEnhance {
                 name : 'datanucleusenhancer',
                 classpath : sourceSets.main.runtimeClasspath.asPath,
                 classname : 'org.datanucleus.enhancer.tools.EnhancerTask'
-                // the below is for DataNucleus Enhancer 3.1.1
-                // classname : 'org.datanucleus.enhancer.tools.EnhancerTask'
         )
 
         // run the DataNucleus Enhancer as an Ant task
@@ -99,20 +99,3 @@ version = '52'          // Version in generated output
 
 sourceCompatibility = 1.7  // App Engine Standard uses Java 7
 targetCompatibility = 1.7 // App Engine Standard uses Java 7
-
-/**
- <orderEntry type="library" name="com.google.appengine:appengine-jsr107cache:1.9.53" level="project" />
- <orderEntry type="library" name="net.sf.jsr107cache:jsr107cache:1.1" level="project" />
- <orderEntry type="library" name="com.google.appengine:appengine-api-1.0-sdk:1.9.53" level="project" />
- <orderEntry type="library" name="com.google.appengine:appengine-api-labs:1.9.53" level="project" />
- <orderEntry type="library" name="com.google.appengine.orm:datanucleus-appengine:1.0.10" level="project" />
- <orderEntry type="library" scope="RUNTIME" name="org.datanucleus:datanucleus-jpa:1.1.5" level="project" />
- <orderEntry type="library" name="org.apache.geronimo.specs:geronimo-jpa_3.0_spec:1.1.1" level="project" />
- <orderEntry type="library" name="org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
- <orderEntry type="library" name="javax.jdo:jdo2-api:2.3-eb" level="project" />
- <orderEntry type="library" name="com.google.appengine:appengine-api-1.0-sdk:Release" level="project" />
- <orderEntry type="library" name="com.google.appengine:appengine-endpoints:1.9.53" level="project" />
- <orderEntry type="library" name="com.google.appengine:appengine-endpoints-deps:1.9.53" level="project" />
- <orderEntry type="library" name="javax.servlet:servlet-api:2.5" level="project" />
- <orderEntry type="library" scope="RUNTIME" name="org.datanucleus:datanucleus-core:1.1.5" level="project" />
- */
