@@ -137,7 +137,7 @@ public abstract class AbstractServlet extends HttpServlet {
   boolean isSecretValid(String secret) {
     String secretHash = locationProperties.getSecretHash();
     return (StringUtil.isEmpty(secretHash) ||
-        (StringUtil.isNotEmpty(secret) && secretHash.equals(HashService.calculateHash(secret))));
+        (StringUtil.isNotEmpty(secret) && secretHash.equals(HashService.INSTANCE.calculateHash(secret))));
   }
 
 
@@ -149,7 +149,7 @@ public abstract class AbstractServlet extends HttpServlet {
 
   boolean isReadSecretValid(String readHash, String secret) {
     return (StringUtil.isEmpty(readHash) ||
-        (StringUtil.isNotEmpty(secret) && readHash.equals(HashService.calculateHash(secret))));
+        (StringUtil.isNotEmpty(secret) && readHash.equals(HashService.INSTANCE.calculateHash(secret))));
   }
 
 }
