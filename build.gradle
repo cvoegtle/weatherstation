@@ -5,6 +5,7 @@ buildscript {    // Configuration for building
     }
     dependencies {
         classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'    // latest App Engine Gradle tasks
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.51"
     }
 }
 
@@ -18,9 +19,9 @@ repositories {   // repositories for Jar's you access in your code
 }
 
 apply plugin: 'java'                              // standard Java tasks
+apply plugin: 'kotlin'
 apply plugin: 'war'                               // standard Web Archive plugin
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
-
 
 dependencies {
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
@@ -38,6 +39,8 @@ dependencies {
     compile 'com.google.appengine.orm:datanucleus-appengine:2.1.2'
     compile 'org.datanucleus:datanucleus-core:3.1.3'
 
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.51"
+
     compile 'org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.0'
     compile 'javax.jdo:jdo-api:3.0'
     compile 'javax.transaction:jta:1.1'
@@ -53,10 +56,10 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '52'
-        project = 'wetterimages'
-        stopPreviousVersion = false
-        promote = false
+        version = '53'
+        project = 'instantwetter'
+        stopPreviousVersion = true
+        promote = true
     }
 }
 
@@ -97,5 +100,5 @@ classes.dependsOn(datanucleusEnhance)
 group = 'org.voegtle.weatherstation'   // Generated output GroupId
 version = '52'          // Version in generated output
 
-sourceCompatibility = 1.7  // App Engine Standard uses Java 7
-targetCompatibility = 1.7 // App Engine Standard uses Java 7
+sourceCompatibility = 1.8  // App Engine Standard uses Java 7
+targetCompatibility = 1.8 // App Engine Standard uses Java 7
