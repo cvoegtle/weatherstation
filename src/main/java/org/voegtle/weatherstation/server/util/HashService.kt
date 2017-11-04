@@ -1,7 +1,6 @@
 package org.voegtle.weatherstation.server.util
 
 import java.security.MessageDigest
-import kotlin.experimental.and
 
 object HashService {
   private val SALT = "AgentCoplien"
