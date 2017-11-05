@@ -105,7 +105,7 @@ public class WeatherDataFetcher {
     dataSets = removeDuplicates(dataSets);
     int day = 1;
     for (AggregatedWeatherDataSet dataSet : dataSets) {
-      Statistics.TimeRange range = Statistics.TimeRange.byDay(day++);
+      Statistics.TimeRange range = Statistics.TimeRange.Companion.byDay(day++);
 
       Float rain = calculateRain(dataSet.getRainCounter(), 0);
       if (rain != null) {

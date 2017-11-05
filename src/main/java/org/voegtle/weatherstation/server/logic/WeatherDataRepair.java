@@ -91,18 +91,18 @@ public class WeatherDataRepair {
       for (SmoothedWeatherDataSet ds : repairJob.getDefectDataSets()) {
         index++;
         log.info("repair " + index + " - " + ds.getTimestamp());
-        log.info("insideTemperature: " + first.getInsideTemperature() + " " + step.insideTemperature);
+        log.info("insideTemperature: " + first.getInsideTemperature() + " " + step.getInsideTemperature());
 
-        ds.setOutsideHumidity(getNewValue(first.getOutsideHumidity(), index, step.humidity));
-        ds.setOutsideTemperature(getNewValue(first.getOutsideTemperature(), index, step.temperature));
+        ds.setOutsideHumidity(getNewValue(first.getOutsideHumidity(), index, step.getHumidity()));
+        ds.setOutsideTemperature(getNewValue(first.getOutsideTemperature(), index, step.getTemperature()));
 
-        ds.setInsideHumidity(getNewValue(first.getInsideHumidity(), index, step.insideHumidity));
-        ds.setInsideTemperature(getNewValue(first.getInsideTemperature(), index, step.insideTemperature));
+        ds.setInsideHumidity(getNewValue(first.getInsideHumidity(), index, step.getInsideHumidity()));
+        ds.setInsideTemperature(getNewValue(first.getInsideTemperature(), index, step.getInsideTemperature()));
 
         if (first.getRainCounter() != null) {
-          ds.setRainCounter(getNewValue(first.getRainCounter(), index, step.rain));
+          ds.setRainCounter(getNewValue(first.getRainCounter(), index, step.getRain()));
         }
-        ds.setKwh(getNewValue(first.getKwh(), index, step.kwh));
+        ds.setKwh(getNewValue(first.getKwh(), index, step.getKwh()));
 
         setDefaults(ds);
         pm.updateDataset(ds);
