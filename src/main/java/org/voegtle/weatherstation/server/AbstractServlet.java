@@ -56,15 +56,15 @@ public abstract class AbstractServlet extends HttpServlet {
 
   private LocationProperties createLocationProperties() {
     LocationProperties lp = new LocationProperties();
-    lp.setLocation("instant");
-    lp.setAddress("Mobile Wetterstation");
-    lp.setCityShortcut("MO");
-    lp.setCity("Irgendwo in Deutschland");
+    lp.setLocation("development");
+    lp.setAddress("Entwicklungs Station");
+    lp.setCityShortcut("DEV");
+    lp.setCity("Tegelweg 8");
     lp.setWeatherForecast("");
     lp.setSecretHash("2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4");
     lp.setReadHash("a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c");
-    lp.setIndexOutsideTemperature(6);
-    lp.setIndexOutsideHumidity(14);
+    lp.setIndexInsideTemperature(6);
+    lp.setIndexInsideHumidity(14);
     lp.setExpectedDataSets(1000);
     lp.setExpectedRequests(1000);
     lp.setTimezone("Europe/Berlin");
@@ -74,8 +74,8 @@ public abstract class AbstractServlet extends HttpServlet {
 
   private WeatherLocation createWeatherLocation() {
     WeatherLocation location = new WeatherLocation();
-    location.setLocation("elbwetter");
-    location.setHost("elbwetter.appspot.com");
+    location.setLocation("instantwetter");
+    location.setHost("instantwetter.appspot.com");
     location.setForwardSecret(false);
 
     return location;

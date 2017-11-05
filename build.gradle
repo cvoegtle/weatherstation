@@ -97,8 +97,5 @@ task datanucleusEnhance {
 classes.dependsOn(datanucleusEnhance)
 // [END model]
 
-group = 'org.voegtle.weatherstation'   // Generated output GroupId
-version = '52'          // Version in generated output
-
 sourceCompatibility = 1.8  // App Engine Standard uses Java 7
 targetCompatibility = 1.8 // App Engine Standard uses Java 7
