@@ -88,7 +88,7 @@ public class PersistenceManager {
   public void clearImages() {
     EntityManager em = factory.createEntityManager();
 
-    em.createQuery("DELETE FROM Image").executeUpdate();
+    em.createQuery("DELETE FROM Image img").executeUpdate();
 
     em.close();
   }
