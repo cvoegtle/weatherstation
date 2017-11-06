@@ -97,8 +97,8 @@ public class PersistenceManager {
     EntityManager em = factory.createEntityManager();
 
     Query q = em.createQuery("SELECT count(img.oid) FROM Image img");
-    Integer count = (Integer) q.getSingleResult();
-    return count != null ? count : 0;
+    Long count = (Long) q.getSingleResult();
+    return count != null ? count.intValue() : 0;
   }
 
 
