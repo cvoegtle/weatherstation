@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class WeatherDataSmoother {
+class WeatherDataSmoother {
 
   private final PersistenceManager pm;
   private final DateUtil dateUtil;
