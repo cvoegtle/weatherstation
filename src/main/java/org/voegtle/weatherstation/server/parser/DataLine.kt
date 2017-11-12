@@ -3,14 +3,13 @@ package org.voegtle.weatherstation.server.parser
 import java.util.ArrayList
 import java.util.StringTokenizer
 
-class DataLine(data: String) {
+class DataLine(line: String) {
   private val values = ArrayList<String>()
 
   init {
-    var data = data
-    data = data.replace(" ", "+")
-    data = data.replace(";;", "; ;")
-    data = data.replace(";;", "; ;")
+    val data = line.replace(" ", "+")
+        .replace(";;", "; ;")
+        .replace(";;", "; ;")
     val tokenizer = StringTokenizer(data, ";\n")
     while (tokenizer.hasMoreTokens()) {
       values.add(tokenizer.nextToken().trim { it <= ' ' })
