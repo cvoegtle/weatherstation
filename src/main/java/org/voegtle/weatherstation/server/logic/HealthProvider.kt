@@ -24,7 +24,7 @@ class HealthProvider(private val pm: PersistenceManager, locationProperties: Loc
 
   fun get(): HealthDTO {
     val today = dateUtil.today
-    val health: HealthDTO? = cache[HEALTH] as HealthDTO
+    val health: HealthDTO? = cache[HEALTH] as HealthDTO?
     if (health == null || isOutdated(health, today)) {
       return pm.selectHealth(today).toDTO()
     }
