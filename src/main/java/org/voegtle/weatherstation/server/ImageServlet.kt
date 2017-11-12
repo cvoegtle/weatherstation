@@ -21,7 +21,7 @@ class ImageServlet : AbstractServlet() {
   @Throws(ServletException::class, IOException::class)
   override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
 
-    val param = ImageUrlParameter(request, locationProperties.dateUtil)
+    val param = ImageUrlParameter(request, locationProperties!!.dateUtil)
     if (param.isRefresh) {
       imageCache.refresh(param.begin, param.end)
       response.writer.write("ACK ${imageCache.size()}")

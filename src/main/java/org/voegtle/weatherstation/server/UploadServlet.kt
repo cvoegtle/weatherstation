@@ -7,7 +7,7 @@ import org.voegtle.weatherstation.server.request.IncomingUrlParameter
 import org.voegtle.weatherstation.server.request.ResponseCode
 import java.io.BufferedReader
 import java.io.IOException
-import java.util.*
+import java.util.ArrayList
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -18,17 +18,17 @@ class UploadServlet : AbstractInputServlet() {
   override fun doPost(request: HttpServletRequest, response: HttpServletResponse) {
     val result: String
 
-    val param = IncomingUrlParameter(request, locationProperties.dateUtil)
+    val param = IncomingUrlParameter(request, locationProperties!!.dateUtil)
     if (isSecretValid(param.secret)) {
       if (isCorrectLocation(param.location)) {
-        val hp = HealthProvider(pm, locationProperties)
+        val hp = HealthProvider(pm, locationProperties!!)
         val health = hp.get()
         health.incrementRequests()
 
         val lines = readInputLines(getContentStream(request, "$1"))
         health.incrementLines(lines.size)
 
-        val importer = WeatherDataImporter(pm, locationProperties)
+        val importer = WeatherDataImporter(pm, locationProperties!!)
         result = importer.doImport(lines)
 
         health.incrementPersisted(importer.persisted)
@@ -37,7 +37,7 @@ class UploadServlet : AbstractInputServlet() {
         result = ResponseCode.WRONG_LOCATION
       }
     } else {
-      AbstractServlet.log.warning("request without authorisation. Sent secret: " + param.secret)
+      log.warning("request without authorisation. Sent secret: " + param.secret)
       result = ResponseCode.NOT_AUTHORIZED
     }
 
@@ -51,9 +51,9 @@ class UploadServlet : AbstractInputServlet() {
       lines.add(DataLine(line))
       line = reader.readLine()
     }
-    AbstractServlet.log.info("number of datalines: " + lines.size)
+    log.info("number of datalines: " + lines.size)
     for (dl in lines) {
-      AbstractServlet.log.info(dl.toString())
+      log.info(dl.toString())
     }
     return lines
   }
