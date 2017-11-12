@@ -28,10 +28,6 @@ public class Health {
     this.day = day;
   }
 
-  public Health(HealthDTO dto) {
-    fromDTO(dto);
-  }
-
   public void fromDTO(HealthDTO dto) {
     this.day = dto.getDay();
     this.requests = dto.getRequests();
@@ -40,7 +36,8 @@ public class Health {
   }
 
   public HealthDTO toDTO() {
-    HealthDTO dto = new HealthDTO(this.getDay());
+    Date day = new Date(this.getDay().getTime()); // convert from datanucleus date to java.util.Date
+    HealthDTO dto = new HealthDTO(day);
     dto.setRequests(this.getRequests());
     dto.setLines(this.getLines());
     dto.setPersisted(this.getPersisted());
