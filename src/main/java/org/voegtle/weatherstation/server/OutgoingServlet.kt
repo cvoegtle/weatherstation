@@ -5,7 +5,6 @@ import org.voegtle.weatherstation.server.logic.WeatherDataFetcher
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.request.DataType
 import org.voegtle.weatherstation.server.request.OutgoingUrlParameter
-import org.voegtle.weatherstation.server.util.DateUtil
 import java.io.IOException
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
@@ -36,9 +35,8 @@ class OutgoingServlet : AbstractServlet() {
       writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
     } else if (param.begin != null) {
       val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end)
-      log.info("begin: " + param.begin + " end: " + param.end + " localTZ: " + param.isLocalTimezone +
-                                   " localTimezone: " + locationProperties!!.dateUtil.timezone.displayName +
-                                   " CEST: " + DateUtil.getTzCEST().displayName)
+      log.info(
+          "begin: ${param.begin} end: ${param.end} localTZ: ${param.isLocalTimezone} localTimezone: ${locationProperties?.dateUtil?.timezone?.displayName}")
 
       returnDetailedResult(response, result, authorized)
     }

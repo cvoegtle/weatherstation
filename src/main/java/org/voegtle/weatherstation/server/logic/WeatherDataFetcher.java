@@ -3,7 +3,7 @@ package org.voegtle.weatherstation.server.logic;
 import org.voegtle.weatherstation.server.data.RainDTO;
 import org.voegtle.weatherstation.server.data.Statistics;
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO;
-import org.voegtle.weatherstation.server.persistence.*;
+import org.voegtle.weatherstation.server.persistence.PersistenceManager;
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet;
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties;
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet;
@@ -35,12 +35,12 @@ public class WeatherDataFetcher {
   }
 
   private List<SmoothedWeatherDataSet> fetchTodaysDataSets() {
-    Date today = dateUtil.getToday();
+    Date today = dateUtil.today();
     return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today), null);
   }
 
   private SmoothedWeatherDataSet getFirstDataSetOfToday() {
-    Date today = dateUtil.getToday();
+    Date today = dateUtil.today();
     today = dateUtil.fromLocalToGMT(today);
     Date oneHourLater = dateUtil.incrementHour(today);
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater);
@@ -100,7 +100,7 @@ public class WeatherDataFetcher {
   }
 
   private void buildHistoricStatistics(Statistics stats) {
-    Date yesterday = dateUtil.getYesterday();
+    Date yesterday = dateUtil.yesterday();
     Collection<AggregatedWeatherDataSet> dataSets = pm.fetchAggregatedWeatherDataInRange(dateUtil.daysEarlier(yesterday, 29), yesterday, false);
     dataSets = removeDuplicates(dataSets);
     int day = 1;

@@ -6,7 +6,6 @@ import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.Date
 import java.util.HashMap
-import java.util.logging.Logger
 import javax.cache.Cache
 import javax.cache.CacheManager
 
@@ -23,7 +22,7 @@ class HealthProvider(private val pm: PersistenceManager, locationProperties: Loc
   }
 
   fun get(): HealthDTO {
-    val today = dateUtil.today
+    val today = dateUtil.today()
     val health: HealthDTO? = cache[HEALTH] as HealthDTO?
     if (health == null || isOutdated(health, today)) {
       return pm.selectHealth(today).toDTO()

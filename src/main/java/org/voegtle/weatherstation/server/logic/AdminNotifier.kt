@@ -15,7 +15,7 @@ class AdminNotifier(private val pm: PersistenceManager, private val locationProp
   private val reportCreator = HealthReportCreator(locationProperties)
 
   fun sendNotifications() {
-    val health = healthProvider.get(dateUtil.yesterday)
+    val health = healthProvider.get(dateUtil.yesterday())
     val isIncident = checkForIncident(health)
 
     pm.fetchContacts()

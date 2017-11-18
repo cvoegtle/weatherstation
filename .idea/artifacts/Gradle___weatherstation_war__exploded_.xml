@@ -29,12 +29,12 @@
           <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-api-jdo:3.1.3" />
           <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-api-jpa:3.1.3" />
           <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-core:3.1.3" />
-          <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.51" />
           <element id="library" level="project" name="Gradle: org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.0" />
           <element id="library" level="project" name="Gradle: javax.jdo:jdo-api:3.0.1" />
           <element id="library" level="project" name="Gradle: javax.transaction:jta:1.1" />
           <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
-          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.1.51/222365b4b684bfe35a7676c5ff69b4b414e398fa/kotlin-reflect-1.1.51.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.1.60/af5cabae2d352850b076213f358dc2150b14a812/kotlin-reflect-1.1.60.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.1.60/ac63d0e86e690fe4eded7f1f8998996c28499989/kotlin-stdlib-1.1.60.jar" />
         </element>
       </element>
     </root>
