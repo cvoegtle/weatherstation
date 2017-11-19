@@ -16,7 +16,7 @@ class OutgoingServlet : AbstractServlet() {
   public override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
     response.setHeader("Access-Control-Allow-Origin", "*")
 
-    val weatherDataFetcher = WeatherDataFetcher(pm, locationProperties)
+    val weatherDataFetcher = WeatherDataFetcher(pm, locationProperties!!)
 
     val param = OutgoingUrlParameter(request, locationProperties!!.dateUtil)
     val authorized = isReadSecretValid(param.secret)
