@@ -83,8 +83,7 @@ class TestWeatherDataFetcher {
     }
   }
 
-  @Test
-  fun checkFetchSmoothed() {
+  @Test fun checkFetchSmoothed() {
     val mockedPersistenceManager = Mockito.mock(PersistenceManager::class.java)
     `when`(mockedPersistenceManager.fetchSmoothedWeatherDataInRange(startTime, endTime))
         .thenReturn(defaultResponse)
@@ -95,8 +94,7 @@ class TestWeatherDataFetcher {
     Assertions.assertEquals(5.0f, result[3].outsideTemperature)
   }
 
-  @Test
-  fun checkGetLatest() {
+  @Test fun checkGetLatest() {
     val mockedPersistenceManager = Mockito.mock(PersistenceManager::class.java)
     `when`(mockedPersistenceManager.fetchYoungestDataSet()).thenReturn(latestWeatherData)
     `when`(mockedPersistenceManager.fetchDataSetMinutesBefore(endTime, 20)).thenReturn(twentyMinutesBefore)
@@ -107,5 +105,26 @@ class TestWeatherDataFetcher {
 
     Assertions.assertEquals(22.8f, result.insideTemperature)
 
+    val result2 = weatherDataFetcher.getLatestWeatherDataUnformatted(false)
+
+    Assertions.assertEquals(null, result2.insideTemperature)
+    Assertions.assertEquals(null, result2.windspeed)
   }
+
+  @Test fun checkGetLatestWithWind() {
+    val specialLocationProperties = createLocationProperties()
+    specialLocationProperties.isWindRelevant = true
+
+    val mockedPersistenceManager = Mockito.mock(PersistenceManager::class.java)
+    `when`(mockedPersistenceManager.fetchYoungestDataSet()).thenReturn(latestWeatherData)
+    `when`(mockedPersistenceManager.fetchDataSetMinutesBefore(endTime, 20)).thenReturn(twentyMinutesBefore)
+    `when`(mockedPersistenceManager.fetchDataSetMinutesBefore(endTime, 60)).thenReturn(oneHourBefore)
+
+    val weatherDataFetcher = WeatherDataFetcher(mockedPersistenceManager, specialLocationProperties)
+    val result = weatherDataFetcher.getLatestWeatherDataUnformatted(true)
+
+    Assertions.assertEquals(10.7f, result.windspeed)
+  }
+
+
 }
