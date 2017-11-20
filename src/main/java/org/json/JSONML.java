@@ -79,7 +79,7 @@ public class JSONML {
 
             token = x.nextToken();
             if (!(token instanceof String)) {
-              throw new JSONException("Expected a closing name instead of '" + token + "'.");
+              throw new JSONException("Expected a closing identifier instead of '" + token + "'.");
             }
             if (x.nextToken() != XML.GT) {
               throw x.syntaxError("Misshaped close tag");
@@ -231,9 +231,9 @@ public class JSONML {
   /**
    * Convert a well-formed (but not necessarily valid) XML string into a
    * JSONArray using the JsonML transform. Each XML tag is represented as a
-   * JSONArray in which the first element is the tag name. If the tag has
+   * JSONArray in which the first element is the tag identifier. If the tag has
    * attributes, then the second element will be JSONObject containing the
-   * name/value pairs. If the tag contains children, then strings and JSONArrays
+   * identifier/value pairs. If the tag contains children, then strings and JSONArrays
    * will represent the child tags. Comments, prologs, DTDs, and
    * <code>&lt;[ [ ]]></code> are ignored.
    * 
@@ -249,9 +249,9 @@ public class JSONML {
   /**
    * Convert a well-formed (but not necessarily valid) XML string into a
    * JSONArray using the JsonML transform. Each XML tag is represented as a
-   * JSONArray in which the first element is the tag name. If the tag has
+   * JSONArray in which the first element is the tag identifier. If the tag has
    * attributes, then the second element will be JSONObject containing the
-   * name/value pairs. If the tag contains children, then strings and JSONArrays
+   * identifier/value pairs. If the tag contains children, then strings and JSONArrays
    * will represent the child content and tags. Comments, prologs, DTDs, and
    * <code>&lt;[ [ ]]></code> are ignored.
    * 

@@ -33,12 +33,12 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
- * A JSONObject is an unordered collection of name/value pairs. Its external
+ * A JSONObject is an unordered collection of identifier/value pairs. Its external
  * form is a string wrapped in curly braces with colons between the names and
  * values, and commas between the values and names. The internal form is an
  * object having <code>get</code> and <code>opt</code> methods for accessing the
- * values by name, and <code>put</code> methods for adding or replacing values
- * by name. The values can be any of these types: <code>Boolean</code>,
+ * values by identifier, and <code>put</code> methods for adding or replacing values
+ * by identifier. The values can be any of these types: <code>Boolean</code>,
  * <code>JSONArray</code>, <code>JSONObject</code>, <code>Number</code>,
  * <code>String</code>, or the <code>JSONObject.NULL</code> object. A JSONObject
  * constructor can be used to convert an external form JSON text into an
@@ -244,7 +244,7 @@ public class JSONObject {
   /**
    * Construct a JSONObject from an Object using bean getters. It reflects on
    * all of the public methods of the object. For each of the methods with no
-   * parameters and a name starting with <code>"get"</code> or <code>"is"</code>
+   * parameters and a identifier starting with <code>"get"</code> or <code>"is"</code>
    * followed by an uppercase letter, the method is invoked, and a key and the
    * value returned from the getter method are put into the new JSONObject.
    * <p/>
@@ -252,10 +252,10 @@ public class JSONObject {
    * prefix. If the second remaining character is not upper case, then the first
    * character is converted to lower case.
    * <p/>
-   * For example, if an object has a method named <code>"getName"</code>, and if
-   * the result of calling <code>object.getName()</code> is
+   * For example, if an object has a method named <code>"getIdentifier"</code>, and if
+   * the result of calling <code>object.getIdentifier()</code> is
    * <code>"Larry Fine"</code>, then the JSONObject will contain
-   * <code>"name": "Larry Fine"</code>.
+   * <code>"identifier": "Larry Fine"</code>.
    *
    * @param bean An object that has getter methods that should be used to make a
    *             JSONObject.
@@ -305,7 +305,7 @@ public class JSONObject {
   /**
    * Construct a JSONObject from a ResourceBundle.
    *
-   * @param baseName The ResourceBundle base name.
+   * @param baseName The ResourceBundle base identifier.
    * @param locale   The Locale to load the ResourceBundle for.
    * @throws JSONException If any JSONExceptions are detected.
    */
@@ -322,7 +322,7 @@ public class JSONObject {
 
         // Go through the path, ensuring that there is a nested JSONObject for
         // each
-        // segment except the last. Add the value using the last segment's name
+        // segment except the last. Add the value using the last segment's identifier
         // into
         // the deepest nested JSONObject.
 
@@ -949,7 +949,7 @@ public class JSONObject {
   /**
    * Put a key/value pair in the JSONObject, but only if the key and the value
    * are both non-null, and only if there is not already a member with that
-   * name.
+   * identifier.
    */
   public JSONObject putOnce(String key, Object value) throws JSONException {
     if (key != null && value != null) {
@@ -1057,10 +1057,10 @@ public class JSONObject {
   }
 
   /**
-   * Remove a name and its value, if present.
+   * Remove a identifier and its value, if present.
    *
-   * @param key The name to be removed.
-   * @return The value that was associated with the name, or null if there was
+   * @param key The identifier to be removed.
+   * @return The value that was associated with the identifier, or null if there was
    * no value.
    */
   public Object remove(String key) {

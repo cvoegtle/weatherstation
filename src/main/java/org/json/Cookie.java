@@ -26,7 +26,7 @@ SOFTWARE.
 
 /**
  * Convert a web browser cookie specification to a JSONObject and back.
- * JSON and Cookies are both notations for name/value pairs.
+ * JSON and Cookies are both notations for identifier/value pairs.
  * @author JSON.org
  * @version 2010-12-24
  */
@@ -65,16 +65,16 @@ public class Cookie {
 
     /**
      * Convert a cookie specification string into a JSONObject. The string
-     * will contain a name value pair separated by '='. The name and the value
+     * will contain a identifier value pair separated by '='. The identifier and the value
      * will be unescaped, possibly converting '+' and '%' sequences. The
      * cookie properties may follow, separated by ';', also represented as
-     * name=value (except the secure property, which does not have a value).
-     * The name will be stored under the key "name", and the value will be
+     * identifier=value (except the secure property, which does not have a value).
+     * The identifier will be stored under the key "identifier", and the value will be
      * stored under the key "value". This method does not do checking or
      * validation of the parameters. It only converts the cookie string into
      * a JSONObject.
      * @param string The cookie specification string.
-     * @return A JSONObject containing "name", "value", and possibly other
+     * @return A JSONObject containing "identifier", "value", and possibly other
      *  members.
      * @throws JSONException
      */
@@ -83,7 +83,7 @@ public class Cookie {
         JSONObject     jo = new JSONObject();
         Object         value;
         JSONTokener x = new JSONTokener(string);
-        jo.put("name", x.nextTo('='));
+        jo.put("identifier", x.nextTo('='));
         x.next('=');
         jo.put("value", x.nextTo(';'));
         x.next();
@@ -107,7 +107,7 @@ public class Cookie {
 
     /**
      * Convert a JSONObject into a cookie specification string. The JSONObject
-     * must contain "name" and "value" members.
+     * must contain "identifier" and "value" members.
      * If the JSONObject contains "expires", "domain", "path", or "secure"
      * members, they will be appended to the cookie specification string.
      * All other members are ignored.
@@ -118,7 +118,7 @@ public class Cookie {
     public static String toString(JSONObject jo) throws JSONException {
         StringBuffer sb = new StringBuffer();
 
-        sb.append(escape(jo.getString("name")));
+        sb.append(escape(jo.getString("identifier")));
         sb.append("=");
         sb.append(escape(jo.getString("value")));
         if (jo.has("expires")) {

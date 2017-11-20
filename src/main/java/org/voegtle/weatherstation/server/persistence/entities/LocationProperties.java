@@ -141,12 +141,12 @@ public class LocationProperties {
     return timezone;
   }
 
-  public DateUtil getDateUtil() {
-    return new DateUtil(TimeZone.getTimeZone(timezone));
-  }
-
   public void setTimezone(String timezone) {
     this.timezone = timezone;
+  }
+
+  public DateUtil getDateUtil() {
+    return new DateUtil(TimeZone.getTimeZone(timezone));
   }
 
   public Integer getIndexOutsideTemperature() {
@@ -182,14 +182,7 @@ public class LocationProperties {
   }
 
   public DataIndicies getDataIndices() {
-    DataIndicies di = new DataIndicies();
-
-    di.indexInsideHumidity = indexInsideHumidity;
-    di.indexInsideTemperature = indexInsideTemperature;
-    di.indexOutsideHumidity = indexOutsideHumidity;
-    di.indexOutsideTemperature = indexOutsideTemperature;
-
-    return di;
+    return new DataIndicies(indexOutsideTemperature, indexOutsideHumidity, indexInsideTemperature, indexInsideHumidity);
   }
 
   public Integer getExpectedDataSets() {

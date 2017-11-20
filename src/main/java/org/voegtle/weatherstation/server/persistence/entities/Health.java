@@ -37,11 +37,7 @@ public class Health {
 
   public HealthDTO toDTO() {
     Date day = new Date(this.getDay().getTime()); // convert from datanucleus date to java.util.Date
-    HealthDTO dto = new HealthDTO(day);
-    dto.setRequests(this.getRequests());
-    dto.setLines(this.getLines());
-    dto.setPersisted(this.getPersisted());
-    return dto;
+    return new HealthDTO(day, this.getRequests(), this.getLines(), this.getPersisted());
   }
 
   public Date getDay() {

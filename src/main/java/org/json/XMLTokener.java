@@ -217,7 +217,7 @@ public class XMLTokener extends JSONTokener {
   /**
    * Get the next XML Token. These tokens are found inside of angle brackets. It
    * may be one of these characters: <code>/ > = ! ?</code> or it may be a
-   * string wrapped in single quotes or double quotes, or it may be a name.
+   * string wrapped in single quotes or double quotes, or it may be a identifier.
    * 
    * @return a String or a Character.
    * @throws JSONException
@@ -292,7 +292,7 @@ public class XMLTokener extends JSONTokener {
         case '<':
         case '"':
         case '\'':
-          throw syntaxError("Bad character in a name");
+          throw syntaxError("Bad character in a identifier");
         }
       }
     }

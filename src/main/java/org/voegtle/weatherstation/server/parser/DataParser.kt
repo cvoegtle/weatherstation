@@ -4,19 +4,21 @@ import org.voegtle.weatherstation.server.persistence.DataIndicies
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.util.StringUtil
-
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.ArrayList
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class DataParser(dateUtil: DateUtil, di: DataIndicies) {
 
-  private val MIN_DATE = dateUtil.getDate(2016, 5, 1)
+  private val MIN_DATE = dateUtil.getDate(2017, 11, 1)
 
-  private val indexOutsideTemperature = if (di.indexOutsideTemperature != null) di.indexOutsideTemperature else INDEX_OUTSIDE_TEMPERATURE
-  private val indexOutsideHumidity = if (di.indexOutsideHumidity != null) di.indexOutsideHumidity else INDEX_OUTSIDE_HUMIDITY
-  private val indexInsideTemperature = if (di.indexInsideHumidity != null) di.indexInsideHumidity else INDEX_INSIDE_HUMIDITY
-  private val indexInsideHumidity = if (di.indexInsideTemperature != null) di.indexInsideTemperature else INDEX_INSIDE_TEMPERATURE
+  private val indexOutsideTemperature = di.indexOutsideTemperature ?: INDEX_OUTSIDE_TEMPERATURE
+  private val indexOutsideHumidity = di.indexOutsideHumidity ?: INDEX_OUTSIDE_HUMIDITY
+  private val indexInsideTemperature = di.indexInsideHumidity ?: INDEX_INSIDE_HUMIDITY
+  private val indexInsideHumidity = di.indexInsideTemperature ?: INDEX_INSIDE_TEMPERATURE
 
   @Throws(ParseException::class)
   fun parse(lines: List<DataLine>): List<WeatherDataSet> {

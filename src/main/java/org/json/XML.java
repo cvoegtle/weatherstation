@@ -130,7 +130,7 @@ public class XML {
    * @param context
    *          The JSONObject that will include the new material.
    * @param name
-   *          The tag name.
+   *          The tag identifier.
    * @return true if the close tag is processed.
    * @throws JSONException
    */
@@ -354,7 +354,7 @@ public class XML {
    * JSONObject. Some information may be lost in this transformation because
    * JSON is a data format and XML is a document format. XML uses elements,
    * attributes, and content text, while JSON uses unordered collections of
-   * name/value pairs and arrays of values. JSON does not does not like to
+   * identifier/value pairs and arrays of values. JSON does not does not like to
    * distinguish between elements and attributes. Sequences of similar elements
    * are represented as JSONArrays. Content text may be placed in a "content"
    * member. Comments, prologs, DTDs, and <code>&lt;[ [ ]]></code> are ignored.
@@ -391,7 +391,7 @@ public class XML {
    * @param object
    *          A JSONObject.
    * @param tagName
-   *          The optional name of the enclosing tag.
+   *          The optional identifier of the enclosing tag.
    * @return A string.
    * @throws JSONException
    */
