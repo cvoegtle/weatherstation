@@ -22,8 +22,8 @@ public class CentralUrlParameter extends UrlParameter {
   public CentralUrlParameter(HttpServletRequest request) {
     super(request, new DateUtil(TimeZone.getDefault()), DataType.CURRENT);
     this.buildNumber = getUrlParameter(PARAM_BUILD);
-    this.utf8 = getUrlParameterBoolean(PARAM_UTF8) || StringUtil.isNotEmpty(buildNumber);
-    this.newFormat |= StringUtil.isNotEmpty(buildNumber);
+    this.utf8 = getUrlParameterBoolean(PARAM_UTF8) || StringUtil.INSTANCE.isNotEmpty(buildNumber);
+    this.newFormat |= StringUtil.INSTANCE.isNotEmpty(buildNumber);
 
     String locationsStr = getUrlParameter(PARAM_LOCATIONS);
     locations = new ArrayList<>();

@@ -16,11 +16,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private val dateUtil: DateUtil = locationProperties.dateUtil
 
   private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
-      var today: Date = dateUtil.today()
-      today = dateUtil.fromLocalToGMT(today)!!
-      val oneHourLater = dateUtil.incrementHour(today)
-      return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
-    }
+    var today: Date = dateUtil.today()
+    today = dateUtil.fromLocalToGMT(today)!!
+    val oneHourLater = dateUtil.incrementHour(today)
+    return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
+  }
 
   fun getAggregatedWeatherData(begin: Date, end: Date): List<AggregatedWeatherDataSet> =
       pm.fetchAggregatedWeatherDataInRange(begin, end)
@@ -39,40 +39,25 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
-    val dto = UnformattedWeatherDTO()
-    dto.time = latest.timestamp
-    dto.localTime = dateUtil.toLocalTime(latest.timestamp)
-    dto.temperature = latest.outsideTemperature
-    dto.humidity = latest.outsideHumidity
-
-    val raining = isRaining(latest, twentyMinutesBefore)
-    dto.isRaining = raining
-
-    if (locationProperties.isWindRelevant) {
-      dto.windspeed = latest.windspeed
-    }
-    dto.watt = latest.watt
-    if (authorized) {
-      dto.insideTemperature = latest.insideTemperature
-      dto.insideHumidity = latest.insideHumidity
-    }
-
-    if (SmoothedWeatherDataSet.hasRainCounter(oneHourBefore)) {
-      dto.rainLastHour = calculateRain(latest.rainCounter!!, oneHourBefore!!.rainCounter!!)
-    }
-
-    if (SmoothedWeatherDataSet.hasRainCounter(today) && WeatherDataSet.hasRainCounter(latest)) {
-      dto.rainToday = calculateRain(latest.rainCounter!!, today!!.rainCounter!!)
-    }
-
-    return dto
+    return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
+                                 temperature = latest.outsideTemperature, humidity = latest.outsideHumidity,
+                                 isRaining = isRaining(latest, twentyMinutesBefore),
+                                 windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
+                                 watt = latest.watt,
+                                 insideTemperature = if (authorized) latest.insideTemperature else null,
+                                 insideHumidity = if (authorized) latest.insideHumidity else null,
+                                 rainLastHour = if (SmoothedWeatherDataSet.hasRainCounter(oneHourBefore))
+                                   calculateRain(latest.rainCounter!!, oneHourBefore!!.rainCounter!!)
+                                 else null,
+                                 rainToday = if (SmoothedWeatherDataSet.hasRainCounter(today)
+                                     && WeatherDataSet.hasRainCounter(latest))
+                                   calculateRain(latest.rainCounter!!, today!!.rainCounter!!)
+                                 else null)
   }
 
   private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {
-    var raining = false
-    if (latest.isRaining != null) {
-      raining = latest.isRaining!!
-    }
+    var raining = latest.isRaining ?: false
+
     if (latest.rainCounter != null && SmoothedWeatherDataSet.hasRainCounter(fifteenMinutesBefore)) {
       raining = raining || latest.rainCounter!! - fifteenMinutesBefore!!.rainCounter!! > 0
     }

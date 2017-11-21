@@ -50,7 +50,9 @@ public class LocationProperties {
   }
 
   public boolean isValid() {
-    return StringUtil.isNotEmpty(location) && StringUtil.isNotEmpty(city) && StringUtil.isNotEmpty(address);
+    return StringUtil.INSTANCE.isNotEmpty(location)
+        && StringUtil.INSTANCE.isNotEmpty(city)
+        && StringUtil.INSTANCE.isNotEmpty(address);
   }
 
   public String getLocation() {
