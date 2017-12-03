@@ -7,17 +7,11 @@ import java.net.MalformedURLException
 import java.net.URL
 
 class WeatherUrl @Throws(MalformedURLException::class) constructor(location: WeatherLocation, param: UrlParameter) {
-  var url: URL
-    private set
+  val forwardSecret = StringUtil.isNotEmpty(param.secret) && location.isForwardSecret
 
-  override fun toString(): String {
-    return url.toString()
-  }
+  val url: URL = URL("https://" + location.host + "/weatherstation/query?type=" + param.type
+                         + (if (param.isExtended) "&ext" else "") + (if (param.isNewFormat) "&new" else "")
+                         + if (forwardSecret) "&secret=" + StringUtil.urlEncode(param.secret!!) else "")
 
-  init {
-    val forwardSecret = StringUtil.isNotEmpty(param.secret) && location.isForwardSecret
-    url = URL("https://" + location.host + "/weatherstation/query?type=" + param.type
-                  + (if (param.isExtended) "&ext" else "") + (if (param.isNewFormat) "&new" else "")
-                  + if (forwardSecret) "&secret=" + StringUtil.urlEncode(param.secret) else "")
-  }
+  override fun toString(): String = url.toString()
 }

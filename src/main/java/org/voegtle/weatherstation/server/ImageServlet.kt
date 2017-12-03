@@ -22,24 +22,26 @@ class ImageServlet : AbstractServlet() {
   override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
 
     val param = ImageUrlParameter(request, locationProperties!!.dateUtil)
-    if (param.isRefresh) {
-      imageCache.refresh(param.begin, param.end)
-      response.writer.write("ACK ${imageCache.size()}")
-      response.writer.close()
-    } else if (param.isClear) {
-      imageCache.clear()
-      response.writer.write("ACK")
-      response.writer.close()
-    } else {
-      if (StringUtil.isNotEmpty(param.oid)) {
+    when {
+      param.isRefresh -> {
+        imageCache.refresh(param.begin, param.end)
+        response.writer.write("ACK ${imageCache.size()}")
+        response.writer.close()
+      }
+      param.isClear -> {
+        imageCache.clear()
+        response.writer.write("ACK")
+        response.writer.close()
+      }
+      else -> param.oid?.let {
         val identifier = if (StringUtil.isNotEmpty(param.zx)) {
-          ImageIdentifier(param.oid, param.zx)
+          ImageIdentifier(it, param.zx)
         } else {
-          ImageIdentifier(param.sheet, param.oid, param.format)
+          ImageIdentifier(param.sheet, it, param.format)
         }
         val image = imageCache[identifier]
 
-        if (image != null) {
+        image?.let {
           response.contentType = "image/png"
           response.outputStream.write(image.pngAsBytes)
           response.outputStream.close()

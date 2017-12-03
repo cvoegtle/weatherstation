@@ -22,7 +22,7 @@ class OutgoingServlet : AbstractServlet() {
     val authorized = isReadSecretValid(param.secret)
 
     if (param.type == DataType.AGGREGATED) {
-      val result = weatherDataFetcher.getAggregatedWeatherData(param.begin, param.end)
+      val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end!!)
       returnAggregatedResult(response, result, param.isExtended)
     } else if (param.type == DataType.CURRENT) {
       val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
@@ -34,7 +34,7 @@ class OutgoingServlet : AbstractServlet() {
       val stats = weatherDataFetcher.fetchStatistics()
       writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
     } else if (param.begin != null) {
-      val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end)
+      val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end!!)
       log.info(
           "begin: ${param.begin} end: ${param.end} localTZ: ${param.isLocalTimezone} localTimezone: ${locationProperties?.dateUtil?.timezone?.displayName}")
 

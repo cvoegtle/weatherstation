@@ -6,8 +6,8 @@ object HashService {
   private val SALT = "AgentCoplien"
   private val md = MessageDigest.getInstance("SHA-256")
 
-  fun calculateHash(input: String): String {
-    val hashedInput: ByteArray = md.digest((SALT + input).toByteArray(charset("UTF8")))
+  fun calculateHash(input: String?): String {
+    val hashedInput: ByteArray = md.digest(("$SALT${input ?: ""}").toByteArray(charset("UTF8")))
 
     return convertToHex(hashedInput)
   }

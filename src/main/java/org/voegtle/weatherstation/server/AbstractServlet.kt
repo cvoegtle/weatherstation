@@ -9,7 +9,6 @@ import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDat
 import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
-import org.voegtle.weatherstation.server.util.StringUtil
 import java.io.IOException
 import java.io.PrintWriter
 import java.util.logging.Logger
@@ -128,14 +127,13 @@ abstract class AbstractServlet : HttpServlet() {
 
   }
 
-  internal fun isCorrectLocation(location: String): Boolean {
-    return StringUtil.isNotEmpty(location) && location == locationProperties!!.location
+  internal fun isCorrectLocation(location: String?): Boolean {
+    return location == locationProperties!!.location
   }
 
-  internal fun isSecretValid(secret: String): Boolean {
+  internal fun isSecretValid(secret: String?): Boolean {
     val secretHash = locationProperties!!.secretHash
-    return StringUtil.isEmpty(secretHash) || StringUtil.isNotEmpty(secret) && secretHash == HashService.calculateHash(
-        secret)
+    return secretHash == HashService.calculateHash(secret)
   }
 
 
@@ -145,7 +143,6 @@ abstract class AbstractServlet : HttpServlet() {
   }
 
   internal fun isReadSecretValid(readHash: String?, secret: String?): Boolean {
-    return StringUtil.isEmpty(readHash) || StringUtil.isNotEmpty(secret)
-        && readHash == HashService.calculateHash(secret!!)
+    return readHash == HashService.calculateHash(secret)
   }
 }
