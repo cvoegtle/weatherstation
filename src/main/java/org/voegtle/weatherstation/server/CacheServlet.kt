@@ -29,7 +29,7 @@ class CacheServlet : AbstractInputServlet() {
     try {
       val encodedWeatherData = readString(request)
       log.info("received cache object: <$encodedWeatherData>")
-      val cacheWeatherDTO = JSONConverter(locationProperties).decodeWeatherDTO(encodedWeatherData)
+      val cacheWeatherDTO = JSONConverter(locationProperties!!).decodeWeatherDTO(encodedWeatherData)
 
       cache.put(cacheWeatherDTO.id, cacheWeatherDTO)
 

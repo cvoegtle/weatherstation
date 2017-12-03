@@ -39,7 +39,7 @@ abstract class AbstractServlet : HttpServlet() {
     //    pm.makePersistant(contact);
 
     locationProperties = pm.fetchLocationProperties()
-    jsonConverter = JSONConverter(locationProperties)
+    jsonConverter = JSONConverter(locationProperties!!)
   }
 
   private fun createContact(): Contact {
