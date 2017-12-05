@@ -17,8 +17,8 @@ class DataParser(dateUtil: DateUtil, di: DataIndicies) {
 
   private val indexOutsideTemperature = di.indexOutsideTemperature ?: INDEX_OUTSIDE_TEMPERATURE
   private val indexOutsideHumidity = di.indexOutsideHumidity ?: INDEX_OUTSIDE_HUMIDITY
-  private val indexInsideTemperature = di.indexInsideHumidity ?: INDEX_INSIDE_HUMIDITY
-  private val indexInsideHumidity = di.indexInsideTemperature ?: INDEX_INSIDE_TEMPERATURE
+  private val indexInsideTemperature = di.indexInsideTemperature ?: INDEX_INSIDE_TEMPERATURE
+  private val indexInsideHumidity = di.indexInsideHumidity ?: INDEX_INSIDE_HUMIDITY
 
   @Throws(ParseException::class)
   fun parse(lines: List<DataLine>): List<WeatherDataSet> {
