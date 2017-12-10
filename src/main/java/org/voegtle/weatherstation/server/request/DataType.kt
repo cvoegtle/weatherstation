@@ -9,7 +9,7 @@ enum class DataType private constructor(private val id: String) {
 
   companion object {
 
-    fun fromString(id: String): DataType {
+    fun fromString(id: String?): DataType {
       return DataType.values().firstOrNull { it.id == id }
           ?: UNDEFINED
     }
