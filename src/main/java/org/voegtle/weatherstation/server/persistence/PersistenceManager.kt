@@ -18,7 +18,7 @@ import javax.persistence.Persistence
 import javax.persistence.Query
 import javax.persistence.TemporalType
 
-class PersistenceManager {
+open class PersistenceManager {
   companion object {
     private val PERSISTENCE_UNIT_NAME = "transactions-optional"
     private val factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME)

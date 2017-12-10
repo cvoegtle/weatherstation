@@ -10,14 +10,15 @@ import javax.servlet.http.HttpServletRequest
 
 class CentralUrlParameter(request: HttpServletRequest) : UrlParameter(request, DateUtil(TimeZone.getDefault()),
                                                                       DataType.CURRENT) {
+  private val PARAM_UTF8 = "utf8"
+  private val PARAM_BUILD = "build"
+  private val PARAM_LOCATIONS = "locations"
 
-  val isUtf8: Boolean
-  val buildNumber: String?
+  val buildNumber: String? = getUrlParameter(PARAM_BUILD)
+  val isUtf8: Boolean = getUrlParameterBoolean(PARAM_UTF8) || StringUtil.isNotEmpty(buildNumber)
   val locations: List<String>
 
   init {
-    this.buildNumber = getUrlParameter(PARAM_BUILD)
-    this.isUtf8 = getUrlParameterBoolean(PARAM_UTF8) || StringUtil.isNotEmpty(buildNumber)
     this.isNewFormat =  this.isNewFormat || StringUtil.isNotEmpty(buildNumber)
 
     val locationsStr = getUrlParameter(PARAM_LOCATIONS)
@@ -27,9 +28,4 @@ class CentralUrlParameter(request: HttpServletRequest) : UrlParameter(request, D
 
   }
 
-  companion object {
-    private val PARAM_UTF8 = "utf8"
-    private val PARAM_BUILD = "build"
-    private val PARAM_LOCATIONS = "locations"
-  }
 }
