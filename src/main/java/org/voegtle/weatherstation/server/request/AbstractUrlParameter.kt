@@ -43,7 +43,7 @@ abstract class AbstractUrlParameter protected constructor(private val request: H
     return result
   }
 
-  @JvmOverloads protected fun getUrlParameterInteger(paramName: String, defaultValue: Int? = null): Int? {
+  protected fun getUrlParameterInteger(paramName: String, defaultValue: Int? = null): Int? {
     val param = request.getParameter(paramName)
     return if (StringUtil.isNotEmpty(param)) param.toInt() else defaultValue
   }

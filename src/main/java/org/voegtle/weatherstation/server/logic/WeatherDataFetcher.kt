@@ -46,12 +46,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                                  watt = latest.watt,
                                  insideTemperature = if (authorized) latest.insideTemperature else null,
                                  insideHumidity = if (authorized) latest.insideHumidity else null,
-                                 rainLastHour = if (SmoothedWeatherDataSet.hasRainCounter(oneHourBefore))
-                                   calculateRain(latest.rainCounter!!, oneHourBefore!!.rainCounter!!)
+                                 rainLastHour = if (oneHourBefore != null)
+                                   calculateRain(latest.rainCounter, oneHourBefore.rainCounter)
                                  else null,
-                                 rainToday = if (SmoothedWeatherDataSet.hasRainCounter(today)
-                                     && WeatherDataSet.hasRainCounter(latest))
-                                   calculateRain(latest.rainCounter!!, today!!.rainCounter!!)
+                                 rainToday = if (today != null)
+                                   calculateRain(latest.rainCounter, today.rainCounter)
                                  else null)
   }
 
@@ -132,8 +131,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     } else calculateRain(latest.rainCounter!!, previous.rainCounter!!)
   }
 
-  private fun calculateRain(youngerCount: Int, olderCount: Int): Float? {
-    val rainCount = youngerCount - olderCount
+  private fun calculateRain(youngerCount: Int?, olderCount: Int?): Float? {
+    val rainCount = (youngerCount ?: 0) - (olderCount ?: 0)
     return if (rainCount > 0) {
       (0.295 * rainCount).toFloat()
     } else null
