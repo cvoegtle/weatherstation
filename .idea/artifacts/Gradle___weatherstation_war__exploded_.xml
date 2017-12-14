@@ -17,24 +17,24 @@
           <element id="dir-copy" path="$PROJECT_DIR$/out/production/resources" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Gradle: com.google.appengine:appengine-endpoints:1.9.59" />
-          <element id="library" level="project" name="Gradle: com.google.appengine.orm:datanucleus-appengine:2.1.2" />
           <element id="library" level="project" name="Gradle: com.google.appengine:appengine-api-1.0-sdk:1.9.59" />
-          <element id="library" level="project" name="Gradle: com.google.appengine:appengine-api-labs:1.9.59" />
-          <element id="library" level="project" name="Gradle: com.google.appengine:appengine-endpoints-deps:1.9.59" />
-          <element id="library" level="project" name="Gradle: com.google.appengine:appengine-jsr107cache:1.9.59" />
-          <element id="library" level="project" name="Gradle: net.sf.jsr107cache:jsr107cache:1.1" />
-          <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-enhancer:3.1.1" />
-          <element id="library" level="project" name="Gradle: org.ow2.asm:asm:5.0.4" />
-          <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-api-jdo:3.1.3" />
-          <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-api-jpa:3.1.3" />
-          <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-core:3.1.3" />
           <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.2.0" />
           <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.0" />
+          <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
+          <element id="library" level="project" name="Gradle: com.google.appengine.orm:datanucleus-appengine:2.1.2" />
           <element id="library" level="project" name="Gradle: org.apache.geronimo.specs:geronimo-jpa_2.0_spec:1.0" />
+          <element id="library" level="project" name="Gradle: org.ow2.asm:asm:5.0.4" />
+          <element id="library" level="project" name="Gradle: org.datanucleus:datanucleus-core:3.1.3" />
           <element id="library" level="project" name="Gradle: javax.jdo:jdo-api:3.0.1" />
           <element id="library" level="project" name="Gradle: javax.transaction:jta:1.1" />
-          <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.appengine/appengine-endpoints/1.9.59/7cb61cf401922f132929f28d216fe6b666b18a6/appengine-endpoints-1.9.59.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.appengine/appengine-api-labs/1.9.59/2c9335b437a26e849b32fb780009b6a39be59fba/appengine-api-labs-1.9.59.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.appengine/appengine-endpoints-deps/1.9.59/c7d62e07e92e395b9fbc8f49360dcc6d06b7e0ac/appengine-endpoints-deps-1.9.59.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.appengine/appengine-jsr107cache/1.9.59/6b701b3b18cf91675612bc6c0533454b6f6d5236/appengine-jsr107cache-1.9.59.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.jsr107cache/jsr107cache/1.1/193a0dca92c221ebf45c7181f00e5db967721c08/jsr107cache-1.1.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.datanucleus/datanucleus-enhancer/3.1.1/b141c67d55cc19f14639f091b84e692e2198dc50/datanucleus-enhancer-3.1.1.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.datanucleus/datanucleus-api-jdo/3.1.3/2b516725909217520c9c55b591b5e48ab3a0dc64/datanucleus-api-jdo-3.1.3.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.datanucleus/datanucleus-api-jpa/3.1.3/9866db180ef911990dbb1f82ce7015d8135d40b/datanucleus-api-jpa-3.1.3.jar" />
         </element>
       </element>
     </root>
