@@ -30,7 +30,7 @@ class AdminNotifier(private val pm: PersistenceManager, private val locationProp
     val datasetFactor = (expectedDataSets!! - health.persisted).toDouble() / expectedDataSets
     val requestFactor = (expectedRequests!! - health.requests).toDouble() / expectedRequests
     val incidentDetected = datasetFactor > 0.1 || requestFactor > 0.1
-    log.warning("incident: $incidentDetected, Requestfaktor: $requestFactor, DatasetFaktor: $datasetFactor")
+    log.info("incident: $incidentDetected, Requestfaktor: $requestFactor, DatasetFaktor: $datasetFactor")
     return incidentDetected
   }
 
