@@ -6,6 +6,16 @@
 
     <persistence-unit name="transactions-optional">
         <provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
+        <class>org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.Contact</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.Health</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.LocationProperties</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.WeatherLocation</class>
+        <class> org.voegtle.weatherstation.server.image.Image</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="datanucleus.NontransactionalRead" value="true"/>
             <property name="datanucleus.NontransactionalWrite" value="true"/>
