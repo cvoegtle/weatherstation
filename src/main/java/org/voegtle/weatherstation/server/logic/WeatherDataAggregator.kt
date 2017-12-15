@@ -17,6 +17,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
     while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       val aggregatedDay = createNewDay(dateOfLastAggregation)
+      log.info("aggregate " + aggregatedDay.date)
       val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date)!!,
                                                                dateUtil.fromLocalToGMT(
                                                                    dateUtil.nextDay(aggregatedDay.date)))
@@ -37,17 +38,14 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
       var kwhLast: Double? = null
       for (wds in weatherDataSets) {
         if (wds.isValid) {
-          log.warning("Smoothed DS: " + wds.timestamp)
           aggregation.addOutsideTemperature(wds.outsideTemperature, wds.timestamp)
           aggregation.addOutsideHumidity(wds.outsideHumidity)
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
-          wds.rainCounter?.let {
-            if (rainCountStart == null) {
-              rainCountStart = wds.rainCounter
-            }
-            rainCountLast = wds.rainCounter
+          if (rainCountStart == null) {
+            rainCountStart = wds.rainCounter
           }
+          rainCountLast = wds.rainCounter
           if (kwhStart == null) {
             kwhStart = wds.kwh
           }
