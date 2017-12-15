@@ -17,7 +17,6 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
     while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       val aggregatedDay = createNewDay(dateOfLastAggregation)
-      log.warning("aggregate " + aggregatedDay.date)
       val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date)!!,
                                                                dateUtil.fromLocalToGMT(
                                                                    dateUtil.nextDay(aggregatedDay.date)))
