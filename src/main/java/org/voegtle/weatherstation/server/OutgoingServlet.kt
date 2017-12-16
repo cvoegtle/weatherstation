@@ -21,24 +21,30 @@ class OutgoingServlet : AbstractServlet() {
     val param = OutgoingUrlParameter(request, locationProperties!!.dateUtil)
     val authorized = isReadSecretValid(param.secret)
 
-    if (param.type == DataType.AGGREGATED) {
-      val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end!!)
-      returnAggregatedResult(response, result, param.isExtended)
-    } else if (param.type == DataType.CURRENT) {
-      val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
-      returnCurrentWeatherData(response, currentWeatherData, param.isExtended, param.isNewFormat)
-    } else if (param.type == DataType.RAIN) {
-      val rainData = weatherDataFetcher.fetchRainData()
-      writeResponse(response, jsonConverter!!.toJson(rainData))
-    } else if (param.type == DataType.STATS) {
-      val stats = weatherDataFetcher.fetchStatistics()
-      writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
-    } else if (param.begin != null) {
-      val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end!!)
-      log.info(
-          "begin: ${param.begin} end: ${param.end} localTZ: ${param.isLocalTimezone} localTimezone: ${locationProperties?.dateUtil?.timezone?.displayName}")
+    when {
+      param.type == DataType.AGGREGATED -> {
+        val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end)
+        returnAggregatedResult(response, result, param.isExtended)
+      }
+      param.type == DataType.CURRENT -> {
+        val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
+        returnCurrentWeatherData(response, currentWeatherData, param.isExtended, param.isNewFormat)
+      }
+      param.type == DataType.RAIN -> {
+        val rainData = weatherDataFetcher.fetchRainData()
+        writeResponse(response, jsonConverter!!.toJson(rainData))
+      }
+      param.type == DataType.STATS -> {
+        val stats = weatherDataFetcher.fetchStatistics()
+        writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
+      }
+      param.begin != null -> {
+        val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end!!)
+        log.info(
+            "begin: ${param.begin} end: ${param.end} localTZ: ${param.isLocalTimezone} localTimezone: ${locationProperties?.dateUtil?.timezone?.displayName}")
 
-      returnDetailedResult(response, result, authorized)
+        returnDetailedResult(response, result, authorized)
+      }
     }
 
   }
