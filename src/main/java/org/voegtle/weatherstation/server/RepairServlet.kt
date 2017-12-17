@@ -17,7 +17,7 @@ class RepairServlet : AbstractServlet() {
 
     if (isSecretValid(param.secret)) {
       val repairService = WeatherDataRepair(pm, locationProperties!!)
-      val repaired = repairService.repair(param.begin!!, param.end!!)
+      val repaired = repairService.repair(param.begin!!, param.end)
       returnDetailedResult(response, repaired, false)
     } else {
       returnResult(response, ResponseCode.NOT_AUTHORIZED)

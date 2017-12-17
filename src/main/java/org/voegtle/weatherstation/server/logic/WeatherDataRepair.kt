@@ -2,11 +2,12 @@ package org.voegtle.weatherstation.server.logic
 
 import com.google.appengine.api.datastore.Key
 import org.voegtle.weatherstation.server.logic.data.RepairJob
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
+import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
+import java.util.HashMap
 import java.util.logging.Logger
 
 class WeatherDataRepair(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
@@ -34,7 +35,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
       return repairJob
     }
 
-  fun repair(begin: Date, end: Date): List<SmoothedWeatherDataSet> {
+  fun repair(begin: Date, end: Date?): List<SmoothedWeatherDataSet> {
     val repaired = ArrayList<SmoothedWeatherDataSet>()
     val weatherDataFetcher = WeatherDataFetcher(pm, locationProperties)
     datasets = weatherDataFetcher.fetchSmoothedWeatherData(begin, end)

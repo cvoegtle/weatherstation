@@ -25,7 +25,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       pm.fetchAggregatedWeatherDataInRange(begin, end)
 
-  fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> =
+  fun fetchSmoothedWeatherData(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> =
       pm.fetchSmoothedWeatherDataInRange(begin, end)
 
   private fun fetchTodaysDataSets(): List<SmoothedWeatherDataSet> {
