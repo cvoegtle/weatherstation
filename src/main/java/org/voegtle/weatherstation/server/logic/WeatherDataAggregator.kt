@@ -55,7 +55,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
       rainCountStart?.let {
         aggregation.rainCounter = Math.max((rainCountLast ?: 0) - it, 0)
-        aggregation.rainDays = if (rainCountLast!! > it) 1 else 0
+        aggregation.rainDays = if (rainCountLast ?: 0 > it) 1 else 0
       }
 
       if (kwhStart != null && kwhLast != null) {
