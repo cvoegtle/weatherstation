@@ -118,8 +118,8 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
     return Math.round(value).toInt()
   }
 
-  private fun getNewValue(startValue: Float, index: Int, step: Double?): Float? {
-    if (step == null) {
+  private fun getNewValue(startValue: Float?, index: Int, step: Double?): Float? {
+    if (step == null || startValue == null) {
       return null
     }
     val value = startValue + index * step
