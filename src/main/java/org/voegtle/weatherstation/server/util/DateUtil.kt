@@ -121,6 +121,14 @@ class DateUtil(val timezone: TimeZone) {
     return cal.time
   }
 
+  fun incrementDateBy15min(currentTime: Date): Date {
+    val cal = Calendar.getInstance(Locale.GERMANY)
+    cal.time = currentTime
+    cal.add(Calendar.MINUTE, 15)
+
+    return cal.time
+  }
+
   fun nextDay(date: Date): Date {
     val cal = Calendar.getInstance(Locale.GERMANY)
 

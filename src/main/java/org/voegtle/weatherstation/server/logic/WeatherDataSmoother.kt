@@ -23,16 +23,8 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
       pm.makePersitant(smoothed)
       pm.removeWeatherDataInRange(range.begin, range.end)
 
-      currentTime = incrementDateBy15min(currentTime)
+      currentTime = dateUtil.incrementDateBy15min(currentTime)
     }
-  }
-
-  private fun incrementDateBy15min(currentTime: Date): Date {
-    val cal = Calendar.getInstance(Locale.GERMANY)
-    cal.time = currentTime
-    cal.add(Calendar.MINUTE, 15)
-
-    return cal.time
   }
 
   private fun calculateStartTime(timeOfYoungestWeatherDataSet: Date): Date {
