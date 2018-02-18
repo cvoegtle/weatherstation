@@ -8,6 +8,7 @@ tmp=$4
 frequency=${tmp:=1}
 echo Frequency: $frequency
 wetter=/home/pi/wetter
+test -f /etc/openwrt_release && wetter=/root
 # Loop forever to read data from USB-WDE1
 
 while true
@@ -25,7 +26,7 @@ do
         echo $tmp >>${wetter}/sendbuffer.txt
         linecount=$(wc -l < "${wetter}/sendbuffer.txt")
         if [[ $(($linecount % $frequency)) == 0 ]] ; then
-          wget --timeout=90 --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3
+          wget --timeout=90 --post-file=${wetter}/sendbuffer.txt -O ${wetter}/wetter_response.txt http://$1/weatherstation/upload?location=$2\&secret=$3 2>${wetter}/wget_std_err.log
           rc=$?
           if [[ $rc == 0 ]] ; then
             rm ${wetter}/sendbuffer.txt
