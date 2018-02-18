@@ -32,7 +32,7 @@ do
             rm ${wetter}/sendbuffer.txt
           else
             endtime=`date -Iseconds`
-            echo start: $timestamp, end: $endtime, rc: $rc >>${wetter}/error.log
+            echo start: $timestamp, end: $endtime, rc: $rc >${wetter}/error.log
           fi
           read response < ${wetter}/wetter_response.txt
           echo response = $response
@@ -45,6 +45,6 @@ do
     done
   done
   restarttime=`date -Iseconds`
-  echo $restarttime restart socat $? >>${wetter}/error.log
+  echo $restarttime restart socat $? >${wetter}/error.log
   sleep 10
 done
