@@ -132,10 +132,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   }
 
   private fun calculateRain(youngerCount: Int?, olderCount: Int?): Float? {
-    val rainCount = if (youngerCount != null) youngerCount  - (olderCount ?: 0) else 0
-    return if (rainCount > 0) {
-      (0.295 * rainCount).toFloat()
-    } else null
+    if (youngerCount == null || olderCount == null) {
+      return null
+    }
+
+    val rainCount = youngerCount - olderCount
+    return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
   }
 
   private fun calculateKwh(latest: WeatherDataSet?, previous: SmoothedWeatherDataSet?): Double? {
