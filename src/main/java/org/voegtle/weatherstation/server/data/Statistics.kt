@@ -29,11 +29,16 @@ class Statistics {
         today.setTemperature(temperature)
         last7days.setTemperature(temperature)
       }
+
       Statistics.TimeRange.yesterday -> {
         yesterday.setTemperature(temperature)
         last7days.setTemperature(temperature)
       }
+
       Statistics.TimeRange.last7days -> last7days.setTemperature(temperature)
+
+      else -> {
+      }
     }
     last30days.setTemperature(temperature)
 
@@ -50,6 +55,9 @@ class Statistics {
         last7days.addRain(rain)
       }
       Statistics.TimeRange.last7days -> last7days.addRain(rain)
+
+      else -> {
+      }
     }
     last30days.addRain(rain)
   }
@@ -67,6 +75,9 @@ class Statistics {
           last7days.addKwh(kwh)
         }
         Statistics.TimeRange.last7days -> last7days.addKwh(kwh)
+
+        else -> {
+        }
       }
       last30days.addKwh(kwh)
     }
