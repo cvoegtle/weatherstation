@@ -135,10 +135,14 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     if (youngerCount == null || olderCount == null) {
       return null
     }
-
-    val rainCount = youngerCount - olderCount
+    val referenceCount = makeOverflowCorrection(olderCount, youngerCount)
+    val rainCount = youngerCount - referenceCount
     return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
   }
+
+  private val OVERFLOW = 4096
+  private fun makeOverflowCorrection(olderCount: Int, youngerCount: Int): Int =
+    if (olderCount >= youngerCount && olderCount > 4000 && youngerCount > 0) olderCount - OVERFLOW else olderCount
 
   private fun calculateKwh(latest: WeatherDataSet?, previous: SmoothedWeatherDataSet?): Double? {
     return if (latest == null || previous == null || latest.kwh == null || previous.kwh == null) {
