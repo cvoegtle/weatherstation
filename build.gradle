@@ -1,5 +1,5 @@
 buildscript {    // Configuration for building
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.60'
 
     repositories {
         jcenter()    // Bintray's repository - a fast Maven Central mirror & more
@@ -53,7 +53,7 @@ dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
     testRuntime("org.apache.logging.log4j:log4j-jul:2.9.1")
-    testCompile ("org.mockito:mockito-core:2.+" )
+    testCompile("org.mockito:mockito-core:2.+")
 }
 
 junitPlatform {
@@ -84,7 +84,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '55'
+        version = '56'
         project = 'elbwetter'
         stopPreviousVersion = true
         promote = true
@@ -99,26 +99,29 @@ task datanucleusEnhance {
 
     doLast {
         // define the entity classes
-        def entityFiles = fileTree(sourceSets.main.output.classesDir)
+        sourceSets.main.output.classesDirs.each {
+            def entityFiles = fileTree(it)
 
-        println "Enhancing with DataNucleus the following files"
-        entityFiles.getFiles().each {
+            println "Enhancing with DataNucleus the following files"
             println it
-        }
+            entityFiles.getFiles().each {
+                println it
+            }
 
-        // define Ant task for DataNucleus Enhancer
-        ant.taskdef(
-                name : 'datanucleusenhancer',
-                classpath : sourceSets.main.runtimeClasspath.asPath,
-                classname : 'org.datanucleus.enhancer.tools.EnhancerTask'
-        )
+            // define Ant task for DataNucleus Enhancer
+            ant.taskdef(
+                    name: 'datanucleusenhancer',
+                    classpath: sourceSets.main.runtimeClasspath.asPath,
+                    classname: 'org.datanucleus.enhancer.tools.EnhancerTask'
+            )
 
-        // run the DataNucleus Enhancer as an Ant task
-        ant.datanucleusenhancer(
-                classpath: sourceSets.main.runtimeClasspath.asPath,
-                verbose: true,
-                api: 'JPA') {
-            entityFiles.addToAntBuilder(ant, 'fileset', FileCollection.AntType.FileSet)
+            // run the DataNucleus Enhancer as an Ant task
+            ant.datanucleusenhancer(
+                    classpath: sourceSets.main.runtimeClasspath.asPath,
+                    verbose: true,
+                    api: 'JPA') {
+                entityFiles.addToAntBuilder(ant, 'fileset', FileCollection.AntType.FileSet)
+            }
         }
 
     }
