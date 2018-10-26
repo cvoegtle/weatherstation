@@ -11,8 +11,11 @@ import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.Date
 import java.util.LinkedHashMap
+import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
+  private val log = Logger.getLogger(WeatherDataFetcher::class.java.name)
+
   private val dateUtil: DateUtil = locationProperties.dateUtil
 
   private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
@@ -137,6 +140,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     }
     val referenceCount = makeOverflowCorrection(olderCount, youngerCount)
     val rainCount = youngerCount - referenceCount
+    log.warning("youngerCount = $youngerCount, olderCount = $olderCount, rainCount = $rainCount")
     return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
   }
 
