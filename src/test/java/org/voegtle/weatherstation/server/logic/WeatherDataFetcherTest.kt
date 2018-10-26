@@ -11,7 +11,7 @@ import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import java.util.Calendar
 import java.util.Date
 
-class TestWeatherDataFetcher {
+class WeatherDataFetcherTest {
   companion object {
     val locationProperties = createLocationProperties()
     val dateUtil = locationProperties.dateUtil
