@@ -140,7 +140,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     }
     val referenceCount = makeOverflowCorrection(olderCount, youngerCount)
     val rainCount = youngerCount - referenceCount
-    log.warning("youngerCount = $youngerCount, olderCount = $olderCount, rainCount = $rainCount")
     return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
   }
 

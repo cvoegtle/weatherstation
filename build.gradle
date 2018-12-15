@@ -85,7 +85,7 @@ appengine {  // App Engine tasks configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
         version = '57'
-        projectId = 'leo-wetter'
+        projectId = 'tegelwetter'
         stopPreviousVersion = true
         promote = true
     }
