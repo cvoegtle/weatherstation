@@ -28,14 +28,14 @@ abstract class AbstractServlet : HttpServlet() {
   override fun init() {
     super.init()
 
-    //    WeatherLocation location = createWeatherLocation();
-    //    pm.makePersistant(location);
+//    val location = createWeatherLocation()
+//    pm.makePersistant(location)
 
-    //    LocationProperties lp = createLocationProperties();
-    //    pm.makePersistant(lp);
+//    val lp = createLocationProperties()
+//    pm.makePersistant(lp)
 
-    //    Contact contact = createContact();
-    //    pm.makePersistant(contact);
+//    val contact = createContact()
+//    pm.makePersistant(contact)
 
     locationProperties = pm.fetchLocationProperties()
     jsonConverter = JSONConverter(locationProperties!!)
@@ -52,7 +52,7 @@ abstract class AbstractServlet : HttpServlet() {
 
   private fun createLocationProperties(): LocationProperties {
     val lp = LocationProperties()
-    lp.location = "development"
+    lp.location = "wetterwolke"
     lp.address = "Entwicklungs Station"
     lp.cityShortcut = "DEV"
     lp.city = "Tegelweg 8"
