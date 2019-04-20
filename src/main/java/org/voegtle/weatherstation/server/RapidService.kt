@@ -11,19 +11,20 @@ import java.util.logging.Logger
   @GetMapping("/weatherstation/rapid")
   fun receive(@RequestParam ID: String,
               @RequestParam PASSWORD: String,
-              @RequestParam dateutc: String,
-              @RequestParam barometer: Float,
-              @RequestParam humidity: Int,
-              @RequestParam UV: Int,
-              @RequestParam solarradiation: Float,
-              @RequestParam winddir: Int,
+              @RequestParam dateutc: String?,
               @RequestParam temp: Float,
-              @RequestParam windspeed: Float,
-              @RequestParam indoortemp: Float,
-              @RequestParam windgust: Float,
+              @RequestParam humidity: Int,
+              @RequestParam barometer: Float?,
               @RequestParam dailyrain: Float,
-              @RequestParam rain: Float): String {
-    log.warning("Received for $ID: barometer=$barometer")
+              @RequestParam rain: Float,
+              @RequestParam UV: Float?,
+              @RequestParam solarradiation: Float?,
+              @RequestParam winddir: Int?,
+              @RequestParam windspeed: Float?,
+              @RequestParam indoortemp: Float?,
+              @RequestParam indoorhumidity: Float?,
+              @RequestParam windgust: Float?): String {
+    log.info("Received at $dateutc for $ID: temperature=$temp, humidity=$humidity, barometer=$barometer")
     return "OK"
   }
 }
