@@ -191,7 +191,7 @@ class DateUtil(val timezone: TimeZone) {
 }
 
 fun parseUtcDate(timeStr: String): Date {
-  val sdf = SimpleDateFormat("dd-MM-yyyy")
+  val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
   sdf.timeZone = TimeZone.getTimeZone("UTC")
   return sdf.parse(timeStr)
 }
