@@ -161,7 +161,6 @@ class DateUtil(val timezone: TimeZone) {
     return sdf.format(day)
   }
 
-
   private fun getTimeOffset(date: Date, tz: TimeZone): Int {
     return tz.getOffset(date.time) / 3600000
   }
@@ -190,3 +189,10 @@ class DateUtil(val timezone: TimeZone) {
     }
   }
 }
+
+fun parseUtcDate(timeStr: String): Date {
+  val sdf = SimpleDateFormat("dd-MM-yyyy")
+  sdf.timeZone = TimeZone.getTimeZone("UTC")
+  return sdf.parse(timeStr)
+}
+
