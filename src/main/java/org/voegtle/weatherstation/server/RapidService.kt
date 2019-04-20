@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.voegtle.weatherstation.server.persistence.PersistenceManager
+import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.rapid.RapidDataSet
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import java.util.HashMap
@@ -17,6 +19,9 @@ import javax.cache.CacheManager
   @Autowired
   private val objectMapper: ObjectMapper? = null
   private var cache: Cache = createCache()
+
+  private val pm = PersistenceManager()
+
 
   val log = Logger.getLogger("RapidService")
 
@@ -36,12 +41,37 @@ import javax.cache.CacheManager
               @RequestParam windgust: Float?,
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
+    validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
+    storeReceivedDataInCache(dateutc, temp, humidity, barometer, dailyrain, rain, UV, solarradiation, winddir, windspeed, windgust, indoortemp,
+                             indoorhumidity)
+    return cache.size.toString()
+  }
+
+  private fun validateReceivedRequest(fetchLocationProperties: LocationProperties, id: String, secret: String) {
+
+  }
+
+  private fun storeReceivedDataInCache(dateutc: String, temp: Float, humidity: Int, barometer: Float,
+                                       dailyrain: Float, rain: Float, UV: Float?, solarradiation: Float?,
+                                       winddir: Int?, windspeed: Float?, windgust: Float?, indoortemp: Float?,
+                                       indoorhumidity: Float?) {
     val dataset = RapidDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
                                rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
-    val jsonDataset = objectMapper!!.writerWithDefaultPrettyPrinter().writeValueAsString(dataset)
+    val jsonDataset = objectMapper!!.writeValueAsString(dataset)
     cache.set(dataset.time, jsonDataset)
-    return cache.size.toString()
+  }
+
+  private fun fetchLocationProperties(): LocationProperties {
+    val jsonLocation = cache.get("location")
+    if (jsonLocation == null) {
+      val locationProperties = pm.fetchLocationProperties()
+      val json = objectMapper!!.writeValueAsString(locationProperties)
+      cache.set("location", json)
+      return locationProperties
+    } else {
+      return objectMapper!!.readValue(jsonLocation as String, LocationProperties::class.java)
+    }
   }
 
   private fun createCache(): Cache {
