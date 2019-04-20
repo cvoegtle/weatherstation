@@ -36,12 +36,12 @@ import javax.cache.CacheManager
               @RequestParam windgust: Float?,
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
-    log.info("Received at $dateutc for $ID: temperature=$temp, humidity=$humidity, barometer=$barometer")
     val dataset = RapidDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
                                rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
-
-    return objectMapper!!.writerWithDefaultPrettyPrinter().writeValueAsString(dataset)
+    val jsonDataset = objectMapper!!.writerWithDefaultPrettyPrinter().writeValueAsString(dataset)
+    cache.set(dataset.time, jsonDataset)
+    return cache.size.toString()
   }
 
   private fun createCache(): Cache {
