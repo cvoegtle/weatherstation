@@ -1,7 +1,8 @@
 <cronentries>
-  <cron>
+<!--  <cron>
     <url>/weatherstation/report</url>
     <description>daily status report</description>
     <schedule>every day 02:00</schedule>
   </cron>
+-->
 </cronentries>

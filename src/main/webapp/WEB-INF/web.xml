@@ -1,103 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>query</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.OutgoingServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>query</servlet-name>
-    <url-pattern>/weatherstation/query</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>repair</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.RepairServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>repair</servlet-name>
-    <url-pattern>/weatherstation/repair</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>upload</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.UploadServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>upload</servlet-name>
-    <url-pattern>/weatherstation/upload</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>cache</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.CacheServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>cache</servlet-name>
-    <url-pattern>/weatherstation/cache</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>image</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.ImageServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>image</servlet-name>
-    <url-pattern>/weatherstation/image</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>central</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.CentralServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>central</servlet-name>
-    <url-pattern>/weatherstation/read</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>reporting</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.ReportingServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>reporting</servlet-name>
-    <url-pattern>/weatherstation/report</url-pattern>
-  </servlet-mapping>
-
-
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-
-  <servlet>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-    <init-param>
-      <param-name>services</param-name>
-      <param-value/>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <url-pattern>/_ah/spi/*</url-pattern>
-  </servlet-mapping>
-
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>wetterwolke</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
 </web-app>
