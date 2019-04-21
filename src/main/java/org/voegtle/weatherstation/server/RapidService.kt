@@ -1,6 +1,7 @@
 package org.voegtle.weatherstation.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.appengine.api.log.InvalidRequestException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.rapid.RapidDataSet
+import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import java.util.HashMap
 import java.util.logging.Logger
@@ -47,8 +49,10 @@ import javax.cache.CacheManager
     return cache.size.toString()
   }
 
-  private fun validateReceivedRequest(fetchLocationProperties: LocationProperties, id: String, secret: String) {
-
+  private fun validateReceivedRequest(locationProperties: LocationProperties, id: String, secret: String) {
+    if (locationProperties.location != id || isSecretValid(locationProperties, secret)) {
+      throw InvalidRequestException("Credentials not valid")
+    }
   }
 
   private fun storeReceivedDataInCache(dateutc: String, temp: Float, humidity: Int, barometer: Float,
@@ -78,4 +82,10 @@ import javax.cache.CacheManager
     val cacheFactory = CacheManager.getInstance().cacheFactory
     return cacheFactory.createCache(HashMap<Any, Any>())
   }
+
+  internal fun isSecretValid(locationProperties: LocationProperties, secret: String?): Boolean {
+    val secretHash = locationProperties.secretHash
+    return secretHash == HashService.calculateHash(secret)
+  }
+
 }
