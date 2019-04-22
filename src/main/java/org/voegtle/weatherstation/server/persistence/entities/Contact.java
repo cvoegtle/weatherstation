@@ -1,11 +1,13 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class Contact {
   @Id
+  Long id;
+
   private String mailAdress;
 
   private String name;

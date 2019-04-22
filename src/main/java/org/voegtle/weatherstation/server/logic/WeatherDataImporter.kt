@@ -2,13 +2,10 @@ package org.voegtle.weatherstation.server.logic
 
 import org.voegtle.weatherstation.server.parser.DataLine
 import org.voegtle.weatherstation.server.parser.DataParser
-import org.voegtle.weatherstation.server.persistence.*
+import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.request.ResponseCode
-import org.voegtle.weatherstation.server.util.DateUtil
-
 import java.text.ParseException
 import java.util.ArrayList
 import java.util.Date
@@ -25,19 +22,19 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
     private set
 
   private fun findDateOfLastDataSet(): Date {
-      var lastImport = dateUtil.getDate(2017, 10, 1)
+    var lastImport = dateUtil.getDate(2019, 4, 1)
 
-      val youngestDataSet = pm.fetchYoungestDataSet()
-      if (youngestDataSet != null && youngestDataSet.timestamp.after(lastImport)) {
-        lastImport = youngestDataSet.timestamp
-      }
-
-      val youngestSmoothedDS = pm.fetchYoungestSmoothedDataSet()
-      if (youngestSmoothedDS != null && youngestSmoothedDS.timestamp.after(lastImport)) {
-        lastImport = youngestSmoothedDS.timestamp
-      }
-      return lastImport
+    val youngestDataSet = pm.fetchYoungestDataSet()
+    if (youngestDataSet.timestamp.after(lastImport)) {
+      lastImport = youngestDataSet.timestamp
     }
+
+    val youngestSmoothedDS = pm.fetchYoungestSmoothedDataSet()
+    if (youngestSmoothedDS != null && youngestSmoothedDS.timestamp.after(lastImport)) {
+      lastImport = youngestSmoothedDS.timestamp
+    }
+    return lastImport
+  }
 
   fun doImport(lines: ArrayList<DataLine>): String {
     var result: String
@@ -48,8 +45,11 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
       log.info("Number of valid datasets: " + dataSets.size)
       dataSets
           .filter { isNotOutdated(it) }
-          .filter { pm.makePersitant(it) }
-          .forEach { persisted++ }
+          .filter { it.isValid }
+          .forEach {
+            pm.makePersistant(it)
+            persisted++
+          }
 
       if (persisted > 0) {
         WeatherDataSmoother(pm, dateUtil).smoothWeatherData()

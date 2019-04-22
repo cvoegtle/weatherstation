@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server.logic
 
-import com.google.appengine.api.datastore.Key
 import org.voegtle.weatherstation.server.logic.data.RepairJob
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -11,7 +10,7 @@ import java.util.HashMap
 import java.util.logging.Logger
 
 class WeatherDataRepair(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-  private var datasets: MutableList<SmoothedWeatherDataSet> = ArrayList<SmoothedWeatherDataSet>()
+  private var datasets: MutableList<SmoothedWeatherDataSet> = ArrayList()
 
   private fun fetchNextRepairJob(): RepairJob {
       val repairJob = RepairJob()
@@ -55,16 +54,16 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
   }
 
   private fun removeDuplicates(): Collection<SmoothedWeatherDataSet> {
-    val duplicate = HashMap<Key, SmoothedWeatherDataSet>()
+    val duplicate = HashMap<Long, SmoothedWeatherDataSet>()
     var previousDataset: SmoothedWeatherDataSet? = null
 
     for (dataset in datasets) {
       if (previousDataset != null) {
         if (dataset.timestamp == previousDataset.timestamp) {
           if (!dataset.isValid) {
-            duplicate.put(dataset.key, dataset)
+            duplicate.put(dataset.id, dataset)
           } else {
-            duplicate.put(previousDataset.key, previousDataset)
+            duplicate.put(previousDataset.id, previousDataset)
           }
         }
       }

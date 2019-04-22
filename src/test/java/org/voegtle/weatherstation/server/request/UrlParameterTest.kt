@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.request
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Test
 import org.mockito.Mockito
 import javax.servlet.http.HttpServletRequest
 
@@ -11,7 +11,7 @@ class UrlParameterTest {
     Mockito.`when`(request.getParameter("build")).thenReturn("544")
     Mockito.`when`(request.getParameter("locations")).thenReturn("tegelweg8,leoxity,bali,herzo,elb")
     val parameter = CentralUrlParameter(request)
-    Assertions.assertEquals(true, parameter.isUtf8)
-    Assertions.assertEquals("544", parameter.buildNumber)
+    assertEquals(true, parameter.isUtf8)
+    assertEquals("544", parameter.buildNumber)
   }
 }

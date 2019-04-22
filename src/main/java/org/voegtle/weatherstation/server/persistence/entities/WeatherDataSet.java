@@ -1,20 +1,17 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class WeatherDataSet {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  private Long id;
 
-  private Date timestamp;
+  @Index private Date timestamp;
   private Float outsideTemperature;
   private Float outsideHumidity;
   private Float insideTemperature;
@@ -27,6 +24,14 @@ public class WeatherDataSet {
   private Double kwh;
 
   public WeatherDataSet() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public WeatherDataSet(Date timestamp) {
@@ -63,10 +68,6 @@ public class WeatherDataSet {
 
   public void setRainCounter(Integer rainCounter) {
     this.rainCounter = rainCounter;
-  }
-
-  public Key getKey() {
-    return key;
   }
 
   public Float getOutsideHumidity() {

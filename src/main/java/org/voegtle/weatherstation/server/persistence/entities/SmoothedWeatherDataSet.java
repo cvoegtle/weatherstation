@@ -1,22 +1,31 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class SmoothedWeatherDataSet {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  public Long getId() {
+    return id;
+  }
 
-  private Date timestamp;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  @Id
+  Long id;
+
+  @Index private Date timestamp;
   private Float outsideTemperature;
   private Float outsideHumidity;
   private Float insideTemperature;
   private Float insideHumidity;
-  private Integer rainCounter;
+  @Index private Integer rainCounter;
   private Boolean raining;
   private Float windspeed;
   private Float windspeedMax;
@@ -24,22 +33,18 @@ public class SmoothedWeatherDataSet {
   private Double kwh;
   private Boolean repaired;
 
-  @Transient
+  @Ignore
   private int countOutsideTemperature = 0;
-  @Transient
+  @Ignore
   private int countOutsideHumidity = 0;
-  @Transient
+  @Ignore
   private int countInsideTemperature = 0;
-  @Transient
+  @Ignore
   private int countInsideHumidity = 0;
-  @Transient
+  @Ignore
   private int countWindspeed = 0;
-  @Transient
+  @Ignore
   private int countWatt = 0;
-
-  public static boolean hasRainCounter(SmoothedWeatherDataSet sds) {
-    return sds != null && sds.getRainCounter() != null;
-  }
 
   public SmoothedWeatherDataSet() {
     timestamp = new Date();
@@ -47,6 +52,10 @@ public class SmoothedWeatherDataSet {
 
   public SmoothedWeatherDataSet(Date timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public static boolean hasRainCounter(SmoothedWeatherDataSet sds) {
+    return sds != null && sds.getRainCounter() != null;
   }
 
   public void add(WeatherDataSet wds) {
@@ -209,10 +218,6 @@ public class SmoothedWeatherDataSet {
 
   public void setRainCounter(Integer rainCounter) {
     this.rainCounter = rainCounter;
-  }
-
-  public Key getKey() {
-    return key;
   }
 
   public Float getOutsideHumidity() {

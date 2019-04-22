@@ -26,7 +26,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   }
 
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
-      pm.fetchAggregatedWeatherDataInRange(begin, end)
+      if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> =
       pm.fetchSmoothedWeatherDataInRange(begin, end)
@@ -38,7 +38,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val today = firstDataSetOfToday()
-    val latest: WeatherDataSet = pm.fetchYoungestDataSet()!!
+    val latest: WeatherDataSet = pm.fetchYoungestDataSet()
     val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
@@ -75,8 +75,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   private fun buildHistoricStatistics(stats: Statistics) {
     val yesterday = dateUtil.yesterday()
-    var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
-        dateUtil.daysEarlier(yesterday, 29), yesterday, false)
+    var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRangeDesc(dateUtil.daysEarlier(yesterday, 29), yesterday)
     dataSets = removeDuplicates(dataSets)
     var day = 1
     for (dataSet in dataSets) {
@@ -107,7 +106,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     if (todaysDataSets.size > 0) {
       val firstSet = todaysDataSets[0]
-      val latest: WeatherDataSet = pm.fetchYoungestDataSet()!!
+      val latest: WeatherDataSet = pm.fetchYoungestDataSet()
       val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
       stats.rainLastHour = calculateRain(latest, oneHourBefore)
 

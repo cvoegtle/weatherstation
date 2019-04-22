@@ -1,12 +1,12 @@
 package org.voegtle.weatherstation.server.util
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class TestHashService {
   @Test fun checkHashNull() {
     val hashNull = HashService.calculateHash(null)
     val hashEmpty = HashService.calculateHash(null)
-    Assertions.assertEquals(hashEmpty, hashNull)
+    assertEquals(hashEmpty, hashNull)
   }
 }

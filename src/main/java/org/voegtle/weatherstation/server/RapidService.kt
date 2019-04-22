@@ -50,9 +50,11 @@ import javax.cache.CacheManager
   }
 
   private fun validateReceivedRequest(locationProperties: LocationProperties, id: String, secret: String) {
-    if (locationProperties.location != id || isSecretValid(locationProperties, secret)) {
+    if (locationProperties.location != id || !isSecretValid(locationProperties, secret)) {
+      log.warning("wrong credentials")
       throw InvalidRequestException("Credentials not valid")
     }
+    log.info("Good credentials")
   }
 
   private fun storeReceivedDataInCache(dateutc: String, temp: Float, humidity: Int, barometer: Float,
@@ -85,7 +87,9 @@ import javax.cache.CacheManager
 
   internal fun isSecretValid(locationProperties: LocationProperties, secret: String?): Boolean {
     val secretHash = locationProperties.secretHash
-    return secretHash == HashService.calculateHash(secret)
+    val calculateHash = HashService.calculateHash(secret)
+    log.info("secret= $secret, hash=$calculateHash, secretHash=$secretHash")
+    return secretHash == calculateHash
   }
 
 }

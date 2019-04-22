@@ -1,7 +1,10 @@
 package org.voegtle.weatherstation.server.util
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Test
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -38,10 +41,10 @@ class TestJSONConverter {
                                     watt = 533.3f)
     val json = jsonConverter.toJson(dto)
 
-    Assertions.assertFalse(json.has("wind"))
-    Assertions.assertEquals(dateUtil.toLocalTime(time), json.getString("localtime"))
-    Assertions.assertEquals(5, Math.round(json.getDouble("temperature")))
-    Assertions.assertEquals(51, Math.round(json.getDouble("humidity")))
+    assertFalse(json.has("wind"))
+    assertEquals(dateUtil.toLocalTime(time), json.getString("localtime"))
+    assertEquals(5, Math.round(json.getDouble("temperature")))
+    assertEquals(51, Math.round(json.getDouble("humidity")))
   }
 
   @Test fun checkToJsonCacheWeatherDTO() {
@@ -65,11 +68,11 @@ class TestJSONConverter {
 
     val json = jsonConverter.toJson(dto)
 
-    Assertions.assertTrue(json.has("wind"))
-    Assertions.assertTrue(json.has("watt"))
-    Assertions.assertFalse(json.has("windspeed"))
-    Assertions.assertEquals(-4.6f, json.get("temperature"))
-    Assertions.assertEquals(712.9f, json.get("watt"))
+    assertTrue(json.has("wind"))
+    assertTrue(json.has("watt"))
+    assertFalse(json.has("windspeed"))
+    assertEquals(-4.6f, json.get("temperature"))
+    assertEquals(712.9f, json.get("watt"))
   }
 
   @Test fun checkDecodeCacheWeatherDTO() {
@@ -77,14 +80,14 @@ class TestJSONConverter {
 
     val jsonConverter = JSONConverter(locationProperties)
     val dto = jsonConverter.decodeWeatherDTO(input)
-    Assertions.assertEquals("leoxity", dto.id)
-    Assertions.assertEquals("13:20", dto.localTime)
-    Assertions.assertEquals(8.695692f, dto.longitude)
-    Assertions.assertEquals(52.014572f, dto.latitude)
-    Assertions.assertEquals(0.6f, dto.temperature)
-    Assertions.assertEquals(15.0f, dto.watt)
-    Assertions.assertNull(dto.insideHumidity)
-    Assertions.assertNull(dto.insideTemperature)
+    assertEquals("leoxity", dto.id)
+    assertEquals("13:20", dto.localTime)
+    assertEquals(8.695692f, dto.longitude)
+    assertEquals(52.014572f, dto.latitude)
+    assertEquals(0.6f, dto.temperature)
+    assertEquals(15.0f, dto.watt)
+    assertNull(dto.insideHumidity)
+    assertNull(dto.insideTemperature)
   }
 
   @Test fun checkDecodeCacheWeatherDTOInside() {
@@ -92,15 +95,15 @@ class TestJSONConverter {
 
     val jsonConverter = JSONConverter(locationProperties)
     val dto = jsonConverter.decodeWeatherDTO(input)
-    Assertions.assertEquals("tegelweg8", dto.id)
-    Assertions.assertEquals("13:37", dto.localTime)
-    Assertions.assertEquals(8.758523f, dto.longitude)
-    Assertions.assertEquals(51.723778f, dto.latitude)
-    Assertions.assertEquals(0.8f, dto.temperature)
-    Assertions.assertNull(dto.watt)
-    Assertions.assertNull(dto.windspeed)
-    Assertions.assertEquals(49.0f, dto.insideHumidity)
-    Assertions.assertEquals(19.1f, dto.insideTemperature)
+    assertEquals("tegelweg8", dto.id)
+    assertEquals("13:37", dto.localTime)
+    assertEquals(8.758523f, dto.longitude)
+    assertEquals(51.723778f, dto.latitude)
+    assertEquals(0.8f, dto.temperature)
+    assertNull(dto.watt)
+    assertNull(dto.windspeed)
+    assertEquals(49.0f, dto.insideHumidity)
+    assertEquals(19.1f, dto.insideTemperature)
   }
 
 }

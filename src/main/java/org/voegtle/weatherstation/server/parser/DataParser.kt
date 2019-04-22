@@ -87,7 +87,7 @@ class DataParser(dateUtil: DateUtil, di: DataIndicies) {
   }
 
   private fun isValid(data: DataLine): Boolean {
-    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data[indexOutsideTemperature])
+    return data.size() > INDEX_DATE && StringUtil.isNotEmpty(data[indexOutsideTemperature]) && StringUtil.isNotEmpty(data[indexOutsideHumidity])
   }
 
   @Throws(ParseException::class)

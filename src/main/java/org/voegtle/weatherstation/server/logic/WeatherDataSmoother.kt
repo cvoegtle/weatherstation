@@ -20,7 +20,7 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
       val smoothed = SmoothedWeatherDataSet(currentTime)
       weatherData.forEach { wds -> smoothed.add(wds) }
       smoothed.normalize()
-      pm.makePersitant(smoothed)
+      pm.makePersistant(smoothed)
       pm.removeWeatherDataInRange(range.begin, range.end)
 
       currentTime = dateUtil.incrementDateBy15min(currentTime)
@@ -47,7 +47,7 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
   private fun calculateEndTime(): Date {
     val youngest = pm.fetchYoungestDataSet()
     val cal = Calendar.getInstance(Locale.GERMANY)
-    cal.time = youngest!!.timestamp
+    cal.time = youngest.timestamp
     cal.add(Calendar.MINUTE, -8)
     return cal.time
   }

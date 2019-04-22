@@ -24,7 +24,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
       aggregate(aggregatedDay, weatherDataSets)
 
-      pm.makePersitant(aggregatedDay)
+      pm.makePersistant(aggregatedDay)
       dateOfLastAggregation = aggregatedDay.date
     }
   }
@@ -70,13 +70,13 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
   }
 
   private fun fetchDateOfLastAggregation(): Date {
-    val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY)
+    val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()
     return if (lastAggregatedDay == null) dateUtil.getDate(2016, 5, 11) else lastAggregatedDay.date
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {
     val youngest = pm.fetchYoungestDataSet()
-    var timestamp = dateUtil.daysEarlier(youngest!!.timestamp, 1)
+    var timestamp = dateUtil.daysEarlier(youngest.timestamp, 1)
     timestamp = dateUtil.fromGMTtoLocal(timestamp)
     return timestamp
   }

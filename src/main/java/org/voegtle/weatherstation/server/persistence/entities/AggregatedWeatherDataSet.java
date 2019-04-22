@@ -1,21 +1,21 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 import org.voegtle.weatherstation.server.persistence.PeriodEnum;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class AggregatedWeatherDataSet {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  private Long id;
 
-  private Date date;
+  @Index private Date date;
 
-  @Enumerated(EnumType.STRING)
-  private PeriodEnum period;
+  @Index private PeriodEnum period;
   private boolean finished;
 
   private Date timeOfMinimum;
@@ -24,31 +24,31 @@ public class AggregatedWeatherDataSet {
   private Float outsideTemperatureMin;
   private Float outsideTemperatureMax;
   private Float outsideTemperatureAverage;
-  @Transient
+  @Ignore
   private int outsideTemperatureCounter;
 
   private Float outsideHumidityMin;
   private Float outsideHumidityMax;
   private Float outsideHumidityAverage;
-  @Transient
+  @Ignore
   private int outsideHumidityCounter;
 
   private Float insideTemperatureMin;
   private Float insideTemperatureMax;
   private Float insideTemperatureAverage;
-  @Transient
+  @Ignore
   private int insideTemperatureCounter;
 
   private Float insideHumidityMin;
   private Float insideHumidityMax;
   private Float insideHumidityAverage;
-  @Transient
+  @Ignore
   private int insideHumidityCounter;
 
   private Float windspeedMin;
   private Float windspeedMax;
   private Float windspeedAverage;
-  @Transient
+  @Ignore
   private int windspeedCounter;
 
   private int rainCounter;
@@ -265,14 +265,6 @@ public class AggregatedWeatherDataSet {
 
   public Float getInsideHumidityAverage() {
     return insideHumidityAverage;
-  }
-
-  public Key getKey() {
-    return key;
-  }
-
-  public void setKey(Key key) {
-    this.key = key;
   }
 
   public Float getWindspeedMin() {

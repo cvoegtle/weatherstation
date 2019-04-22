@@ -1,7 +1,8 @@
 package org.voegtle.weatherstation.server.logic
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
 
 class CalculationRuleTest {
   @Test fun checkOverflowCorrection() {
