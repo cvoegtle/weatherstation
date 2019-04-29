@@ -1,19 +1,13 @@
 package org.voegtle.weatherstation.server
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
+import java.util.logging.Logger
 
-@RestController class IntervalService {
-  @Autowired
-  private val objectMapper: ObjectMapper? = null
-  private val pm = PersistenceManager()
-
+@RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
 
   @GetMapping("/weatherstation/interval")
   fun receive(@RequestParam ID: String,
