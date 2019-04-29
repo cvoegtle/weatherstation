@@ -2,30 +2,34 @@ package org.voegtle.weatherstation.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.appengine.api.log.InvalidRequestException
+import com.sun.corba.se.impl.util.RepositoryId.cache
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
+import org.voegtle.weatherstation.server.rapid.AggregatedRapidDataSet
+import org.voegtle.weatherstation.server.rapid.RapidCache
 import org.voegtle.weatherstation.server.rapid.RapidDataSet
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.parseUtcDate
-import java.util.HashMap
 import java.util.logging.Logger
-import javax.cache.Cache
-import javax.cache.CacheManager
+import javax.annotation.PostConstruct
 
 
 @RestController class RapidService {
   @Autowired
   private val objectMapper: ObjectMapper? = null
-  private var cache: Cache = createCache()
-
   private val pm = PersistenceManager()
+  private val rapidCache = RapidCache()
 
 
   val log = Logger.getLogger("RapidService")
+
+  @PostConstruct fun init() {
+    rapidCache.objectMapper = this.objectMapper
+  }
 
   @GetMapping("/weatherstation/rapid")
   fun receive(@RequestParam ID: String,
@@ -44,8 +48,17 @@ import javax.cache.CacheManager
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
-    storeReceivedDataInCache(dateutc, temp, humidity, barometer, dailyrain, rain, UV, solarradiation, winddir, windspeed, windgust, indoortemp,
-                             indoorhumidity)
+    val dataset = RapidDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
+                               rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
+                               windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
+    var aggregatedDataSet = rapidCache.getLatest()
+    if (aggregatedDataSet == null) {
+      aggregatedDataSet = AggregatedRapidDataSet(dataset)
+    } else {
+      aggregatedDataSet.add(dataset)
+    }
+
+    storeReceivedDataInCache(aggregatedDataSet)
     return cache.size.toString()
   }
 
@@ -57,15 +70,8 @@ import javax.cache.CacheManager
     log.info("Good credentials")
   }
 
-  private fun storeReceivedDataInCache(dateutc: String, temp: Float, humidity: Int, barometer: Float,
-                                       dailyrain: Float, rain: Float, UV: Float?, solarradiation: Float?,
-                                       winddir: Int?, windspeed: Float?, windgust: Float?, indoortemp: Float?,
-                                       indoorhumidity: Float?) {
-    val dataset = RapidDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
-                               rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
-                               windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
-    val jsonDataset = objectMapper!!.writeValueAsString(dataset)
-    cache.set(dataset.time, jsonDataset)
+  private fun storeReceivedDataInCache(aggregatedDataSet: AggregatedRapidDataSet) {
+    rapidCache.save(aggregatedDataSet)
   }
 
   private fun fetchLocationProperties(): LocationProperties {
@@ -78,11 +84,6 @@ import javax.cache.CacheManager
     } else {
       return objectMapper!!.readValue(jsonLocation as String, LocationProperties::class.java)
     }
-  }
-
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, Any>())
   }
 
   internal fun isSecretValid(locationProperties: LocationProperties, secret: String?): Boolean {
