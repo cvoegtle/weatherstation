@@ -1,4 +1,4 @@
-package org.voegtle.weatherstation.server.rapid
+package org.voegtle.weatherstation.server.weewx
 
 class MaxFloat {
   var value: Float? = 0.0f

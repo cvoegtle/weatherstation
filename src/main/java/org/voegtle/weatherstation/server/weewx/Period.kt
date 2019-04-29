@@ -1,4 +1,4 @@
-package org.voegtle.weatherstation.server.rapid
+package org.voegtle.weatherstation.server.weewx
 
 import java.util.Date
 

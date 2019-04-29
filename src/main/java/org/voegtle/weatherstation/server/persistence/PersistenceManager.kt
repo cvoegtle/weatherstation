@@ -8,6 +8,7 @@ import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
+import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.Date
 import java.util.logging.Logger
 
@@ -17,6 +18,10 @@ open class PersistenceManager {
   }
 
   fun makePersistant(dataSet: WeatherDataSet) {
+    ObjectifyService.ofy().save().entity(dataSet).now()
+  }
+
+  fun makePersistant(dataSet: WeewxDataSet) {
     ObjectifyService.ofy().save().entity(dataSet).now()
   }
 

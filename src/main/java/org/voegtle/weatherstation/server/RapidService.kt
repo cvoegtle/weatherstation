@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.rapid.AggregatedRapidDataSet
-import org.voegtle.weatherstation.server.rapid.RapidCache
-import org.voegtle.weatherstation.server.rapid.RapidDataSet
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.parseUtcDate
+import org.voegtle.weatherstation.server.weewx.AggregatedRapidDataSet
+import org.voegtle.weatherstation.server.weewx.RapidCache
+import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
@@ -31,7 +31,7 @@ import javax.annotation.PostConstruct
     rapidCache.objectMapper = this.objectMapper
   }
 
-  @GetMapping("/weatherstation/rapid")
+  @GetMapping("/weatherstation/weewx")
   fun receive(@RequestParam ID: String,
               @RequestParam PASSWORD: String,
               @RequestParam dateutc: String,
@@ -48,7 +48,7 @@ import javax.annotation.PostConstruct
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
-    val dataset = RapidDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
+    val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = dailyrain,
                                rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
     var aggregatedDataSet = rapidCache.getLatest()

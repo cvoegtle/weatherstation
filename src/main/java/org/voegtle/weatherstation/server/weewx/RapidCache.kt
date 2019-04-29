@@ -1,4 +1,4 @@
-package org.voegtle.weatherstation.server.rapid
+package org.voegtle.weatherstation.server.weewx
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.HashMap

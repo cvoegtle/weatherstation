@@ -1,4 +1,4 @@
-package org.voegtle.weatherstation.server.rapid
+package org.voegtle.weatherstation.server.weewx
 
 
 class AggregatedRapidDataSet {
@@ -17,12 +17,12 @@ class AggregatedRapidDataSet {
   val indoorHumidity = AggregatedFloat()
 
 
-  constructor(dataset: RapidDataSet) {
+  constructor(dataset: WeewxDataSet) {
     period.start = dataset.time
     add(dataset)
   }
 
-  fun add(dataset: RapidDataSet) {
+  fun add(dataset: WeewxDataSet) {
     period.end = dataset.time
     temperature.add(dataset.temperature)
     humidity.add(dataset.humidity)
