@@ -14,7 +14,7 @@ import java.util.logging.Logger
               @RequestParam PASSWORD: String,
               @RequestParam dateutc: String,
               @RequestParam temp: Float,
-              @RequestParam humidity: Int,
+              @RequestParam humidity: Float,
               @RequestParam barometer: Float,
               @RequestParam dailyrain: Float,
               @RequestParam rain: Float,
@@ -29,7 +29,9 @@ import java.util.logging.Logger
                                rain = rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
 
+    val locationProperties = fetchLocationProperties()
     pm.makePersistant(dataset)
+//    WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
     return "OK"
   }
 

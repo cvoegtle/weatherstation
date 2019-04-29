@@ -43,9 +43,9 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
           if (rainCountStart == null) {
-            rainCountStart = wds.rainCounter
+            rainCountStart = (wds.rainCounter * 5).toInt()
           }
-          rainCountLast = wds.rainCounter
+          rainCountLast = (wds.rainCounter * 5).toInt()
           if (kwhStart == null) {
             kwhStart = wds.kwh
           }

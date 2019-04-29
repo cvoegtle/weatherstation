@@ -17,7 +17,7 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
       val range = dateUtil.getRangeAround(currentTime, 7 * 60 + 30)
       val weatherData = pm.fetchWeatherDataInRange(range.begin, range.end)
 
-      val smoothed = SmoothedWeatherDataSet(currentTime)
+      val smoothed = SmoothedWeatherDataSet(timestamp = currentTime)
       weatherData.forEach { wds -> smoothed.add(wds) }
       smoothed.normalize()
       pm.makePersistant(smoothed)

@@ -54,7 +54,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
   }
 
   private fun removeDuplicates(): Collection<SmoothedWeatherDataSet> {
-    val duplicate = HashMap<Long, SmoothedWeatherDataSet>()
+    val duplicate = HashMap<Long?, SmoothedWeatherDataSet>()
     var previousDataset: SmoothedWeatherDataSet? = null
 
     for (dataset in datasets) {
@@ -93,7 +93,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
         ds.insideTemperature = getNewValue(it.insideTemperature, index, step.insideTemperature)
 
         if (it.rainCounter != null) {
-          ds.rainCounter = getNewValue(it.rainCounter, index, step.rain)
+          ds.rainCounter = getNewValue(it.rainCounter, index, step.rain)!!
         }
         it.kwh?.let {
           ds.kwh = getNewValue(it, index, step.kwh)

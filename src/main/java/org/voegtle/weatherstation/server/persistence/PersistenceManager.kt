@@ -34,7 +34,7 @@ open class PersistenceManager {
   }
 
   fun updateDataset(ds: SmoothedWeatherDataSet) {
-    val managedDS = ObjectifyService.ofy().load().type(SmoothedWeatherDataSet::class.java).id(ds.id).now()
+    val managedDS = ObjectifyService.ofy().load().type(SmoothedWeatherDataSet::class.java).id(ds.id!!).now()
 
     managedDS.outsideHumidity = ds.outsideHumidity
     managedDS.outsideTemperature = ds.outsideTemperature
@@ -49,7 +49,7 @@ open class PersistenceManager {
   }
 
   fun removeDataset(ds: SmoothedWeatherDataSet) {
-    ObjectifyService.ofy().delete().type(SmoothedWeatherDataSet::class.java).id(ds.id).now()
+    ObjectifyService.ofy().delete().type(SmoothedWeatherDataSet::class.java).id(ds.id!!).now()
   }
 
   fun makePersistant(dataSet: AggregatedWeatherDataSet) {
@@ -80,11 +80,11 @@ open class PersistenceManager {
       .first()
       .safe()
 
-  fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeatherDataSet> = ObjectifyService.ofy().load()
-      .type(WeatherDataSet::class.java)
-      .filter("timestamp >=", begin)
-      .filter("timestamp <=", end)
-      .order("timestamp")
+  fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeewxDataSet> = ObjectifyService.ofy().load()
+      .type(WeewxDataSet::class.java)
+      .filter("time >=", begin)
+      .filter("time <=", end)
+      .order("time")
       .list()
 
 

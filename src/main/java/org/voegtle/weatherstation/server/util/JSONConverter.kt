@@ -136,7 +136,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
       } else {
         json.put("rain", 0.0)
       }
-      previousRainCounter = wds.rainCounter
+      previousRainCounter = wds.getRainCounterAsInt()
       json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
       json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
 
