@@ -76,7 +76,7 @@ open class PersistenceManager {
   fun fetchYoungestDataSet(): WeewxDataSet = ObjectifyService.ofy()
       .load()
       .type(WeewxDataSet::class.java)
-      .order("-timestamp")
+      .order("-time")
       .first()
       .safe()
 
