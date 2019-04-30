@@ -73,9 +73,9 @@ open class PersistenceManager {
     return result
   }
 
-  fun fetchYoungestDataSet(): WeatherDataSet = ObjectifyService.ofy()
+  fun fetchYoungestDataSet(): WeewxDataSet = ObjectifyService.ofy()
       .load()
-      .type(WeatherDataSet::class.java)
+      .type(WeewxDataSet::class.java)
       .order("-timestamp")
       .first()
       .safe()
@@ -140,9 +140,9 @@ open class PersistenceManager {
 
   fun removeWeatherDataInRange(begin: Date, end: Date) {
     val ids = ObjectifyService.ofy().load()
-        .type(WeatherDataSet::class.java)
-        .filter("timestamp >=", begin)
-        .filter("timestamp <=", end)
+        .type(WeewxDataSet::class.java)
+        .filter("time >=", begin)
+        .filter("time <=", end)
         .list()
         .map { it.id }
 

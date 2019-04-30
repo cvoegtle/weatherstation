@@ -76,7 +76,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {
     val youngest = pm.fetchYoungestDataSet()
-    var timestamp = dateUtil.daysEarlier(youngest.timestamp, 1)
+    var timestamp = dateUtil.daysEarlier(youngest.time, 1)
     timestamp = dateUtil.fromGMTtoLocal(timestamp)
     return timestamp
   }

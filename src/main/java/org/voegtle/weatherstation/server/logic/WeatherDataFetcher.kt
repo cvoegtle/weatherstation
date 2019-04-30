@@ -9,6 +9,7 @@ import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
+import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.Date
 import java.util.LinkedHashMap
 import java.util.logging.Logger
@@ -38,12 +39,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val today = firstDataSetOfToday()
-    val latest: WeatherDataSet = pm.fetchYoungestDataSet()
+    val latest: WeewxDataSet = pm.fetchYoungestDataSet()
     val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
-    return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
-                                 temperature = latest.outsideTemperature, humidity = latest.outsideHumidity,
+    return UnformattedWeatherDTO(time = latest.time, localTime = dateUtil.toLocalTime(latest.time),
+                                 temperature = latest.temperature, humidity = latest.humidity,
                                  isRaining = isRaining(latest, twentyMinutesBefore),
                                  windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
                                  watt = latest.watt,
@@ -57,11 +58,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                                  else null)
   }
 
-  private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {
-    var raining = latest.isRaining ?: false
+  private fun isRaining(latest: WeewxDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {
+    var raining = false
 
     if (latest.rainCounter != null && SmoothedWeatherDataSet.hasRainCounter(fifteenMinutesBefore)) {
-      raining = raining || latest.rainCounter!! - fifteenMinutesBefore!!.rainCounter!! > 0
+      raining = raining || latest.rain!! - fifteenMinutesBefore!!.rainCounter!! > 0
     }
     return raining
   }
