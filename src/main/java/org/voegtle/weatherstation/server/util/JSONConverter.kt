@@ -115,7 +115,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
   fun toJson(list: List<SmoothedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
     val dateUtil = locationProperties.dateUtil
 
-    var previousRainCounter: Int? = null
+    var previousRain: Float = 0.0f
     val jsonObjects = ArrayList<JSONObject>()
     for (wds in list) {
       val json = WeatherJSONObject()
@@ -130,13 +130,11 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         json.put("inside_humidity", wds.insideHumidity)
       }
 
-      if (previousRainCounter != null && wds.rainCounter != null) {
-        val rain = 0.295 * (wds.rainCounter!! - previousRainCounter)
-        json.put("rain", Math.max(rain, 0.0))
-      } else {
-        json.put("rain", 0.0)
+      val rain = wds.dailyRain - previousRain
+      if (rain > 0) {
+        json.put("rain", rain)
       }
-      previousRainCounter = wds.getRainCounterAsInt()
+      previousRain = wds.dailyRain
       json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
       json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
 

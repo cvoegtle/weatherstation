@@ -47,7 +47,7 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
   private fun calculateEndTime(): Date {
     val youngest = pm.fetchYoungestDataSet()
     val cal = Calendar.getInstance(Locale.GERMANY)
-    cal.time = youngest.timestamp
+    cal.time = youngest.time
     cal.add(Calendar.MINUTE, -8)
     return cal.time
   }

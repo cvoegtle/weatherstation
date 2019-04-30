@@ -195,6 +195,10 @@ public class AggregatedWeatherDataSet {
     return rainCounter;
   }
 
+  public Float getRainAsFloat() {
+    return rainCounter * 0.2f;
+  }
+
   public void setRainCounter(int rainCounter) {
     this.rainCounter = rainCounter;
   }

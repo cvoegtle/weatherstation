@@ -22,7 +22,8 @@ import java.util.Date
                                      var insideHumidity: Float? = null,
                                      @Ignore private var countInsideHumidity: Int = 0,
 
-                                     @Index var rainCounter: Float = 0.0f,
+                                     @Index var rainCounter: Int = 0,
+                                     var dailyRain: Float = 0.0f,
                                      var isRaining: Boolean? = null,
 
                                      var windspeed: Float? = null,
@@ -39,16 +40,12 @@ import java.util.Date
   val isValid: Boolean
     get() = outsideTemperature != null && outsideHumidity != null
 
-  fun getRainCounterAsInt(): Int {
-    return (rainCounter * 5).toInt()
-  }
-
   fun add(wds: WeewxDataSet) {
     addOutsideTemperature(wds.temperature)
     addOutsideHumidity(wds.humidity)
     addInsideTemperature(wds.indoorTemperature)
     addInsideHumidity(wds.indoorHumidity)
-    addRainCount(wds.rain)
+    addDailyRain(wds.dailyRain)
     addWindspeed(wds.windSpeed)
     setWindspeedMaxIfMax(wds.windGust)
   }
@@ -110,13 +107,19 @@ import java.util.Date
     }
   }
 
-  private fun addRainCount(rainCounter: Float?) {
+  private fun addRainCount(rainCounter: Int?) {
     if (rainCounter != null) {
       if (this.rainCounter == null) {
         this.rainCounter = rainCounter
-      } else if (rainCounter > rainCounter) {
+      } else if (rainCounter > this.rainCounter) {
         this.rainCounter = rainCounter
       }
+    }
+  }
+
+  private fun addDailyRain(dailyRain: Float) {
+    if (this.dailyRain < dailyRain) {
+      this.dailyRain = dailyRain
     }
   }
 

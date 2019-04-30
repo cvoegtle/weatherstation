@@ -38,11 +38,7 @@ class RepairJob {
 
     step.humidity = ((last!!.outsideHumidity!! - first!!.outsideHumidity!!) / (defectDataSets.size + 1)).toDouble()
     step.temperature = ((last!!.outsideTemperature!! - first!!.outsideTemperature!!) / (defectDataSets.size + 1)).toDouble()
-    if (last!!.rainCounter == null) {
-      step.rain = 0.0
-    } else {
-      step.rain = ((last!!.rainCounter!! - first!!.rainCounter!!) / (defectDataSets.size + 1)).toDouble()
-    }
+    step.rain = ((last!!.rainCounter - first!!.rainCounter) / (defectDataSets.size + 1)).toDouble()
 
     step.insideHumidity = spreadEqually(first!!.insideHumidity, last!!.insideHumidity, defectDataSets.size)
     step.insideTemperature = spreadEqually(first!!.insideTemperature, last!!.insideTemperature, defectDataSets.size)

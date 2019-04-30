@@ -25,8 +25,8 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
     var lastImport = dateUtil.getDate(2019, 4, 1)
 
     val youngestDataSet = pm.fetchYoungestDataSet()
-    if (youngestDataSet.timestamp.after(lastImport)) {
-      lastImport = youngestDataSet.timestamp
+    if (youngestDataSet.time.after(lastImport)) {
+      lastImport = youngestDataSet.time
     }
 
     val youngestSmoothedDS = pm.fetchYoungestSmoothedDataSet()
