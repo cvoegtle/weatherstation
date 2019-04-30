@@ -11,10 +11,8 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.Date
 import java.util.LinkedHashMap
-import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-  private val log = Logger.getLogger(WeatherDataFetcher::class.java.name)
 
   private val dateUtil: DateUtil = locationProperties.dateUtil
 
@@ -37,12 +35,15 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   }
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
-    val today = firstDataSetOfToday()
     val latest: WeewxDataSet = pm.fetchYoungestDataSet()
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
-    return UnformattedWeatherDTO(time = latest.time, localTime = dateUtil.toLocalTime(latest.time),
-                                 temperature = latest.temperature, humidity = latest.humidity,
+    return UnformattedWeatherDTO(time = latest.time,
+                                 location = locationProperties.city,
+                                 localtime = dateUtil.toLocalTime(latest.time),
+                                 temperature = latest.temperature,
+                                 humidity = latest.humidity,
+                                 barometer = latest.barometer,
                                  isRaining = isRaining(latest),
                                  windspeed = if (locationProperties.isWindRelevant) latest.windSpeed else null,
                                  insideTemperature = if (authorized) latest.indoorTemperature else null,

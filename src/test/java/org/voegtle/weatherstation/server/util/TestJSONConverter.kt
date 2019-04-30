@@ -35,10 +35,10 @@ class TestJSONConverter {
   @Test fun checkToJsonUnformattedWeatherDTO() {
     val jsonConverter = JSONConverter(locationProperties)
     val time = Date()
-    val dto = UnformattedWeatherDTO(time = time, localTime = dateUtil.toLocalTime(time), temperature = 5.1f,
+    val dto = UnformattedWeatherDTO(time = time, localtime = dateUtil.toLocalTime(time), temperature = 5.1f,
                                     humidity = 51.0f, insideTemperature = 6.1f, insideHumidity = 61.0f,
                                     isRaining = true, rainLastHour = 0.3f, rainToday = 3.3f, windspeed = null,
-                                    watt = 533.3f)
+                                    solarradiation = 533.3f, location = "hallo", barometer = 1000.0f)
     val json = jsonConverter.toJson(dto)
 
     assertFalse(json.has("wind"))

@@ -14,7 +14,7 @@ var testdaten = [
         rain_today: 5.015,
         rain: 2.065,
         temperature: 5.3,
-        watt: null
+        solarradiation: null
     },
     {
         "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
@@ -26,7 +26,7 @@ var testdaten = [
         "rain_today": 1.475,
         "rain": "",
         "temperature": 8.6,
-        watt: null
+        "solarradiation": null
     },
     {
         "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
@@ -38,7 +38,7 @@ var testdaten = [
         "rain_today": 2.065,
         "rain": "",
         "temperature": 4.6,
-        watt: null
+        "solarradiation": null
     }
 ];
 var singleTestdaten = {
@@ -50,26 +50,16 @@ var singleTestdaten = {
     "rain_today": 5.015,
     "rain": 2.065,
     "temperature": 5.3,
-    watt: null
+    "solarradiation": null
 };
-function fetchAllWeatherData(processWeatherData, reportConnectionProblem, urlParam) {
+function fetchWeatherData(processWeatherData, reportConnectionProblem) {
     var ajaxRequest = new XMLHttpRequest();
     ajaxRequest.onload = function () {
         var weatherData = JSON.parse(ajaxRequest.responseText);
         processWeatherData(weatherData);
     };
     ajaxRequest.onerror = reportConnectionProblem;
-    ajaxRequest.open("get", "/weatherstation/read?" + urlParam + "&build=web&type=current", true);
-    ajaxRequest.send();
-}
-function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
-    var ajaxRequest = new XMLHttpRequest();
-    ajaxRequest.onload = function () {
-        var weatherData = JSON.parse(ajaxRequest.responseText);
-        processWeatherData(weatherData);
-    };
-    ajaxRequest.onerror = reportConnectionProblem;
-    ajaxRequest.open("get", "/weatherstation/query?type=" + type + "&new&build=web", true);
+    ajaxRequest.open("get", "/weatherstation/query?build=web", true);
     ajaxRequest.send();
 }
 function getOptionalNumber(value, unit) {

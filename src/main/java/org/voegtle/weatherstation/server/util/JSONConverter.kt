@@ -7,10 +7,7 @@ import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Date
 
@@ -29,11 +26,11 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
     json.putOpt("raining", currentWeatherData.isRaining)
     json.putOpt("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-    json.putOpt("watt", currentWeatherData.watt)
+    json.putOpt("solarradidation", currentWeatherData.solarradiation)
 
-    json.put("location", locationProperties.city)
+    json.put("location", currentWeatherData.location)
     json.put("location_short", locationProperties.cityShortcut)
-    json.putOpt("localtime", currentWeatherData.localTime)
+    json.putOpt("localtime", currentWeatherData.localtime)
 
     json.put("id", locationProperties.location)
     json.putOpt("forecast", locationProperties.weatherForecast)
@@ -71,36 +68,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     return json
   }
 
-  fun toJsonLegacy(currentWeatherData: UnformattedWeatherDTO, extended: Boolean): JSONObject {
-    val json = WeatherJSONObject()
-    json.put("timestamp", currentWeatherData.time)
-    json.put("temperature", currentWeatherData.temperature)
-    if (currentWeatherData.insideTemperature != null) {
-      json.put("inside_temperature", currentWeatherData.insideTemperature)
-    }
-    json.put("humidity", currentWeatherData.humidity)
-    if (currentWeatherData.insideHumidity != null) {
-      json.put("inside_humidity", currentWeatherData.insideHumidity)
-    }
-    json.put("rain", currentWeatherData.rainLastHour)
-    json.put("rain_today", currentWeatherData.rainToday)
-    json.put("raining", currentWeatherData.isRaining)
-    json.put("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-    if (currentWeatherData.watt != null) {
-      json.put("watt", currentWeatherData.watt)
-    }
-
-    json.put("location", locationProperties.city)
-    json.put("location_short", locationProperties.cityShortcut)
-
-    json.put("id", locationProperties.location)
-    if (extended) {
-      json.put("forecast", locationProperties.weatherForecast)
-    }
-
-    return json
-  }
-
 
   fun toJson(rain: RainDTO): JSONObject {
     val json = WeatherJSONObject()
@@ -112,39 +79,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     return json
   }
 
-  fun toJson(list: List<SmoothedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
-    val dateUtil = locationProperties.dateUtil
-
-    var previousRain: Float = 0.0f
-    val jsonObjects = ArrayList<JSONObject>()
-    for (wds in list) {
-      val json = WeatherJSONObject()
-      json.put("timestamp", dateUtil.toLocalDate(wds.timestamp))
-      json.put("temperature", wds.outsideTemperature)
-      if (wds.insideTemperature != null && extended) {
-        json.put("inside_temperature", wds.insideTemperature)
-      }
-
-      json.put("humidity", wds.outsideHumidity)
-      if (wds.insideHumidity != null && extended) {
-        json.put("inside_humidity", wds.insideHumidity)
-      }
-
-      val rain = wds.dailyRain - previousRain
-      if (rain > 0) {
-        json.put("rain", rain)
-      }
-      previousRain = wds.dailyRain
-      json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
-      json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
-
-      json.put("watt", wds.watt)
-      jsonObjects.add(json)
-    }
-
-    return jsonObjects
-  }
-
   private fun multiply(input: Float?, factor: Float?): Float? {
     var number = input
     number?.let {
@@ -153,31 +87,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     return number
   }
 
-
-  fun toJsonAggregated(list: List<AggregatedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
-    val sdf = SimpleDateFormat(FORMAT_DATE)
-
-    val jsonObjects = ArrayList<JSONObject>()
-    for (wds in list) {
-      val json = WeatherJSONObject()
-      json.put("date", sdf.format(wds.date))
-      json.put("tempAvg", wds.outsideTemperatureAverage)
-      json.put("tempMin", wds.outsideTemperatureMin)
-      json.put("tempMax", wds.outsideTemperatureMax)
-      json.put("humAvg", wds.outsideHumidityAverage)
-      json.put("humMin", wds.outsideHumidityMin)
-      json.put("humMax", wds.outsideHumidityMax)
-      json.put("wind", multiply(wds.windspeedAverage, locationProperties.windMultiplier))
-      json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
-      val rain = 0.295 * wds.rainCounter
-      json.put("rain", Math.max(rain, 0.0))
-      if (extended) {
-        json.put("kwh", wds.kwh)
-      }
-      jsonObjects.add(json)
-    }
-    return jsonObjects
-  }
 
   fun toJson(stats: Statistics, newFormat: Boolean): JSONObject {
     val json = WeatherJSONObject()

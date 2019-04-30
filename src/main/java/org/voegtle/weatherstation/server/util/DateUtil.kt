@@ -178,14 +178,14 @@ class DateUtil(val timezone: TimeZone) {
   val tzCEST = TimeZone.getTimeZone("Europe/Berlin")
 
   companion object {
-    fun minutesBefore(referenceDate: Date?, minutes: Int): Calendar {
+    fun minutesBefore(referenceDate: Date?, minutes: Int): Date {
       val timeBefore = Calendar.getInstance()
       if (referenceDate != null) {
         timeBefore.time = referenceDate
       }
 
       timeBefore.add(Calendar.MINUTE, -Math.abs(minutes))
-      return timeBefore
+      return timeBefore.time
     }
   }
 }
