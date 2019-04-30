@@ -146,7 +146,7 @@ open class PersistenceManager {
         .list()
         .map { it.id }
 
-    ObjectifyService.ofy().delete().type(WeatherDataSet::class.java).ids(ids).now()
+    ObjectifyService.ofy().delete().type(WeewxDataSet::class.java).ids(ids).now()
   }
 
   fun fetchLocationProperties(): LocationProperties = ObjectifyService.ofy().load()
