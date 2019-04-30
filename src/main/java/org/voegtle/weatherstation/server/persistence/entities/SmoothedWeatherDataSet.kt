@@ -30,6 +30,12 @@ import java.util.Date
                                      var windspeedMax: Float? = null,
                                      @Ignore private var countWindspeed: Int = 0,
 
+                                     var solarRadiation: Float? = null,
+                                     @Ignore private var countSolarRadiation: Int = 0,
+
+                                     var UV: Float? = null,
+                                     @Ignore private var countUV: Int = 0,
+
                                      var watt: Float? = null,
                                      var kwh: Double? = null,
                                      @Ignore private var countWatt: Int = 0,
@@ -48,6 +54,8 @@ import java.util.Date
     addDailyRain(wds.dailyRain)
     addWindspeed(wds.windSpeed)
     setWindspeedMaxIfMax(wds.windGust)
+    addSolarRadiation(wds.solarRadiation)
+    addUV(wds.UV)
   }
 
   fun normalize() {
@@ -65,6 +73,12 @@ import java.util.Date
     }
     if (countWindspeed > 1) {
       windspeed = windspeed!! / countWindspeed
+    }
+    if (countSolarRadiation > 1) {
+      solarRadiation = solarRadiation!! / countSolarRadiation
+    }
+    if (countUV > 1) {
+      UV = UV!! / countUV
     }
     if (countWatt > 0) {
       watt = watt!! / countWatt
@@ -107,29 +121,9 @@ import java.util.Date
     }
   }
 
-  private fun addRainCount(rainCounter: Int?) {
-    if (rainCounter != null) {
-      if (this.rainCounter == null) {
-        this.rainCounter = rainCounter
-      } else if (rainCounter > this.rainCounter) {
-        this.rainCounter = rainCounter
-      }
-    }
-  }
-
   private fun addDailyRain(dailyRain: Float) {
     if (this.dailyRain < dailyRain) {
       this.dailyRain = dailyRain
-    }
-  }
-
-  private fun addRaining(raining: Boolean?) {
-    if (raining != null) {
-      if (isRaining == null) {
-        isRaining = raining
-      } else if (raining) {
-        isRaining = true
-      }
     }
   }
 
@@ -147,6 +141,24 @@ import java.util.Date
       if (windspeedMax == null || windspeedMax!! < it) {
         windspeedMax = it
       }
+    }
+  }
+
+  private fun addSolarRadiation(value: Float?) {
+    value?.let {
+      countSolarRadiation++
+      var newSolarRadiation = solarRadiation ?: 0.0f
+      newSolarRadiation += it
+      solarRadiation = newSolarRadiation
+    }
+  }
+
+  private fun addUV(value: Float?) {
+    value?.let {
+      countUV++
+      var newUV = UV ?: 0.0f
+      newUV += it
+      UV = newUV
     }
   }
 
