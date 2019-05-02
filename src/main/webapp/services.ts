@@ -19,6 +19,7 @@ let testdaten:WeatherData[] = [
     timestamp: "Fri Apr 18 20:28:11 UTC 2014",
     localtime: "20:28",
     wind: 0,
+    barometer: 1000,
     humidity: 85,
     raining: false,
     location: "Paderborn",
@@ -31,6 +32,7 @@ let testdaten:WeatherData[] = [
     "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
     "localtime": "20:28",
     "wind": 0,
+    barometer: 1000,
     "humidity": 76,
     "raining": false,
     "location": "Bonn",
@@ -43,6 +45,7 @@ let testdaten:WeatherData[] = [
     "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
     "localtime": "20:29",
     "wind": 0,
+    barometer: 1000,
     "humidity": 84,
     "raining": false,
     "location": "Freiburg",
@@ -57,6 +60,7 @@ let testdaten:WeatherData[] = [
 let singleTestdaten = {
   "timestamp": "Fri Apr 18 20:28:11 UTC 2014",
   "wind": 0,
+  barometer: 1000,
   "humidity": 85,
   "raining": false,
   "location": "Paderborn",
@@ -76,7 +80,7 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
   };
   ajaxRequest.onerror = reportConnectionProblem;
 
-  ajaxRequest.open("get", "/weatherstation/query?build=web", true);
+  ajaxRequest.open("get", "/weatherstation/current?build=web", true);
   ajaxRequest.send();
 }
 
