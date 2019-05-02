@@ -3,6 +3,7 @@ package org.voegtle.weatherstation.server
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.voegtle.weatherstation.server.logic.WeatherDataForwarder
 import org.voegtle.weatherstation.server.logic.WeatherDataSmoother
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
@@ -33,6 +34,7 @@ import java.util.logging.Logger
     val locationProperties = fetchLocationProperties()
     pm.makePersistant(dataset)
     WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
+    WeatherDataForwarder(pm, locationProperties).forwardLastDataset()
     return "OK"
   }
 

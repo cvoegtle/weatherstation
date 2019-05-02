@@ -12,7 +12,6 @@ import java.util.ArrayList
 import java.util.Date
 
 class JSONConverter(private val locationProperties: LocationProperties) {
-  private val FORMAT_DATE = "yyyy-MM-dd"
 
   fun toJson(currentWeatherData: UnformattedWeatherDTO): JSONObject {
     val json = WeatherJSONObject()
@@ -26,6 +25,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
     json.putOpt("raining", currentWeatherData.isRaining)
     json.putOpt("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
+    json.putOpt("barometer", currentWeatherData.barometer)
     json.putOpt("solarradidation", currentWeatherData.solarradiation)
 
     json.put("location", currentWeatherData.location)

@@ -2,7 +2,6 @@ package org.voegtle.weatherstation.server.persistence.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import org.voegtle.weatherstation.server.persistence.DataIndicies;
 import org.voegtle.weatherstation.server.util.DateUtil;
 import org.voegtle.weatherstation.server.util.StringUtil;
 
@@ -28,12 +27,6 @@ public class LocationProperties {
   private Boolean windRelevant;
 
   private Float windMultiplier;
-
-  private Integer indexOutsideTemperature;
-  private Integer indexOutsideHumidity;
-
-  private Integer indexInsideTemperature;
-  private Integer indexInsideHumidity;
 
   private Integer expectedDataSets;
   private Integer expectedRequests;
@@ -136,42 +129,6 @@ public class LocationProperties {
 
   public DateUtil getDateUtil() {
     return new DateUtil(TimeZone.getTimeZone(timezone));
-  }
-
-  public Integer getIndexOutsideTemperature() {
-    return indexOutsideTemperature;
-  }
-
-  public void setIndexOutsideTemperature(Integer indexOutsideTemperature) {
-    this.indexOutsideTemperature = indexOutsideTemperature;
-  }
-
-  public Integer getIndexOutsideHumidity() {
-    return indexOutsideHumidity;
-  }
-
-  public void setIndexOutsideHumidity(Integer indexOutsideHumidity) {
-    this.indexOutsideHumidity = indexOutsideHumidity;
-  }
-
-  public Integer getIndexInsideTemperature() {
-    return indexInsideTemperature;
-  }
-
-  public void setIndexInsideTemperature(Integer indexInsideTemperature) {
-    this.indexInsideTemperature = indexInsideTemperature;
-  }
-
-  public Integer getIndexInsideHumidity() {
-    return indexInsideHumidity;
-  }
-
-  public void setIndexInsideHumidity(Integer indexInsideHumidity) {
-    this.indexInsideHumidity = indexInsideHumidity;
-  }
-
-  public DataIndicies getDataIndices() {
-    return new DataIndicies(indexOutsideTemperature, indexOutsideHumidity, indexInsideTemperature, indexInsideHumidity);
   }
 
   public Integer getExpectedDataSets() {

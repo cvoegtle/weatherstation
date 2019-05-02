@@ -36,7 +36,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val latest: WeewxDataSet = pm.fetchYoungestDataSet()
-    val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
     return UnformattedWeatherDTO(time = latest.time,
                                  location = locationProperties.city,
@@ -44,13 +43,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                                  temperature = latest.temperature,
                                  humidity = latest.humidity,
                                  barometer = latest.barometer,
+                                 solarradiation = latest.solarRadiation,
                                  isRaining = isRaining(latest),
                                  windspeed = if (locationProperties.isWindRelevant) latest.windSpeed else null,
                                  insideTemperature = if (authorized) latest.indoorTemperature else null,
                                  insideHumidity = if (authorized) latest.indoorHumidity else null,
-                                 rainLastHour = if (oneHourBefore != null)
-                                   calculateRain(latest.dailyRain, oneHourBefore.dailyRain)
-                                 else null,
+                                 rainLastHour = latest.rain,
                                  rainToday = latest.dailyRain)
   }
 
