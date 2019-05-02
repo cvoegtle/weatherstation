@@ -77,3 +77,13 @@ function getTimeFractionAsString(dateAsString) {
     var minutes = date.getMinutes();
     return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
 }
+return result.replace(".", ",") + " " + unit;
+{
+    return "";
+}
+function getTimeFractionAsString(dateAsString) {
+    var date = new Date(dateAsString);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    return hours + ":" + (minutes < 10 ? "0" + minutes : minutes);
+}

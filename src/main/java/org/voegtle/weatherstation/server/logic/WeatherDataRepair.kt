@@ -92,9 +92,6 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
         ds.insideHumidity = getNewValue(it.insideHumidity, index, step.insideHumidity)
         ds.insideTemperature = getNewValue(it.insideTemperature, index, step.insideTemperature)
 
-        if (it.rainCounter != null) {
-          ds.rainCounter = getNewValue(it.rainCounter, index, step.rain)!!
-        }
         it.kwh?.let {
           ds.kwh = getNewValue(it, index, step.kwh)
         }
@@ -106,7 +103,6 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
   }
 
   private fun setDefaults(ds: SmoothedWeatherDataSet) {
-    ds.isRaining = false
     ds.windspeed = 0.0.toFloat()
     ds.windspeedMax = 0.0.toFloat()
     ds.repaired = true

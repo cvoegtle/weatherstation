@@ -14,7 +14,6 @@ class RepairJob {
   inner class RepairStep {
     var temperature = 0.0
     var humidity = 0.0
-    var rain = 0.0
     var insideTemperature: Double? = null
     var insideHumidity: Double? = null
     var kwh: Double? = null
@@ -38,7 +37,6 @@ class RepairJob {
 
     step.humidity = ((last!!.outsideHumidity!! - first!!.outsideHumidity!!) / (defectDataSets.size + 1)).toDouble()
     step.temperature = ((last!!.outsideTemperature!! - first!!.outsideTemperature!!) / (defectDataSets.size + 1)).toDouble()
-    step.rain = ((last!!.rainCounter - first!!.rainCounter) / (defectDataSets.size + 1)).toDouble()
 
     step.insideHumidity = spreadEqually(first!!.insideHumidity, last!!.insideHumidity, defectDataSets.size)
     step.insideTemperature = spreadEqually(first!!.insideTemperature, last!!.insideTemperature, defectDataSets.size)

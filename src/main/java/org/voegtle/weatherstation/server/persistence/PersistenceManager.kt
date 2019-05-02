@@ -38,8 +38,7 @@ open class PersistenceManager {
 
     managedDS.outsideHumidity = ds.outsideHumidity
     managedDS.outsideTemperature = ds.outsideTemperature
-    managedDS.rainCounter = ds.rainCounter
-    managedDS.isRaining = ds.isRaining
+    managedDS.dailyRain = ds.dailyRain
     managedDS.insideTemperature = ds.insideTemperature
     managedDS.insideHumidity = ds.insideHumidity
     managedDS.kwh = ds.kwh

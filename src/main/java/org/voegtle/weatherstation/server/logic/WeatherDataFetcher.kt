@@ -16,13 +16,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   private val dateUtil: DateUtil = locationProperties.dateUtil
 
-  private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
-    var today: Date = dateUtil.today()
-    today = dateUtil.fromLocalToGMT(today)!!
-    val oneHourLater = dateUtil.incrementHour(today)
-    return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
-  }
-
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
@@ -31,7 +24,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   private fun fetchTodaysDataSets(): List<SmoothedWeatherDataSet> {
     val today = dateUtil.today()
-    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today)!!, null)
+    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today), null)
   }
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {

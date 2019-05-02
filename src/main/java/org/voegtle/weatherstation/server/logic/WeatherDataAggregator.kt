@@ -18,9 +18,8 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
     while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       val aggregatedDay = createNewDay(dateOfLastAggregation)
       log.info("aggregate " + aggregatedDay.date)
-      val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date)!!,
-                                                               dateUtil.fromLocalToGMT(
-                                                                   dateUtil.nextDay(aggregatedDay.date)))
+      val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date),
+                                                               dateUtil.fromLocalToGMT(dateUtil.nextDay(aggregatedDay.date)))
 
       aggregate(aggregatedDay, weatherDataSets)
 
@@ -31,37 +30,15 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun aggregate(aggregation: AggregatedWeatherDataSet, weatherDataSets: List<SmoothedWeatherDataSet>) {
     if (weatherDataSets.isNotEmpty()) {
-      var rainCountStart: Int? = null
-      var rainCountLast: Int? = null
-
-      var kwhStart: Double? = null
-      var kwhLast: Double? = null
       for (wds in weatherDataSets) {
         if (wds.isValid) {
           aggregation.addOutsideTemperature(wds.outsideTemperature, wds.timestamp)
           aggregation.addOutsideHumidity(wds.outsideHumidity)
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
-          if (rainCountStart == null) {
-            rainCountStart = (wds.rainCounter * 5).toInt()
-          }
-          rainCountLast = (wds.rainCounter * 5).toInt()
-          if (kwhStart == null) {
-            kwhStart = wds.kwh
-          }
-          kwhLast = wds.kwh
+          aggregation.rainDays = if (wds.dailyRain > 0.0f) 1 else 0
+          aggregation.dailyRain = wds.dailyRain
         }
-      }
-
-      rainCountStart?.let {
-        val lastCount = (rainCountLast ?: 0)
-        val referenceCount = makeOverflowCorrection(it, lastCount)
-        aggregation.rainCounter = Math.max(lastCount - referenceCount, 0)
-        aggregation.rainDays = if (lastCount > referenceCount) 1 else 0
-      }
-
-      if (kwhStart != null && kwhLast != null) {
-        aggregation.kwh = Math.max(kwhLast - kwhStart, 0.0)
       }
 
       aggregation.normalize()
@@ -71,7 +48,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()
-    return if (lastAggregatedDay == null) dateUtil.getDate(2016, 5, 11) else lastAggregatedDay.date
+    return if (lastAggregatedDay == null) dateUtil.getDate(2019, 4, 29) else lastAggregatedDay.date
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {

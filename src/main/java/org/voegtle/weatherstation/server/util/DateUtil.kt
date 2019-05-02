@@ -40,14 +40,11 @@ class DateUtil(val timezone: TimeZone) {
     return cal.time
   }
 
-  fun fromLocalToGMT(date: Date?): Date? {
-    if (date != null) {
-      val cal = Calendar.getInstance(Locale.UK)
-      cal.time = date
-      cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, timezone))
-      return cal.time
-    }
-    return null
+  fun fromLocalToGMT(date: Date): Date {
+    val cal = Calendar.getInstance(Locale.UK)
+    cal.time = date
+    cal.add(Calendar.HOUR_OF_DAY, -getTimeOffset(date, timezone))
+    return cal.time
   }
 
   fun fromGMTtoLocal(date: Date): Date {

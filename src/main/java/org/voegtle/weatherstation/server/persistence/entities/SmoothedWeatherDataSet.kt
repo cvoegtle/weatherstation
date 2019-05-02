@@ -22,9 +22,7 @@ import java.util.Date
                                      var insideHumidity: Float? = null,
                                      @Ignore private var countInsideHumidity: Int = 0,
 
-                                     @Index var rainCounter: Int = 0,
                                      var dailyRain: Float = 0.0f,
-                                     var isRaining: Boolean? = null,
 
                                      var windspeed: Float? = null,
                                      var windspeedMax: Float? = null,
@@ -159,30 +157,6 @@ import java.util.Date
       var newUV = UV ?: 0.0f
       newUV += it
       UV = newUV
-    }
-  }
-
-  private fun addWatt(value: Float?) {
-    value?.let {
-      countWatt++
-      var newWatt = watt ?: 0.0f
-      newWatt += it
-      watt = newWatt
-    }
-  }
-
-  private fun addKwh(value: Double?) {
-    value?.let {
-      if (kwh == null || value > kwh!!) {
-        kwh = value
-      }
-    }
-  }
-
-  companion object {
-
-    fun hasRainCounter(sds: SmoothedWeatherDataSet?): Boolean {
-      return sds != null && sds.rainCounter != null
     }
   }
 }
