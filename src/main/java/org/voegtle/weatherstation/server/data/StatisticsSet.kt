@@ -7,43 +7,22 @@ class StatisticsSet {
     internal set
   var minTemperature: Float? = null
     internal set
-  var kwh: Float? = null
-    internal set
 
   fun addRain(rain: Float?) {
-    if (rain == null) {
-      return
-    }
-
-    if (this.rain == null) {
-      this.rain = rain
-    } else {
-      this.rain = this.rain!! + rain
+    rain?.let {
+      this.rain = this.rain ?: 0.0f + it
     }
   }
 
   fun setTemperature(temperature: Float?) {
-    if (temperature == null) {
-      return
-    }
-
-    if (maxTemperature == null || maxTemperature!!.compareTo(temperature) < 0) {
-      maxTemperature = temperature
-    }
-    if (minTemperature == null || minTemperature!!.compareTo(temperature) > 0) {
-      minTemperature = temperature
+    temperature?.let {
+      if (maxTemperature == null || maxTemperature!! < it) {
+        maxTemperature = it
+      }
+      if (minTemperature == null || minTemperature!! > it) {
+        minTemperature = it
+      }
     }
   }
 
-  fun addKwh(kwh: Float?) {
-    if (kwh == null) {
-      return
-    }
-
-    if (this.kwh == null) {
-      this.kwh = kwh
-    } else {
-      this.kwh = this.kwh!! + kwh
-    }
-  }
 }

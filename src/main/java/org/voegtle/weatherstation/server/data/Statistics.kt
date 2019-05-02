@@ -25,17 +25,17 @@ class Statistics {
 
   fun setTemperature(range: TimeRange, temperature: Float?) {
     when (range) {
-      Statistics.TimeRange.today -> {
+      TimeRange.today -> {
         today.setTemperature(temperature)
         last7days.setTemperature(temperature)
       }
 
-      Statistics.TimeRange.yesterday -> {
+      TimeRange.yesterday -> {
         yesterday.setTemperature(temperature)
         last7days.setTemperature(temperature)
       }
 
-      Statistics.TimeRange.last7days -> last7days.setTemperature(temperature)
+      TimeRange.last7days -> last7days.setTemperature(temperature)
 
       else -> {
       }
@@ -46,41 +46,20 @@ class Statistics {
 
   fun addRain(range: TimeRange, rain: Float?) {
     when (range) {
-      Statistics.TimeRange.today -> {
+      TimeRange.today -> {
         today.addRain(rain)
         last7days.addRain(rain)
       }
-      Statistics.TimeRange.yesterday -> {
+      TimeRange.yesterday -> {
         yesterday.addRain(rain)
         last7days.addRain(rain)
       }
-      Statistics.TimeRange.last7days -> last7days.addRain(rain)
+      TimeRange.last7days -> last7days.addRain(rain)
 
       else -> {
       }
     }
     last30days.addRain(rain)
-  }
-
-  fun addKwh(range: TimeRange, doubleKwh: Double?) {
-    if (doubleKwh != null) {
-      val kwh = doubleKwh.toFloat()
-      when (range) {
-        Statistics.TimeRange.today -> {
-          today.addKwh(kwh)
-          last7days.addKwh(kwh)
-        }
-        Statistics.TimeRange.yesterday -> {
-          yesterday.addKwh(kwh)
-          last7days.addKwh(kwh)
-        }
-        Statistics.TimeRange.last7days -> last7days.addKwh(kwh)
-
-        else -> {
-        }
-      }
-      last30days.addKwh(kwh)
-    }
   }
 
   fun toRainDTO(): RainDTO {

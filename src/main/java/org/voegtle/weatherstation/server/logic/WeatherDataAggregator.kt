@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server.logic
 
-import org.voegtle.weatherstation.server.persistence.PeriodEnum
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
@@ -36,6 +35,8 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.addOutsideHumidity(wds.outsideHumidity)
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
+          aggregation.addWindspeed(wds.windspeed)
+          aggregation.updateWindspeedMax(wds.windspeedMax)
           aggregation.rainDays = if (wds.dailyRain > 0.0f) 1 else 0
           aggregation.dailyRain = wds.dailyRain
         }
@@ -43,7 +44,6 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
       aggregation.normalize()
     }
-    aggregation.isFinished = true
   }
 
   private fun fetchDateOfLastAggregation(): Date {
@@ -59,7 +59,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
   }
 
   private fun createNewDay(lastDay: Date): AggregatedWeatherDataSet {
-    return AggregatedWeatherDataSet(dateUtil.incrementDay(lastDay), PeriodEnum.DAY)
+    return AggregatedWeatherDataSet(date = dateUtil.incrementDay(lastDay))
   }
 
 }

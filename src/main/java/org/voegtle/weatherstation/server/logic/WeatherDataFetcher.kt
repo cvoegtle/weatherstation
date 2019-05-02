@@ -62,12 +62,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     for (dataSet in dataSets) {
       val range = Statistics.TimeRange.byDay(day++)
 
-      val rain = calculateRain(dataSet.rainAsFloat, 0.0f)
-      if (rain > 0) {
+      val rain = dataSet.dailyRain
+      rain?.let {
         stats.addRain(range, rain)
       }
-
-      stats.addKwh(range, null)
 
       stats.setTemperature(range, dataSet.outsideTemperatureMax)
       stats.setTemperature(range, dataSet.outsideTemperatureMin)
@@ -86,13 +84,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     val todaysDataSets = fetchTodaysDataSets()
 
     if (todaysDataSets.size > 0) {
-      val firstSet = todaysDataSets[0]
       val latest: WeewxDataSet = pm.fetchYoungestDataSet()
-      val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
-      stats.rainLastHour = calculateRain(latest, oneHourBefore)
+      stats.rainLastHour = latest.rain
 
-      stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
-      stats.addKwh(Statistics.TimeRange.today, null)
+      stats.addRain(Statistics.TimeRange.today, latest.dailyRain)
       stats.setTemperature(Statistics.TimeRange.today, latest.temperature)
 
       for (dataSet in todaysDataSets) {
@@ -107,15 +102,5 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     return statistics.toRainDTO()
   }
-
-  private fun calculateRain(latest: WeewxDataSet?, previous: SmoothedWeatherDataSet?): Float? {
-    return if (latest == null || previous == null)
-      null
-    else
-      calculateRain(latest.dailyRain, previous.dailyRain)
-  }
-
-  private fun calculateRain(youngerCount: Float, olderCount: Float): Float = youngerCount - olderCount
-
 
 }
