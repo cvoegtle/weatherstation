@@ -25,9 +25,9 @@ class WeatherArea {
         this.updateLabel(this.labelWind, getOptionalNumber(weatherData.wind, "km/h"));
       }
     }
-    if (weatherData.rain_today != null) {
+    if (weatherData.rainToday != null) {
       this.updateLabel(this.labelRainText, "Regen:");
-      this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rain, weatherData.rain_today));
+      this.updateLabel(this.labelRain, this.combineRainValues(weatherData.rainLastHour, weatherData.rainToday));
     }
 
     if (weatherData.hasOwnProperty("solarradiation") && weatherData.solarradiation > 0) {

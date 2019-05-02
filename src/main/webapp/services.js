@@ -11,8 +11,8 @@ var testdaten = [
         humidity: 85,
         raining: false,
         location: "Paderborn",
-        rain_today: 5.015,
-        rain: 2.065,
+        rainToday: 5.015,
+        rainLastHour: 2.065,
         temperature: 5.3,
         solarradiation: null
     },
@@ -23,8 +23,8 @@ var testdaten = [
         "humidity": 76,
         "raining": false,
         "location": "Bonn",
-        "rain_today": 1.475,
-        "rain": "",
+        "rainToday": 1.475,
+        "rainLastHour": "",
         "temperature": 8.6,
         "solarradiation": null
     },
@@ -35,8 +35,8 @@ var testdaten = [
         "humidity": 84,
         "raining": false,
         "location": "Freiburg",
-        "rain_today": 2.065,
-        "rain": "",
+        "rainToday": 2.065,
+        "rainLastHour": "",
         "temperature": 4.6,
         "solarradiation": null
     }
@@ -47,8 +47,8 @@ var singleTestdaten = {
     "humidity": 85,
     "raining": false,
     "location": "Paderborn",
-    "rain_today": 5.015,
-    "rain": 2.065,
+    "rainToday": 5.015,
+    "rainLastHour": 2.065,
     "temperature": 5.3,
     "solarradiation": null
 };

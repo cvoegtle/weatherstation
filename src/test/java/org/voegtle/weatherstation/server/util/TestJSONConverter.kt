@@ -23,8 +23,6 @@ class TestJSONConverter {
     lp.weatherForecast = ""
     lp.secretHash = "2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4"
     lp.readHash = "a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c"
-    lp.indexInsideTemperature = 6
-    lp.indexInsideHumidity = 14
     lp.expectedDataSets = 1000
     lp.expectedRequests = 1000
     lp.timezone = "Europe/Berlin"

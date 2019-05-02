@@ -6,8 +6,8 @@ class WeatherData {
   barometer:number;
   raining:boolean;
   location:string;
-  rain_today:number;
-  rain:any;
+  rainToday:number;
+  rainLastHour:any;
   temperature:number;
   solarradiation:any;
 }
@@ -22,8 +22,8 @@ let testdaten:WeatherData[] = [
     humidity: 85,
     raining: false,
     location: "Paderborn",
-    rain_today: 5.015,
-    rain: 2.065,
+    rainToday: 5.015,
+    rainLastHour: 2.065,
     temperature: 5.3,
     solarradiation: null
   },
@@ -34,8 +34,8 @@ let testdaten:WeatherData[] = [
     "humidity": 76,
     "raining": false,
     "location": "Bonn",
-    "rain_today": 1.475,
-    "rain": "",
+    "rainToday": 1.475,
+    "rainLastHour": "",
     "temperature": 8.6,
     "solarradiation": null
   },
@@ -46,8 +46,8 @@ let testdaten:WeatherData[] = [
     "humidity": 84,
     "raining": false,
     "location": "Freiburg",
-    "rain_today": 2.065,
-    "rain": "",
+    "rainToday": 2.065,
+    "rainLastHour": "",
     "temperature": 4.6,
     "solarradiation": null
   }
@@ -60,8 +60,8 @@ let singleTestdaten = {
   "humidity": 85,
   "raining": false,
   "location": "Paderborn",
-  "rain_today": 5.015,
-  "rain": 2.065,
+  "rainToday": 5.015,
+  "rainLastHour": 2.065,
   "temperature": 5.3,
   "solarradiation": null
 };
