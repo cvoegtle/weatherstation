@@ -19,12 +19,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
-  fun fetchSmoothedWeatherData(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> =
+  fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> =
       pm.fetchSmoothedWeatherDataInRange(begin, end)
 
   private fun fetchTodaysDataSets(): List<SmoothedWeatherDataSet> {
     val today = dateUtil.today()
-    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today), null)
+    return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today))
   }
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
@@ -81,18 +81,16 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   }
 
   private fun buildTodaysStatistics(stats: Statistics) {
+    val latest: WeewxDataSet = pm.fetchYoungestDataSet()
+    stats.rainLastHour = latest.rain
+
+    stats.addRain(Statistics.TimeRange.today, latest.dailyRain)
+    stats.setTemperature(Statistics.TimeRange.today, latest.temperature)
+
     val todaysDataSets = fetchTodaysDataSets()
 
-    if (todaysDataSets.size > 0) {
-      val latest: WeewxDataSet = pm.fetchYoungestDataSet()
-      stats.rainLastHour = latest.rain
-
-      stats.addRain(Statistics.TimeRange.today, latest.dailyRain)
-      stats.setTemperature(Statistics.TimeRange.today, latest.temperature)
-
-      for (dataSet in todaysDataSets) {
-        stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
-      }
+    for (dataSet in todaysDataSets) {
+      stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
     }
   }
 
