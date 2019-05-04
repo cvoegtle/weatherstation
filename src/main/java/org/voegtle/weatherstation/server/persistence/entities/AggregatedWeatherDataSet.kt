@@ -44,7 +44,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   fun addOutsideTemperature(value: Float?, time: Date) {
     value?.let {
       outsideTemperatureCounter++
-      outsideTemperatureAverage = outsideTemperatureAverage ?: 0.0f + it
+      outsideTemperatureAverage = (outsideTemperatureAverage ?: 0.0f) + it
       if (outsideTemperatureMin == null || outsideTemperatureMin!! > it) {
         outsideTemperatureMin = it
         timeOfMinimum = time
@@ -59,7 +59,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   fun addOutsideHumidity(value: Float?) {
     value?.let {
       outsideHumidityCounter++
-      outsideHumidityAverage = outsideHumidityAverage ?: 0.0f + it
+      outsideHumidityAverage = (outsideHumidityAverage ?: 0.0f) + it
       if (outsideHumidityMin == null || outsideHumidityMin!! > it) {
         outsideHumidityMin = it
       }
@@ -72,7 +72,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   fun addInsideTemperature(value: Float?) {
     value?.let {
       insideTemperatureCounter++
-      insideTemperatureAverage = insideTemperatureAverage ?: 0.0f + it
+      insideTemperatureAverage = (insideTemperatureAverage ?: 0.0f) + it
       if (insideTemperatureMin == null || insideTemperatureMin!! > it) {
         insideTemperatureMin = it
       }
@@ -85,7 +85,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   fun addInsideHumidity(value: Float?) {
     value?.let {
       insideHumidityCounter++
-      insideHumidityAverage = insideHumidityAverage ?: 0.0f + it
+      insideHumidityAverage = (insideHumidityAverage ?: 0.0f) + it
       if (insideHumidityMin == null || insideHumidityMin!! > it) {
         insideHumidityMin = it
       }
@@ -98,7 +98,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   fun addWindspeed(value: Float?) {
     value?.let {
       windspeedCounter++
-      windspeedAverage = windspeedAverage ?: 0.0f + it
+      windspeedAverage = (windspeedAverage ?: 0.0f) + it
       if (windspeedMin == null || windspeedMin!! > it) {
         windspeedMin = it
       }

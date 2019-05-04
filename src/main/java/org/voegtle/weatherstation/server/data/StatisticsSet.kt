@@ -10,7 +10,7 @@ class StatisticsSet {
 
   fun addRain(rain: Float?) {
     rain?.let {
-      this.rain = this.rain ?: 0.0f + it
+      this.rain = (this.rain ?: 0.0f) + it
     }
   }
 
