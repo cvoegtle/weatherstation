@@ -1,70 +1,56 @@
 package org.voegtle.weatherstation.server.logic
 
-import org.json.JSONObject
+import org.springframework.web.client.RestTemplate
+import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
+import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
-import org.voegtle.weatherstation.server.util.JSONConverter
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.logging.Logger
 
 internal class WeatherDataForwarder(pm: PersistenceManager, locationProperties: LocationProperties) {
   private val log = Logger.getLogger(WeatherDataForwarder::class.simpleName)
-  private val COMMUNICATION_TIMEOUT = 60000
 
   private val weatherDataFetcher = WeatherDataFetcher(pm, locationProperties)
-  private val jsonConverter = JSONConverter(locationProperties)
+  private val locationProperties = locationProperties
 
   fun forwardLastDataset() {
     val latest = weatherDataFetcher.getLatestWeatherDataUnformatted(true)
-    forward(jsonConverter.toJson(latest))
+    val cacheWeatherDTO = toCachedWeatherDTO(latest)
+    forward(cacheWeatherDTO)
   }
 
-  private fun forward(json: JSONObject) {
+  private fun forward(cacheWeatherDTO: CacheWeatherDTO) {
     try {
-      val encodedBytes = json.toString().toByteArray(charset("ISO-8859-1"))
-
-      val wetterCentral = URL("https://wettercentral.appspot.com/weatherstation/cache")
-      val wetterConnection = wetterCentral.openConnection() as HttpURLConnection
-
-      try {
-        setConnectionParameters(wetterConnection)
-        wetterConnection.outputStream.write(encodedBytes)
-        wetterConnection.outputStream.close()
-        log.info("forwarded <" + json.toString() + ">")
-        read(wetterConnection.inputStream)
-      } finally {
-        wetterConnection.inputStream.close()
-        wetterConnection.disconnect()
-      }
-
+      val restTemplate = RestTemplate()
+      restTemplate.postForObject("https://wettercentral.appspot.com/weatherstation/cache2", cacheWeatherDTO, String::class.java)
     } catch (e: IOException) {
       log.warning("failed forwarding to wettercentral. " + e.message)
     }
 
   }
 
-  private fun setConnectionParameters(wetterConnection: HttpURLConnection) {
-    wetterConnection.connectTimeout = COMMUNICATION_TIMEOUT
-    wetterConnection.readTimeout = COMMUNICATION_TIMEOUT
-    wetterConnection.requestMethod = "POST"
-    wetterConnection.doOutput = true
-  }
+  private fun toCachedWeatherDTO(latest: UnformattedWeatherDTO) = CacheWeatherDTO(
+      id = locationProperties.location,
+      time = latest.time,
+      temperature = latest.temperature,
+      insideTemperature = latest.insideTemperature,
+      humidity = latest.humidity,
+      insideHumidity = latest.insideHumidity,
+      rainLastHour = latest.rainLastHour,
+      rainToday = latest.rainToday,
+      raining = latest.isRaining,
+      windspeed = latest.windspeed,
+      barometer = latest.barometer,
+      solarradiation = latest.solarradiation,
+      location = latest.location,
+      locationShort = locationProperties.cityShortcut,
+      localTime = latest.localtime,
 
-  @Throws(IOException::class)
-  private fun read(inputStream: InputStream): String {
-    val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
-    return reader.readLine()
-  }
+      forecast = locationProperties.weatherForecast,
 
-  private fun getLast(dataSets: List<WeatherDataSet>): WeatherDataSet {
-    val lastIndex = dataSets.size - 1
-    return dataSets[lastIndex]
-  }
+      latitude = locationProperties.latitude,
+      longitude = locationProperties.longitude
+  )
 
 }

@@ -5,69 +5,12 @@ import org.json.JSONObject
 import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
-import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import java.util.ArrayList
 import java.util.Date
 
 class JSONConverter(private val locationProperties: LocationProperties) {
-
-  fun toJson(currentWeatherData: UnformattedWeatherDTO): JSONObject {
-    val json = WeatherJSONObject()
-    json.put("timestamp", currentWeatherData.time)
-    json.putOpt("temperature", currentWeatherData.temperature)
-    json.putOpt("inside_temperature", currentWeatherData.insideTemperature)
-    json.putOpt("humidity", currentWeatherData.humidity)
-    json.putOpt("inside_humidity", currentWeatherData.insideHumidity)
-    json.putOpt("rain", currentWeatherData.rainLastHour)
-    json.putOpt("rain_today", currentWeatherData.rainToday)
-
-    json.putOpt("raining", currentWeatherData.isRaining)
-    json.putOpt("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-    json.putOpt("barometer", currentWeatherData.barometer)
-    json.putOpt("solarradidation", currentWeatherData.solarradiation)
-
-    json.put("location", currentWeatherData.location)
-    json.put("location_short", locationProperties.cityShortcut)
-    json.putOpt("localtime", currentWeatherData.localtime)
-
-    json.put("id", locationProperties.location)
-    json.putOpt("forecast", locationProperties.weatherForecast)
-
-    json.putOpt("latitude", locationProperties.latitude)
-    json.putOpt("longitude", locationProperties.longitude)
-
-    return json
-  }
-
-  fun toJson(currentWeatherData: CacheWeatherDTO): JSONObject {
-    val json = WeatherJSONObject()
-    json.put("timestamp", currentWeatherData.time)
-    json.putOpt("temperature", currentWeatherData.temperature)
-    json.putOpt("inside_temperature", currentWeatherData.insideTemperature)
-    json.putOpt("humidity", currentWeatherData.humidity)
-    json.putOpt("inside_humidity", currentWeatherData.insideHumidity)
-    json.putOpt("rain", currentWeatherData.rainLastHour)
-    json.putOpt("rain_today", currentWeatherData.rainToday)
-
-    json.putOpt("raining", currentWeatherData.isRaining)
-    json.putOpt("wind", currentWeatherData.windspeed)
-    json.putOpt("watt", currentWeatherData.watt)
-
-    json.put("location", currentWeatherData.location)
-    json.put("location_short", currentWeatherData.locationShort)
-    json.putOpt("localtime", currentWeatherData.localTime)
-
-    json.put("id", currentWeatherData.id)
-    json.putOpt("forecast", currentWeatherData.forecast)
-
-    json.putOpt("latitude", currentWeatherData.latitude)
-    json.putOpt("longitude", currentWeatherData.longitude)
-
-    return json
-  }
-
 
   fun toJson(rain: RainDTO): JSONObject {
     val json = WeatherJSONObject()
@@ -78,15 +21,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.put("last30days", rain.last30Days)
     return json
   }
-
-  private fun multiply(input: Float?, factor: Float?): Float? {
-    var number = input
-    number?.let {
-      number *= factor!!
-    }
-    return number
-  }
-
 
   fun toJson(stats: Statistics): JSONObject {
     val json = WeatherJSONObject()
