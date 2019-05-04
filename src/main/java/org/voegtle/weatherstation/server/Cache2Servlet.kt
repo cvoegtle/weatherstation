@@ -4,6 +4,7 @@ import org.json.JSONException
 import org.voegtle.weatherstation.server.util.JSONConverter
 import java.io.IOException
 import java.util.HashMap
+import java.util.logging.Level
 import javax.cache.Cache
 import javax.cache.CacheManager
 import javax.servlet.ServletException
@@ -35,7 +36,7 @@ class Cache2Servlet : AbstractInputServlet() {
 
       returnResult(resp, "ACK")
     } catch (e: JSONException) {
-      log.severe("failed to decode CacheWeatherDTO")
+      log.log(Level.SEVERE, "failed to decode CacheWeatherDTO", e)
     }
 
   }
