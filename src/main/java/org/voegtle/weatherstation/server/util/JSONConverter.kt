@@ -54,6 +54,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("rain", currentWeatherData.rainLastHour)
     json.putOpt("rain_today", currentWeatherData.rainToday)
 
+    json.putOpt("solarRadiation", currentWeatherData.solarRadiation)
+    json.putOpt("UV", currentWeatherData.UV)
+
     json.putOpt("raining", currentWeatherData.isRaining)
     json.putOpt("wind", currentWeatherData.windspeed)
     json.putOpt("watt", currentWeatherData.watt)
@@ -237,6 +240,33 @@ class JSONConverter(private val locationProperties: LocationProperties) {
                            watt = json.optFloat("watt"),
                            rainLastHour = json.optFloat("rain"),
                            rainToday = json.optFloat("rain_today"),
+                           isRaining = json.optBoolean("raining"),
+                           windspeed = json.optFloat("wind"),
+                           latitude = json.getFloat("latitude"),
+                           longitude = json.getFloat("longitude"))
+  }
+
+  @Throws(JSONException::class)
+  fun decodeWeatherDTO2(encodedWeatherData: String): CacheWeatherDTO {
+    val json = JSONObject(encodedWeatherData)
+    val timestamp = json.getString("timestamp")
+    return CacheWeatherDTO(id = json.getString("id"),
+                           time = Date(timestamp),
+                           localTime = json.getString("localtime"),
+
+                           location = json.getString("location"),
+                           locationShort = json.getString("locationShort"),
+                           forecast = json.getString("forecast"),
+
+                           temperature = json.getFloat("temperature"),
+                           humidity = json.optFloat("humidity"),
+                           solarRadiation = json.optFloat("solarRadiation"),
+                           UV = json.getFloat("UV"),
+                           insideTemperature = json.optFloat("insideTemperature"),
+                           insideHumidity = json.optFloat("insideHumidity"),
+                           watt = json.optFloat("watt"),
+                           rainLastHour = json.optFloat("rain"),
+                           rainToday = json.optFloat("rainToday"),
                            isRaining = json.optBoolean("raining"),
                            windspeed = json.optFloat("wind"),
                            latitude = json.getFloat("latitude"),
