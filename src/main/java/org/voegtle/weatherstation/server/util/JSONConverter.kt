@@ -54,6 +54,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("rain", currentWeatherData.rainLastHour)
     json.putOpt("rain_today", currentWeatherData.rainToday)
 
+    json.putOpt("barometer", currentWeatherData.barometer)
     json.putOpt("solarradiation", currentWeatherData.solarradiation)
     json.putOpt("UV", currentWeatherData.UV)
 
@@ -260,6 +261,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
                            temperature = json.getFloat("temperature"),
                            humidity = json.optFloat("humidity"),
+                           barometer = json.optFloat("barometer"),
                            solarradiation = json.optFloat("solarradiation"),
                            UV = json.getFloat("UV"),
                            insideTemperature = json.optFloat("insideTemperature"),
