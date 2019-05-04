@@ -23,6 +23,7 @@ internal class WeatherDataForwarder(pm: PersistenceManager, locationProperties: 
   private fun forward(cacheWeatherDTO: CacheWeatherDTO) {
     try {
       val restTemplate = RestTemplate()
+      log.info("forwarding $cacheWeatherDTO")
       restTemplate.postForObject("https://wettercentral.appspot.com/weatherstation/cache2", cacheWeatherDTO, String::class.java)
     } catch (e: IOException) {
       log.warning("failed forwarding to wettercentral. " + e.message)
