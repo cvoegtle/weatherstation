@@ -5,10 +5,8 @@ import org.json.JSONObject
 import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
-import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import java.util.ArrayList
-import java.util.Date
 
 class JSONConverter(private val locationProperties: LocationProperties) {
 
@@ -52,30 +50,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     return json
   }
 
-  @Throws(JSONException::class)
-  fun decodeWeatherDTO(encodedWeatherData: String): CacheWeatherDTO {
-    val json = JSONObject(encodedWeatherData)
-    val timestamp = json.getString("timestamp")
-    return CacheWeatherDTO(id = json.getString("id"),
-                           time = Date(timestamp),
-                           localTime = json.getString("localtime"),
-
-                           location = json.getString("location"),
-                           locationShort = json.getString("location_short"),
-                           forecast = json.getString("forecast"),
-
-                           temperature = json.getFloat("temperature"),
-                           humidity = json.optFloat("humidity"),
-                           insideTemperature = json.optFloat("inside_temperature"),
-                           insideHumidity = json.optFloat("inside_humidity"),
-                           watt = json.optFloat("watt"),
-                           rainLastHour = json.optFloat("rain"),
-                           rainToday = json.optFloat("rain_today"),
-                           isRaining = json.optBoolean("raining"),
-                           windspeed = json.optFloat("wind"),
-                           latitude = json.getFloat("latitude"),
-                           longitude = json.getFloat("longitude"))
-  }
 }
 
 private fun JSONObject.getFloat(key: String): Float = (this.get(key) as Number).toFloat()
