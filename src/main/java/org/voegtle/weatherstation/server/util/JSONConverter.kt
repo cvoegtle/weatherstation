@@ -250,7 +250,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
   @Throws(JSONException::class)
   fun decodeWeatherDTO2(encodedWeatherData: String): CacheWeatherDTO {
     val json = JSONObject(encodedWeatherData)
-    val timestamp = json.getLong("timestamp")
+    val timestamp = json.getLong("time")
     return CacheWeatherDTO(id = json.getString("id"),
                            time = Date(timestamp),
                            localTime = json.getString("localTime"),
@@ -263,7 +263,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
                            humidity = json.optFloat("humidity"),
                            barometer = json.optFloat("barometer"),
                            solarradiation = json.optFloat("solarradiation"),
-                           UV = json.getFloat("UV"),
+                           UV = json.optFloat("UV"),
                            insideTemperature = json.optFloat("insideTemperature"),
                            insideHumidity = json.optFloat("insideHumidity"),
                            watt = json.optFloat("watt"),
