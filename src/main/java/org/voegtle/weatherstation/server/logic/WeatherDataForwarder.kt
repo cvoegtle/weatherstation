@@ -44,6 +44,7 @@ internal class WeatherDataForwarder(pm: PersistenceManager, locationProperties: 
       windspeed = latest.windspeed,
       barometer = latest.barometer,
       solarradiation = latest.solarradiation,
+      UV = latest.UV,
       location = latest.location,
       locationShort = locationProperties.cityShortcut,
       localTime = latest.localtime,

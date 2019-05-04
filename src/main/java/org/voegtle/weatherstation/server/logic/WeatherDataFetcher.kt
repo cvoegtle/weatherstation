@@ -37,6 +37,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                                  humidity = latest.humidity,
                                  barometer = latest.barometer,
                                  solarradiation = latest.solarRadiation,
+                                 UV = latest.UV,
                                  isRaining = isRaining(latest),
                                  windspeed = if (locationProperties.isWindRelevant) latest.windSpeed else null,
                                  insideTemperature = if (authorized) latest.indoorTemperature else null,

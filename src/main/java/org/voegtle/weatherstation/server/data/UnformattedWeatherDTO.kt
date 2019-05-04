@@ -15,4 +15,5 @@ class UnformattedWeatherDTO(val time: Date,
                             val rainToday: Float?,
                             val windspeed: Float?,
                             val insideHumidity: Float?,
-                            val solarradiation: Float? = null) : Serializable
+                            val solarradiation: Float? = null,
+                            val UV: Float? = null) : Serializable
