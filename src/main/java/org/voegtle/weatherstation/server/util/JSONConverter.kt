@@ -54,10 +54,10 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("rain", currentWeatherData.rainLastHour)
     json.putOpt("rain_today", currentWeatherData.rainToday)
 
-    json.putOpt("solarRadiation", currentWeatherData.solarRadiation)
+    json.putOpt("solarradiation", currentWeatherData.solarradiation)
     json.putOpt("UV", currentWeatherData.UV)
 
-    json.putOpt("raining", currentWeatherData.isRaining)
+    json.putOpt("raining", currentWeatherData.raining)
     json.putOpt("wind", currentWeatherData.windspeed)
     json.putOpt("watt", currentWeatherData.watt)
 
@@ -240,7 +240,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
                            watt = json.optFloat("watt"),
                            rainLastHour = json.optFloat("rain"),
                            rainToday = json.optFloat("rain_today"),
-                           isRaining = json.optBoolean("raining"),
+                           raining = json.optBoolean("raining"),
                            windspeed = json.optFloat("wind"),
                            latitude = json.getFloat("latitude"),
                            longitude = json.getFloat("longitude"))
@@ -252,7 +252,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     val timestamp = json.getString("timestamp")
     return CacheWeatherDTO(id = json.getString("id"),
                            time = Date(timestamp),
-                           localTime = json.getString("localtime"),
+                           localTime = json.getString("localTime"),
 
                            location = json.getString("location"),
                            locationShort = json.getString("locationShort"),
@@ -260,15 +260,15 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
                            temperature = json.getFloat("temperature"),
                            humidity = json.optFloat("humidity"),
-                           solarRadiation = json.optFloat("solarRadiation"),
+                           solarradiation = json.optFloat("solarradiation"),
                            UV = json.getFloat("UV"),
                            insideTemperature = json.optFloat("insideTemperature"),
                            insideHumidity = json.optFloat("insideHumidity"),
                            watt = json.optFloat("watt"),
-                           rainLastHour = json.optFloat("rain"),
+                           rainLastHour = json.optFloat("rainLastHour"),
                            rainToday = json.optFloat("rainToday"),
-                           isRaining = json.optBoolean("raining"),
-                           windspeed = json.optFloat("wind"),
+                           raining = json.optBoolean("raining"),
+                           windspeed = json.optFloat("windspeed"),
                            latitude = json.getFloat("latitude"),
                            longitude = json.getFloat("longitude"))
   }

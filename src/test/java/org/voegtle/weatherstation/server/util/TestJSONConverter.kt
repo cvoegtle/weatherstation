@@ -59,7 +59,7 @@ class TestJSONConverter {
                               insideHumidity = 65.0f,
                               rainLastHour = 0.295f,
                               rainToday = 2.555f,
-                              isRaining = true,
+                              raining = true,
                               watt = 712.9f,
                               windspeed = 33.5f)
 
