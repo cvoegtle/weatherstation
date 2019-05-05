@@ -46,6 +46,7 @@ dependencies {
     compile 'com.googlecode.objectify:objectify:5.1.21'
 
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile("org.mockito:mockito-core:2.+")
