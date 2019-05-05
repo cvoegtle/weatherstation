@@ -38,6 +38,12 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var windspeedAverage: Float? = null,
                                @Ignore private var windspeedCounter: Int = 0,
 
+                               var firstSolarRadiation: Date? = null,
+                               var lastSolarRadiation: Date? = null,
+                               var solarRadiationMax: Float? = null,
+                               var solarRadiationMaxTime: Date? = null,
+                               var solarRadiationTotal: Float? = null,
+
                                var dailyRain: Float? = null,
                                var rainDays: Int = 0) {
 
@@ -129,6 +135,26 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
     }
     if (windspeedCounter > 0) {
       windspeedAverage = windspeedAverage!! / windspeedCounter
+    }
+  }
+
+  fun addSolarRadiation(solarRadiation: Float?) {
+    solarRadiation?.let {
+      solarRadiationTotal = (solarRadiationTotal ?: 0.0f) + (it / 4) // solarRadiation = durchschnittliche Sonneneinstrahlung
+                                                                     // der letzten viertel Stunde
+    }
+  }
+
+  fun updateSolarRadiationMax(solarRadiation: Float?, timestamp: Date) {
+    solarRadiation?.let {
+      if (solarRadiationMax == null || solarRadiationMax!! < it) {
+        solarRadiationMax = it
+        solarRadiationMaxTime = timestamp
+      }
+      if (it > 0) {
+        firstSolarRadiation = firstSolarRadiation ?: timestamp
+        lastSolarRadiation = timestamp
+      }
     }
   }
 }

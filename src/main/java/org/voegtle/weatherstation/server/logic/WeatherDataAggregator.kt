@@ -37,6 +37,8 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.addInsideHumidity(wds.insideHumidity)
           aggregation.addWindspeed(wds.windspeed)
           aggregation.updateWindspeedMax(wds.windspeedMax)
+          aggregation.addSolarRadiation(wds.solarRadiation)
+          aggregation.updateSolarRadiationMax(wds.solarRadiationMax, wds.timestamp)
           aggregation.rainDays = if (wds.dailyRain > 0.0f) 1 else 0
           aggregation.dailyRain = wds.dailyRain
         }

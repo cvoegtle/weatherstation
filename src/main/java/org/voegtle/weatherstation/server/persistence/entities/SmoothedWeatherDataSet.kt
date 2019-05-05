@@ -29,6 +29,7 @@ import java.util.Date
                                      @Ignore private var countWindspeed: Int = 0,
 
                                      var solarRadiation: Float? = null,
+                                     var solarRadiationMax: Float? = null,
                                      @Ignore private var countSolarRadiation: Int = 0,
 
                                      var UV: Float? = null,
@@ -53,6 +54,7 @@ import java.util.Date
     addWindspeed(wds.windSpeed)
     setWindspeedMaxIfMax(wds.windGust)
     addSolarRadiation(wds.solarRadiation)
+    setSolarRadiationIfMax(wds.solarRadiation)
     addUV(wds.UV)
   }
 
@@ -148,6 +150,14 @@ import java.util.Date
       var newSolarRadiation = solarRadiation ?: 0.0f
       newSolarRadiation += it
       solarRadiation = newSolarRadiation
+    }
+  }
+
+  private fun setSolarRadiationIfMax(value: Float?) {
+    value?.let {
+      if (solarRadiationMax == null || solarRadiationMax!! < it) {
+        solarRadiationMax = it
+      }
     }
   }
 
