@@ -63,10 +63,14 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     for (dataSet in dataSets) {
       val range = Statistics.TimeRange.byDay(day++)
 
-      val rain = dataSet.dailyRain
-      rain?.let {
-        stats.addRain(range, rain)
+      dataSet.dailyRain?.let {
+        stats.addRain(range, it)
       }
+
+      dataSet.solarRadiationMax?.let {
+        stats.updateSolarRadiation(range, it)
+      }
+
 
       stats.setTemperature(range, dataSet.outsideTemperatureMax)
       stats.setTemperature(range, dataSet.outsideTemperatureMin)
@@ -87,11 +91,19 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     stats.addRain(Statistics.TimeRange.today, latest.dailyRain)
     stats.setTemperature(Statistics.TimeRange.today, latest.temperature)
+    updateSolarRadiation(latest.solarRadiation, stats)
 
     val todaysDataSets = fetchTodaysDataSets()
 
     for (dataSet in todaysDataSets) {
       stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
+      updateSolarRadiation(dataSet.solarRadiation, stats)
+    }
+  }
+
+  private fun updateSolarRadiation(solarRadiation: Float?, stats: Statistics) {
+    solarRadiation?.let {
+      stats.updateSolarRadiation(Statistics.TimeRange.today, it)
     }
   }
 

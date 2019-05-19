@@ -27,7 +27,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     val jsonObjects = ArrayList<JSONObject>()
     if (stats.rainLastHour != null) {
       val lastHour = StatisticsSet()
-      lastHour.addRain(stats.rainLastHour)
+      stats.rainLastHour?.let {
+        lastHour.addRain(it)
+      }
       jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour))
     }
 
@@ -47,6 +49,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("rain", set.rain)
     json.putOpt("minTemperature", set.minTemperature)
     json.putOpt("maxTemperature", set.maxTemperature)
+    json.putOpt("solarRadiationMax", set.solarRadiationMax)
     return json
   }
 

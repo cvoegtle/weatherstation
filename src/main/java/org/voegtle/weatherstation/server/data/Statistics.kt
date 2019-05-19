@@ -44,7 +44,7 @@ class Statistics {
 
   }
 
-  fun addRain(range: TimeRange, rain: Float?) {
+  fun addRain(range: TimeRange, rain: Float) {
     when (range) {
       TimeRange.today -> {
         today.addRain(rain)
@@ -60,6 +60,24 @@ class Statistics {
       }
     }
     last30days.addRain(rain)
+  }
+
+  fun updateSolarRadiation(range: TimeRange, solarRadiation: Float) {
+    when (range) {
+      TimeRange.today -> {
+        today.updateSolarRadiation(solarRadiation)
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      TimeRange.yesterday -> {
+        yesterday.updateSolarRadiation(solarRadiation)
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      TimeRange.last7days -> {
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      else -> {}
+    }
+    last30days.updateSolarRadiation(solarRadiation)
   }
 
   fun toRainDTO(): RainDTO {

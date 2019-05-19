@@ -8,9 +8,16 @@ class StatisticsSet {
   var minTemperature: Float? = null
     internal set
 
-  fun addRain(rain: Float?) {
-    rain?.let {
-      this.rain = (this.rain ?: 0.0f) + it
+  var solarRadiationMax: Float? = null
+    internal set
+
+  fun addRain(rain: Float) {
+    this.rain = (this.rain ?: 0.0f) + rain
+  }
+
+  fun updateSolarRadiation(solarRadiation: Float) {
+    if (solarRadiationMax == null || solarRadiationMax!! < solarRadiation) {
+      solarRadiationMax = solarRadiation
     }
   }
 
