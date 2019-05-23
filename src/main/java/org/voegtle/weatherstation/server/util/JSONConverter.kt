@@ -55,7 +55,3 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
 }
 
-private fun JSONObject.getFloat(key: String): Float = (this.get(key) as Number).toFloat()
-
-private fun JSONObject.optFloat(key: String): Float? = (this.opt(key) as Number?)?.toFloat()
-
