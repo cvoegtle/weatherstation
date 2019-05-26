@@ -44,8 +44,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var solarRadiationMaxTime: Date? = null,
                                var solarRadiationTotal: Float? = null,
 
-                               var dailyRain: Float? = null,
-                               var rainDays: Int = 0) {
+                               var dailyRain: Float? = null) {
 
   fun addOutsideTemperature(value: Float?, time: Date) {
     value?.let {
