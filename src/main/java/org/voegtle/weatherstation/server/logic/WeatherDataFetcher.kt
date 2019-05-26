@@ -15,6 +15,7 @@ import java.util.LinkedHashMap
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
 
   private val dateUtil: DateUtil = locationProperties.dateUtil
+  private var solarRadiationTotal: Float? = null
 
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
@@ -67,6 +68,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         stats.addRain(range, it)
       }
 
+      dataSet.solarRadiationTotal?.let {
+        stats.addKwh(range, it / 1000) // Watt -> Kilowatt
+      }
+
       dataSet.solarRadiationMax?.let {
         stats.updateSolarRadiation(range, it)
       }
@@ -97,7 +102,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     for (dataSet in todaysDataSets) {
       stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
-      updateSolarRadiation(dataSet.solarRadiation, stats)
+      updateSolarRadiation(dataSet.solarRadiationMax, stats)
+      collectSolarRadiationTotal(dataSet.solarRadiation)
+    }
+    solarRadiationTotal?.let {
+      stats.addKwh(Statistics.TimeRange.today, it)
     }
   }
 
@@ -107,6 +116,13 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     }
   }
 
+  private fun collectSolarRadiationTotal(solarRadiation: Float?) {
+    solarRadiation?.let {
+      // durch 4 teilen, weil es der Wert pro 1/4 Stunde ist
+      // durch 1000 teilen, weil um von w/qm auf kw/qm zu konvertieren
+      solarRadiationTotal = (solarRadiationTotal ?: 0.0f) + it / 4000
+    }
+  }
 
   fun fetchRainData(): RainDTO {
     val statistics = fetchStatistics()

@@ -62,6 +62,24 @@ class Statistics {
     last30days.addRain(rain)
   }
 
+  fun addKwh(range: TimeRange, kwh: Float) {
+    when (range) {
+      TimeRange.today -> {
+        today.addKwh(kwh)
+        last7days.addKwh(kwh)
+      }
+      TimeRange.yesterday -> {
+        yesterday.addKwh(kwh)
+        last7days.addKwh(kwh)
+      }
+      TimeRange.last7days -> last7days.addKwh(kwh)
+
+      else -> {
+      }
+    }
+    last30days.addKwh(kwh)
+  }
+
   fun updateSolarRadiation(range: TimeRange, solarRadiation: Float) {
     when (range) {
       TimeRange.today -> {

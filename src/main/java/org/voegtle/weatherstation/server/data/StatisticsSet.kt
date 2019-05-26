@@ -11,8 +11,14 @@ class StatisticsSet {
   var solarRadiationMax: Float? = null
     internal set
 
+  var kwh: Float? = null
+    internal set
+
+
   fun addRain(rain: Float) {
-    this.rain = (this.rain ?: 0.0f) + rain
+    if (rain > 0.0f) {
+      this.rain = (this.rain ?: 0.0f) + rain
+    }
   }
 
   fun updateSolarRadiation(solarRadiation: Float) {
@@ -32,4 +38,7 @@ class StatisticsSet {
     }
   }
 
+  fun addKwh(kwh: Float) {
+    this.kwh = (this.kwh ?: 0.0f) + kwh
+  }
 }

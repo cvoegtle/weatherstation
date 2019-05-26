@@ -50,6 +50,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("minTemperature", set.minTemperature)
     json.putOpt("maxTemperature", set.maxTemperature)
     json.putOpt("solarRadiationMax", set.solarRadiationMax)
+    json.putOpt("kwh", set.kwh)
     return json
   }
 
