@@ -7,8 +7,10 @@ import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import java.util.ArrayList
+import java.util.logging.Logger
 
 class JSONConverter(private val locationProperties: LocationProperties) {
+  private val log = Logger.getLogger("JSONConverter")
 
   fun toJson(rain: RainDTO): JSONObject {
     val json = WeatherJSONObject()
@@ -25,12 +27,12 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.put("id", locationProperties.location)
 
     val jsonObjects = ArrayList<JSONObject>()
-    if (stats.rainLastHour != null) {
-      val lastHour = StatisticsSet()
-      stats.rainLastHour?.let {
+    stats.rainLastHour?.let {
+      if (it > 0.0) {
+        val lastHour = StatisticsSet()
         lastHour.addRain(it)
+        jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour))
       }
-      jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour))
     }
 
     jsonObjects.add(toJson(Statistics.TimeRange.today, stats.today))
