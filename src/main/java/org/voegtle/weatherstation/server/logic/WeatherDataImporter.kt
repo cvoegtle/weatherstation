@@ -2,13 +2,10 @@ package org.voegtle.weatherstation.server.logic
 
 import org.voegtle.weatherstation.server.parser.DataLine
 import org.voegtle.weatherstation.server.parser.DataParser
-import org.voegtle.weatherstation.server.persistence.*
+import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.request.ResponseCode
-import org.voegtle.weatherstation.server.util.DateUtil
-
 import java.text.ParseException
 import java.util.ArrayList
 import java.util.Date
@@ -45,7 +42,7 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
       log.info("Number of lines: " + lines.size)
       val parser = DataParser(dateUtil, dataIndicies)
       val dataSets = parser.parse(lines)
-      log.info("Number of valid datasets: " + dataSets.size)
+      log.info("Number of parsed datasets: " + dataSets.size)
       dataSets
           .filter { isNotOutdated(it) }
           .filter { pm.makePersitant(it) }

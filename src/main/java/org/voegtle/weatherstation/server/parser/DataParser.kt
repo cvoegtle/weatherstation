@@ -60,7 +60,7 @@ class DataParser(dateUtil: DateUtil, di: DataIndicies) {
       dataSet.insideHumidity = parseFloat(data[indexInsideHumidity])
 
       dataSet.outsideTemperature = parseFloat(data[indexOutsideTemperature])
-      dataSet.outsideHumidity = parseFloat(data[indexOutsideHumidity])
+      dataSet.outsideHumidity = parseFloat(data[indexOutsideHumidity]) ?: 0.0f
 
       dataSet.rainCounter = parseInteger(data[INDEX_RAINCOUNTER])
       dataSet.isRaining = parseBoolean(data[INDEX_RAINING])
