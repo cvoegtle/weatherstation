@@ -31,20 +31,7 @@ import java.util.logging.Logger
   fun list(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") begin: Date,
            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date): List<SmoothedWeatherDataSet> {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
-    val datasets = dataFetcher.fetchSmoothedWeatherData(begin, end)
-    calculateRainPerPeriod(datasets)
-    return datasets
+    return dataFetcher.fetchSmoothedWeatherData(begin, end)
   }
-
-  private fun calculateRainPerPeriod(datasets: MutableList<SmoothedWeatherDataSet>) {
-    var previousRain: Float? = null
-    datasets.forEach {
-      val currentRain = it.dailyRain
-      if (previousRain != null && currentRain > previousRain!!) {
-        it.dailyRain = currentRain - previousRain!!
-      } else {
-        it.dailyRain = 0.0f
-      }
-      previousRain = currentRain }
-  }
+  
 }

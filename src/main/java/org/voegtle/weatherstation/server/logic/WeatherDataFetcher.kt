@@ -20,9 +20,24 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
-  fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> =
-      pm.fetchSmoothedWeatherDataInRange(begin, end)
+  fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
+    val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(begin, end)
+    calculateRainPerPeriod(smoothedWeatherDataInRange)
+    return smoothedWeatherDataInRange
+  }
 
+  private fun calculateRainPerPeriod(datasets: MutableList<SmoothedWeatherDataSet>) {
+    var previousRain: Float? = null
+    datasets.forEach {
+      val currentRain = it.dailyRain
+      if (previousRain != null && currentRain > previousRain!!) {
+        it.dailyRain = currentRain - previousRain!!
+      } else {
+        it.dailyRain = 0.0f
+      }
+      previousRain = currentRain }
+  }
+  
   private fun fetchTodaysDataSets(): List<SmoothedWeatherDataSet> {
     val today = dateUtil.today()
     return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today))
