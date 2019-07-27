@@ -172,6 +172,32 @@ open class PersistenceManager {
     }
   }
 
+  fun updateSmoothedDataset(ds: SmoothedWeatherDataSet) {
+    val em = factory.createEntityManager()
+
+    try {
+      em.transaction.begin()
+      val managedDS = em.find(SmoothedWeatherDataSet::class.java, ds.key)
+      managedDS.dailyRain = ds.dailyRain
+      em.transaction.commit()
+    } finally {
+      em.close()
+    }
+  }
+
+  fun upgradeAggregatedDataset(ds: AggregatedWeatherDataSet) {
+    val em = factory.createEntityManager()
+
+    try {
+      em.transaction.begin()
+      val managedDS = em.find(AggregatedWeatherDataSet::class.java, ds.key)
+      managedDS.dailyRain = ds.dailyRain 
+      em.transaction.commit()
+    } finally {
+      em.close()
+    }
+  }
+
   fun removeDataset(ds: SmoothedWeatherDataSet) {
     val em = factory.createEntityManager()
 

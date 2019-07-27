@@ -17,6 +17,7 @@ public class SmoothedWeatherDataSet {
   private Float insideTemperature;
   private Float insideHumidity;
   private Integer rainCounter;
+  private Float dailyRain;
   private Boolean raining;
   private Float windspeed;
   private Float windspeedMax;
@@ -282,5 +283,23 @@ public class SmoothedWeatherDataSet {
 
   public void setRepaired(Boolean repaired) {
     this.repaired = repaired;
+  }
+
+  public Float getDailyRain() {
+    return dailyRain;
+  }
+
+  public void setDailyRain(Float dailyRain) {
+    this.dailyRain = dailyRain;
+  }
+
+  @Override public String toString() {
+    return "SmoothedWeatherDataSet{" +
+        "timestamp=" + timestamp +
+        ", rainCounter=" + rainCounter + 
+        ", dailyRain=" + dailyRain +
+        "}";
+    
+
   }
 }

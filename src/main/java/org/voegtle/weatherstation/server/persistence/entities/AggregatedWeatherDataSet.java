@@ -53,6 +53,7 @@ public class AggregatedWeatherDataSet {
 
   private int rainCounter;
   private int rainDays;
+  private Float dailyRain;
 
   private Double kwh;
 
@@ -307,6 +308,14 @@ public class AggregatedWeatherDataSet {
     this.kwh = kwh;
   }
 
+  public Float getDailyRain() {
+    return dailyRain;
+  }
+
+  public void setDailyRain(Float dailyRain) {
+    this.dailyRain = dailyRain;
+  }
+
   @Override
   public String toString() {
     return "AggregatedWeatherDataSet{" +
@@ -336,6 +345,7 @@ public class AggregatedWeatherDataSet {
         ", windspeedAverage=" + windspeedAverage +
         ", windspeedCounter=" + windspeedCounter +
         ", rainCounter=" + rainCounter +
+        ", dailyRain=" + dailyRain +
         ", rainDays=" + rainDays +
         ", kwh=" + kwh +
         '}';
