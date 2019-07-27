@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.logic.WeatherDataFetcher
+import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.JSONConverter
 import java.util.Date
@@ -32,6 +33,13 @@ import java.util.logging.Logger
            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date): List<SmoothedWeatherDataSet> {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
     return dataFetcher.fetchSmoothedWeatherData(begin, end)
+  }
+  
+  @GetMapping("/weatherstation/aggregated")
+  fun aggregatedList(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") begin: Date,
+           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date?): List<AggregatedWeatherDataSet> {
+    val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
+    return dataFetcher.fetchAggregatedWeatherData(begin, end)
   }
   
 }

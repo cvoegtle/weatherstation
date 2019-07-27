@@ -17,7 +17,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private val dateUtil: DateUtil = locationProperties.dateUtil
   private var solarRadiationTotal: Float? = null
 
-  fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
+  fun fetchAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
       if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
