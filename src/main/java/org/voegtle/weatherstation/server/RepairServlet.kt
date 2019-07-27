@@ -20,7 +20,7 @@ class RepairServlet : AbstractServlet() {
       if (param.upgrade) {
         val upgrader = UpgradeService(pm, locationProperties!!)
 //        upgrader.upgradeAggregated()
-//        upgrader.upgradeSmoothed()
+        upgrader.upgradeSmoothed(param.begin!!, param.end)
         returnResult(response, ResponseCode.ACKNOWLEDGE)
       } else {
         val repairService = WeatherDataRepair(pm, locationProperties!!)
