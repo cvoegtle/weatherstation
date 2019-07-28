@@ -28,6 +28,7 @@ import java.util.logging.Logger
               @RequestParam windgust: Float?,
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
+    validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
     val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer, dailyRain = 10*dailyrain,
                                rain = 10*rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
