@@ -70,7 +70,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '63'
+        version = '64'
         projectId = 'tegelwetter'
         stopPreviousVersion = true
         promote = true

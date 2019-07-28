@@ -72,6 +72,35 @@ var WeatherArea = /** @class */ (function () {
     };
     return WeatherArea;
 }());
+function repairinit() {
+    init();
+    var today = new Date();
+    var inputStart = document.getElementById("starttime");
+    var inputValue = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + "-00:00:00";
+    inputStart.value = inputValue;
+    inputStart.setSelectionRange(0, inputValue.length);
+    inputStart.focus();
+}
+function onKeyDownOnSecret(event) {
+    if (event.keyCode === 13) {
+        repairData();
+    }
+}
+function repairData() {
+    var inputStart = document.getElementById("starttime");
+    var location = "/weatherstation/repair?begin=" + inputStart.value;
+    var endinput = document.getElementById("endtime");
+    var endValue = endinput.value;
+    if (endValue !== "") {
+        location += "&end=" + endValue;
+    }
+    var inputSecret = document.getElementById("secret");
+    var secretValue = inputSecret.value;
+    if (secretValue !== "") {
+        location += "&secret=" + secretValue;
+    }
+    window.location.href = location;
+}
 function init() {
     var weatherArea = new WeatherArea();
     function updateWeatherArea(weatherData) {

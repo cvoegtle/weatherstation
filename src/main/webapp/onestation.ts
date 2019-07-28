@@ -80,6 +80,42 @@ class WeatherArea {
 
 }
 
+function repairinit() {
+  init();
+ 
+  let today:Date = new Date();
+
+  let inputStart:HTMLInputElement = <HTMLInputElement>document.getElementById("starttime");
+  let inputValue:string = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + "-00:00:00";
+  inputStart.value = inputValue;
+  inputStart.setSelectionRange(0, inputValue.length);
+  inputStart.focus();
+}
+
+function onKeyDownOnSecret(event) {
+  if (event.keyCode === 13) {
+    repairData();
+  }
+}
+
+function repairData():void {
+  let inputStart:HTMLInputElement = <HTMLInputElement>document.getElementById("starttime");
+  let location:string = "/weatherstation/repair?begin=" + inputStart.value;
+
+  let endinput:HTMLInputElement = <HTMLInputElement>document.getElementById("endtime");
+  let endValue = endinput.value;
+  if (endValue !== "") {
+    location += "&end=" + endValue;
+  }
+  let inputSecret:HTMLInputElement = <HTMLInputElement>document.getElementById("secret");
+  let secretValue:string = inputSecret.value;
+  if (secretValue !== "") {
+    location += "&secret=" + secretValue;
+  }
+
+  window.location.href = location;
+}
+
 function init() {
   let weatherArea = new WeatherArea();
 
