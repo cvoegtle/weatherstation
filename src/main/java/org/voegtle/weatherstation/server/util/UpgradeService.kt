@@ -23,14 +23,14 @@ class UpgradeService(private val pm: PersistenceManager, private val locationPro
     var previousRainCounter: Int? = null
     smoothedWeatherData.forEach {
       val currentRainCounter = it.rainCounter
-      if (previousRainCounter != null && currentRainCounter > previousRainCounter!!) {
+      if (previousRainCounter != null && currentRainCounter != null && currentRainCounter > previousRainCounter!!) {
         it.dailyRain = 0.295f * (currentRainCounter - previousRainCounter!!)
       } else {
         it.dailyRain = 0.0f
       }
       log.info(it.toString())
       pm.updateSmoothedDataset(it)
-      previousRainCounter = currentRainCounter
+      previousRainCounter = currentRainCounter ?: previousRainCounter
     }
   }
 }
