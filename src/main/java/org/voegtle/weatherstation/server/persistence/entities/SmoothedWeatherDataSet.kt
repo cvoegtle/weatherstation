@@ -38,6 +38,9 @@ import java.util.Date
                                      var watt: Float? = null,
                                      var kwh: Double? = null,
                                      @Ignore private var countWatt: Int = 0,
+                                     
+                                     var barometer: Float? = null,
+                                     @Ignore private var countBarometer: Int = 0,
 
                                      var repaired: Boolean? = null) {
 
@@ -56,6 +59,7 @@ import java.util.Date
     addSolarRadiation(wds.solarRadiation)
     setSolarRadiationIfMax(wds.solarRadiation)
     addUV(wds.UV)
+    addBarometer(wds.barometer)
   }
 
   fun normalize() {
@@ -82,6 +86,9 @@ import java.util.Date
     }
     if (countWatt > 0) {
       watt = watt!! / countWatt
+    }
+    if (countBarometer > 0) {
+      barometer = barometer!! / countBarometer
     }
   }
 
@@ -169,4 +176,15 @@ import java.util.Date
       UV = newUV
     }
   }
+
+  private fun addBarometer(value: Float?) {
+    value?.let {
+      countBarometer++
+      var newBarometer = barometer ?: 0.0f
+      newBarometer += it
+      barometer = newBarometer
+    }
+  }
+
+
 }
