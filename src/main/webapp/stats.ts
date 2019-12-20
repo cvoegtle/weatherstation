@@ -4,7 +4,7 @@
 function statsinit() {
   init();
 
-  fetchWeatherData(showStats, reportConnectionProblem, "stats");
+  fetchStatisticsData(showStats, reportConnectionProblem);
 
 }
 

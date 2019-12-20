@@ -66,6 +66,16 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem) {
     ajaxRequest.open("get", "/weatherstation/current?build=web", true);
     ajaxRequest.send();
 }
+function fetchStatisticsData(processStatistics, reportConnectionProblem) {
+    var ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.onload = function () {
+        var weatherData = JSON.parse(ajaxRequest.responseText);
+        processStatistics(weatherData);
+    };
+    ajaxRequest.onerror = reportConnectionProblem;
+    ajaxRequest.open("get", "/weatherstation/query?build=web", true);
+    ajaxRequest.send();
+}
 function getOptionalNumber(value, unit) {
     if (value != null) {
         var result = value.toFixed(1);

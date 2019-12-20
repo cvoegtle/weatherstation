@@ -75,12 +75,21 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
   ajaxRequest.onload = function () {
     let weatherData = JSON.parse(ajaxRequest.responseText);
     processWeatherData(weatherData);
-
-
   };
   ajaxRequest.onerror = reportConnectionProblem;
 
   ajaxRequest.open("get", "/weatherstation/current?build=web", true);
+  ajaxRequest.send();
+}
+
+function fetchStatisticsData(processStatistics:Function, reportConnectionProblem:any): void {
+  let ajaxRequest = new XMLHttpRequest();
+  ajaxRequest.onload = function () {
+    let weatherData = JSON.parse(ajaxRequest.responseText);
+    processStatistics(weatherData);
+  };
+  ajaxRequest.onerror = reportConnectionProblem;
+  ajaxRequest.open("get", "/weatherstation/query?build=web", true);
   ajaxRequest.send();
 }
 

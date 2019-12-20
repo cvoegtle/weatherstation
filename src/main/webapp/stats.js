@@ -2,7 +2,7 @@
 /// <reference path='onestation.ts'/>
 function statsinit() {
     init();
-    fetchWeatherData(showStats, reportConnectionProblem, "stats");
+    fetchStatisticsData(showStats, reportConnectionProblem);
 }
 function reportConnectionProblem() {
     // ignore connection problem
