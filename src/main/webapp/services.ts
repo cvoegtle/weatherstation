@@ -94,8 +94,8 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
   ajaxRequest.send();
 }
 
-function getOptionalNumber(value:number, unit:string):string {
-  if (value != null) {
+function getOptionalNumber(value:any, unit:string):string {
+  if (value != null && value != "") {
     let result = value.toFixed(1);
     return result.replace(".", ",") + " " + unit;
   } else {
