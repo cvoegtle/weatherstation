@@ -37,8 +37,8 @@ import java.util.logging.Logger
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
     if (hasEnoughTimeElapsedSinceLastRequest()) {
       val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer,
-                                 dailyRain = 10 * dailyrain,
-                                 rain = 10 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
+                                 dailyRain = 12 * dailyrain,
+                                 rain = 12 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                  windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
 
       val locationProperties = fetchLocationProperties()
