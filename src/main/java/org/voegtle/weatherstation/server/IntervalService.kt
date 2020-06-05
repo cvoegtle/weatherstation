@@ -46,18 +46,19 @@ import java.util.logging.Logger
       WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
       WeatherDataAggregator(pm, locationProperties.dateUtil).aggregateWeatherData()
       WeatherDataForwarder(pm, locationProperties).forwardLastDataset()
-      return "OK"
     }
-    return "VALID-IGNORED"
+    return "OK"
   }
 
   fun hasEnoughTimeElapsedSinceLastRequest(): Boolean {
     val currentTime = LocalDateTime.now()
     val elapsedTime = Duration.between(timeOfLastRequest, currentTime)
+
     return if (elapsedTime > minimumIntervall) {
       timeOfLastRequest = currentTime
       true
     } else {
+      log.info("too soon - ignore this dataset")
       false
     }
 
