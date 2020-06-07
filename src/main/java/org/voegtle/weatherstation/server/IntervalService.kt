@@ -10,11 +10,13 @@ import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.HashMap
 import java.util.logging.Logger
+import javax.cache.Cache
+import javax.cache.CacheManager
 
 @RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
   companion object {
-    var timeOfLastRequest = LocalDateTime.now()
     val minimumIntervall = Duration.ofSeconds(90)
   }
 
@@ -63,4 +65,10 @@ import java.util.logging.Logger
     }
 
   }
+
+  private fun createCache(): Cache {
+    val cacheFactory = CacheManager.getInstance().cacheFactory
+    return cacheFactory.createCache(HashMap<Any, Any>())
+  }
+
 }
