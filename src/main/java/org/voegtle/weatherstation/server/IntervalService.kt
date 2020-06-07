@@ -18,7 +18,10 @@ import javax.cache.CacheManager
 @RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
   companion object {
     val minimumIntervall = Duration.ofSeconds(90)
+    val LAST_REQUEST_TIME = "last_request"
   }
+
+  private val cache: Cache = createCache()
 
   @GetMapping("/weatherstation/interval")
   fun receive(@RequestParam ID: String,
@@ -63,12 +66,14 @@ import javax.cache.CacheManager
       log.info("too soon - ignore this dataset")
       false
     }
-
   }
 
+  private fun retrieveLastRequest() {
+    cache[LAST_REQUEST_TIME]?.let {  }
+  }
   private fun createCache(): Cache {
     val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, Any>())
+    return cacheFactory.createCache(HashMap<Any, LocalDateTime>())
   }
 
 }
