@@ -57,10 +57,10 @@ import javax.cache.CacheManager
 
   fun hasEnoughTimeElapsedSinceLastRequest(): Boolean {
     val currentTime = LocalDateTime.now()
-    val elapsedTime = Duration.between(timeOfLastRequest, currentTime)
+    val elapsedTime = Duration.between(retrieveLastRequest(), currentTime)
 
     return if (elapsedTime > minimumIntervall) {
-      timeOfLastRequest = currentTime
+      storeLastRequest(currentTime)
       true
     } else {
       log.info("too soon - ignore this dataset")
@@ -68,9 +68,12 @@ import javax.cache.CacheManager
     }
   }
 
-  private fun retrieveLastRequest() {
-    cache[LAST_REQUEST_TIME]?.let {  }
+  private fun retrieveLastRequest() = (cache[LAST_REQUEST_TIME] ?: LocalDateTime.of(2020, 1, 1, 0, 0)) as LocalDateTime
+
+  private fun storeLastRequest(time: LocalDateTime) {
+    cache[LAST_REQUEST_TIME] = time
   }
+
   private fun createCache(): Cache {
     val cacheFactory = CacheManager.getInstance().cacheFactory
     return cacheFactory.createCache(HashMap<Any, LocalDateTime>())

@@ -26,7 +26,6 @@ abstract class AbstractWeewxService(val log: Logger) {
       log.warning("wrong credentials")
       throw InvalidRequestException("Credentials not valid")
     }
-    log.info("Good credentials")
   }
 
   fun validateReceivedRequest(locationProperties: LocationProperties, secret: String) {
@@ -34,7 +33,6 @@ abstract class AbstractWeewxService(val log: Logger) {
       log.warning("wrong credentials")
       throw InvalidRequestException("Credentials not valid")
     }
-    log.info("Good credentials")
   }
 
   fun fetchLocationProperties(): LocationProperties {
