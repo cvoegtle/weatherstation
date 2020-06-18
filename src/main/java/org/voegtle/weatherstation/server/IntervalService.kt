@@ -8,8 +8,8 @@ import org.voegtle.weatherstation.server.logic.WeatherDataForwarder
 import org.voegtle.weatherstation.server.logic.WeatherDataSmoother
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
-import java.time.Duration
 import java.time.LocalDateTime
+import java.util.Date
 import java.util.HashMap
 import java.util.logging.Logger
 import javax.cache.Cache
@@ -17,7 +17,7 @@ import javax.cache.CacheManager
 
 @RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
   companion object {
-    val minimumIntervall = Duration.ofSeconds(90)
+    val minimumIntervall = 90_000
     val LAST_REQUEST_TIME = "last_request"
   }
 
@@ -40,11 +40,12 @@ import javax.cache.CacheManager
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
-    if (hasEnoughTimeElapsedSinceLastRequest()) {
-      val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer,
-                                 dailyRain = 12 * dailyrain,
-                                 rain = 12 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
-                                 windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
+    val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer,
+                               dailyRain = 12 * dailyrain,
+                               rain = 12 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
+                               windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
+
+    if (hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
 
       val locationProperties = fetchLocationProperties()
       pm.makePersistant(dataset)
@@ -55,9 +56,9 @@ import javax.cache.CacheManager
     return "OK"
   }
 
-  fun hasEnoughTimeElapsedSinceLastRequest(): Boolean {
-    val currentTime = LocalDateTime.now()
-    val elapsedTime = Duration.between(retrieveLastRequest(), currentTime)
+  fun hasEnoughTimeElapsedSinceLastRequest(time: Date): Boolean {
+    val currentTime = time.time
+    val elapsedTime = currentTime - retrieveLastRequest()
 
     return if (elapsedTime > minimumIntervall) {
       storeLastRequest(currentTime)
@@ -68,9 +69,9 @@ import javax.cache.CacheManager
     }
   }
 
-  private fun retrieveLastRequest() = (cache[LAST_REQUEST_TIME] ?: LocalDateTime.of(2020, 1, 1, 0, 0)) as LocalDateTime
+  private fun retrieveLastRequest() = (cache[LAST_REQUEST_TIME] ?: 0L) as Long
 
-  private fun storeLastRequest(time: LocalDateTime) {
+  private fun storeLastRequest(time: Long) {
     cache[LAST_REQUEST_TIME] = time
   }
 
