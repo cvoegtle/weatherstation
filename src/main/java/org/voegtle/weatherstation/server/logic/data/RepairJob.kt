@@ -17,6 +17,7 @@ class RepairJob {
     var insideTemperature: Double? = null
     var insideHumidity: Double? = null
     var kwh: Double? = null
+    var barometer: Double? = null
   }
 
   fun addDefectDataSet(dataset: SmoothedWeatherDataSet) {
@@ -41,6 +42,7 @@ class RepairJob {
     step.insideHumidity = spreadEqually(first!!.insideHumidity, last!!.insideHumidity, defectDataSets.size)
     step.insideTemperature = spreadEqually(first!!.insideTemperature, last!!.insideTemperature, defectDataSets.size)
     step.kwh = spreadEqually(first!!.kwh, last!!.kwh, defectDataSets.size)
+    step.barometer = spreadEqually(first!!.barometer, last!!.barometer, defectDataSets.size)
   }
 
   private fun spreadEqually(firstValue: Double?, lastValue: Double?, numberOfSets: Int): Double? {

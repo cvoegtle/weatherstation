@@ -93,10 +93,14 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
         ds.insideHumidity = getNewValue(it.insideHumidity, index, step.insideHumidity)
         ds.insideTemperature = getNewValue(it.insideTemperature, index, step.insideTemperature)
 
-        ds.dailyRain = if (isSameDay(it, ds)) it.dailyRain else 0.0f 
-        
+        ds.dailyRain = if (isSameDay(it, ds)) it.dailyRain else 0.0f
+
         it.kwh?.let {
           ds.kwh = getNewValue(it, index, step.kwh)
+        }
+
+        it.barometer?.let{
+          ds.barometer = getNewValue(it, index, step.barometer)
         }
 
         setDefaults(ds)
@@ -108,7 +112,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
   private fun isSameDay(ds1: SmoothedWeatherDataSet, ds2: SmoothedWeatherDataSet): Boolean {
     val cal1 = Calendar.getInstance()
     cal1.time = ds1.timestamp
-    
+
     val cal2 = Calendar.getInstance()
     cal2.time = ds2.timestamp
 
@@ -120,7 +124,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
     ds.windspeedMax = 0.0f
     ds.UV = 0.0f
     ds.solarRadiation = 0.0f
-    ds.solarRadiationMax = 0.0f 
+    ds.solarRadiationMax = 0.0f
     ds.repaired = true
   }
 
