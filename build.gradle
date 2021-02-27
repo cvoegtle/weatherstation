@@ -1,5 +1,5 @@
 buildscript {    // Configuration for building
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.4.31'
     ext.spring_boot_version = '2.4.0'
 
     repositories {
@@ -71,7 +71,7 @@ appengine {  // App Engine tasks configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
         version = '70'
-        projectId = 'tegelwetter'
+        projectId = 'instantwetter'
         stopPreviousVersion = true
         promote = true
     }
