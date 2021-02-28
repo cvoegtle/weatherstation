@@ -129,6 +129,8 @@ open class PersistenceManager {
   fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
       .type(SmoothedWeatherDataSet::class.java)
       .order("-timestamp")
+      .limit(1)
+      .list()
       .firstOrNull()
 
   fun fetchYoungestAggregatedDataSet(): AggregatedWeatherDataSet? = ObjectifyService.ofy().load()
