@@ -34,7 +34,7 @@ class HealthProvider(private val pm: PersistenceManager, locationProperties: Loc
 
   fun update(health: HealthDTO) {
     cache.put(HEALTH, health)
-    pm.makePersistant(health)
+    pm.makePersistent(health)
   }
 
   private fun isOutdated(health: HealthDTO, today: Date): Boolean = today.after(health.day)

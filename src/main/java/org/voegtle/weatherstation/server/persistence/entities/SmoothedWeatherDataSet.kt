@@ -38,7 +38,9 @@ import java.util.Date
                                      var watt: Float? = null,
                                      var kwh: Double? = null,
                                      @Ignore private var countWatt: Int = 0,
-                                     
+
+                                     var powerFeed: Float? = null,
+
                                      var barometer: Float? = null,
                                      @Ignore private var countBarometer: Int = 0,
 

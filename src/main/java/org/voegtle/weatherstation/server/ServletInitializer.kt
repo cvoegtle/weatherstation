@@ -7,7 +7,7 @@ import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.Health
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
+import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 
 class ServletInitializer : SpringBootServletInitializer() {
@@ -17,8 +17,8 @@ class ServletInitializer : SpringBootServletInitializer() {
     ObjectifyService.register(Health::class.java)
     ObjectifyService.register(LocationProperties::class.java)
     ObjectifyService.register(SmoothedWeatherDataSet::class.java)
-    ObjectifyService.register(WeatherDataSet::class.java)
     ObjectifyService.register(WeewxDataSet::class.java)
+    ObjectifyService.register(SolarDataSet::class.java)
 
     return builder.sources(Application::class.java)
   }

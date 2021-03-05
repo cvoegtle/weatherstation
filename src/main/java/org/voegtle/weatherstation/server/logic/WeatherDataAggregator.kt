@@ -22,7 +22,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
       aggregate(aggregatedDay, weatherDataSets)
 
-      pm.makePersistant(aggregatedDay)
+      pm.makePersistent(aggregatedDay)
       dateOfLastAggregation = aggregatedDay.date
     }
   }

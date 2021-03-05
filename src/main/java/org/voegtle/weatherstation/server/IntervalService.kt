@@ -6,22 +6,13 @@ import org.springframework.web.bind.annotation.RestController
 import org.voegtle.weatherstation.server.logic.WeatherDataAggregator
 import org.voegtle.weatherstation.server.logic.WeatherDataForwarder
 import org.voegtle.weatherstation.server.logic.WeatherDataSmoother
+import org.voegtle.weatherstation.server.request.ResponseCode
 import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
-import java.time.LocalDateTime
-import java.util.Date
-import java.util.HashMap
 import java.util.logging.Logger
-import javax.cache.Cache
-import javax.cache.CacheManager
 
 @RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
-  companion object {
-    val minimumIntervall = 90_000
-    val LAST_REQUEST_TIME = "last_request"
-  }
-
-  private val cache: Cache = createCache()
+  val intervalChecker = TimeBetweenRequestsChecker("interval_request")
 
   @GetMapping("/weatherstation/interval")
   fun receive(@RequestParam ID: String,
@@ -45,39 +36,16 @@ import javax.cache.CacheManager
                                rain = 12 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
                                windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
 
-    if (hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
-
+    if (intervalChecker.hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
       val locationProperties = fetchLocationProperties()
-      pm.makePersistant(dataset)
+      pm.makePersistent(dataset)
       WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
       WeatherDataAggregator(pm, locationProperties.dateUtil).aggregateWeatherData()
       WeatherDataForwarder(pm, locationProperties).forwardLastDataset()
-    }
-    return "OK"
-  }
-
-  fun hasEnoughTimeElapsedSinceLastRequest(time: Date): Boolean {
-    val currentTime = time.time
-    val elapsedTime = currentTime - retrieveLastRequest()
-
-    return if (elapsedTime > minimumIntervall) {
-      storeLastRequest(currentTime)
-      true
+      return ResponseCode.ACKNOWLEDGE
     } else {
-      log.info("too soon - ignore this dataset")
-      false
+      return ResponseCode.IGNORED
     }
-  }
-
-  private fun retrieveLastRequest() = (cache[LAST_REQUEST_TIME] ?: 0L) as Long
-
-  private fun storeLastRequest(time: Long) {
-    cache[LAST_REQUEST_TIME] = time
-  }
-
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, LocalDateTime>())
   }
 
 }
