@@ -78,9 +78,11 @@ open class PersistenceManager {
     .first()
     .safe()
 
-  fun fetchYoungestSolarDataSet(): SolarDataSet? = ObjectifyService.ofy()
+  fun fetchCorrespondingSolarDataSet(time: Date): SolarDataSet? = ObjectifyService.ofy()
     .load()
     .type(SolarDataSet::class.java)
+    .filter("time <=", time)
+    .filter("time >=", DateUtil.minutesBefore(time, 15))
     .order("-time")
     .first()
     .safe()

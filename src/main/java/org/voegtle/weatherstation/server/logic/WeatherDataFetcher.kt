@@ -47,7 +47,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val latestWeewxData: WeewxDataSet = pm.fetchYoungestDataSet()
-    val latestSolarData: SolarDataSet? = pm.fetchYoungestSolarDataSet()
+    val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latestWeewxData.time)
 
     return UnformattedWeatherDTO(
       time = latestWeewxData.time,
