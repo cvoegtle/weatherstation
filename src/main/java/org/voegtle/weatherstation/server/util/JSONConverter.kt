@@ -58,6 +58,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     json.putOpt("solarradiation", currentWeatherData.solarradiation)
     json.putOpt("UV", currentWeatherData.UV)
 
+    json.putOpt("powerProduction", currentWeatherData.powerProduction)
+    json.putOpt("powerFeed", currentWeatherData.powerFeed)
+
     json.putOpt("raining", currentWeatherData.raining)
     json.putOpt("wind", currentWeatherData.windspeed)
     json.putOpt("watt", currentWeatherData.watt)
