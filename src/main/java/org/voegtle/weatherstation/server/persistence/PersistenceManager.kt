@@ -162,6 +162,17 @@ open class PersistenceManager {
     ObjectifyService.ofy().delete().type(WeewxDataSet::class.java).ids(ids).now()
   }
 
+  fun removeSolarDataInRange(begin: Date, end: Date) {
+    val ids = ObjectifyService.ofy().load()
+      .type(SolarDataSet::class.java)
+      .filter("time >=", begin)
+      .filter("time <=", end)
+      .list()
+      .map { it.id }
+
+    ObjectifyService.ofy().delete().type(SolarDataSet::class.java).ids(ids).now()
+  }
+
   fun fetchLocationProperties(): LocationProperties = ObjectifyService.ofy().load()
     .type(LocationProperties::class.java)
     .limit(1)
