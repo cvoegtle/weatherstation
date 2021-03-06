@@ -15,7 +15,9 @@ var testdaten = [
         rainToday: 5.015,
         rainLastHour: 2.065,
         temperature: 5.3,
-        solarradiation: null
+        solarradiation: null,
+        powerProduction: null,
+        powerFeed: null
     },
     {
         "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
@@ -28,7 +30,9 @@ var testdaten = [
         "rainToday": 1.475,
         "rainLastHour": "",
         "temperature": 8.6,
-        "solarradiation": null
+        "solarradiation": null,
+        "powerProduction": null,
+        "powerFeed": null
     },
     {
         "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
@@ -41,7 +45,9 @@ var testdaten = [
         "rainToday": 2.065,
         "rainLastHour": "",
         "temperature": 4.6,
-        "solarradiation": null
+        "solarradiation": null,
+        "powerProduction": null,
+        "powerFeed": null
     }
 ];
 var singleTestdaten = {
@@ -54,7 +60,9 @@ var singleTestdaten = {
     "rainToday": 5.015,
     "rainLastHour": 2.065,
     "temperature": 5.3,
-    "solarradiation": null
+    "solarradiation": null,
+    "powerProduction": null,
+    "powerFeed": null
 };
 function fetchWeatherData(processWeatherData, reportConnectionProblem) {
     var ajaxRequest = new XMLHttpRequest();

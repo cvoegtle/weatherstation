@@ -13,6 +13,10 @@ var WeatherArea = /** @class */ (function () {
         this.labelRainText = document.getElementById("rainText");
         this.labelSolarradiationText = document.getElementById("solarradiationText");
         this.labelSolarradiation = document.getElementById("solarradiation");
+        this.labelPowerProductionText = document.getElementById("powerProductionText");
+        this.labelPowerProduction = document.getElementById("powerProduction");
+        this.labelPowerFeedText = document.getElementById("powerFeedText");
+        this.labelPowerFeed = document.getElementById("powerFeed");
     }
     WeatherArea.prototype.update = function (weatherData) {
         this.updateLabel(this.labelTime, weatherData.localtime);
@@ -36,6 +40,22 @@ var WeatherArea = /** @class */ (function () {
         else {
             this.updateLabel(this.labelSolarradiationText, "");
             this.updateLabel(this.labelSolarradiation, "");
+        }
+        if (weatherData.hasOwnProperty("powerProduction") && weatherData.powerProduction > 0) {
+            this.updateLabel(this.labelPowerProductionText, "Leistung Solaranlage: ");
+            this.updateLabel(this.labelPowerProduction, getOptionalNumber(weatherData.powerProduction, "W"));
+        }
+        else {
+            this.updateLabel(this.labelPowerProductionText, "");
+            this.updateLabel(this.labelPowerProduction, "");
+        }
+        if (weatherData.hasOwnProperty("powerFeed") && weatherData.powerFeed > 0) {
+            this.updateLabel(this.labelPowerFeedText, "Einspeisung: ");
+            this.updateLabel(this.labelPowerFeed, getOptionalNumber(weatherData.powerFeed, "W"));
+        }
+        else {
+            this.updateLabel(this.labelPowerFeedText, "");
+            this.updateLabel(this.labelPowerFeed, "");
         }
     };
     WeatherArea.prototype.setup = function (weatherData) {

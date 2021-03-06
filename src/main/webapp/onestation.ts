@@ -13,6 +13,10 @@ class WeatherArea {
   labelRainText: HTMLElement = document.getElementById("rainText");
   labelSolarradiationText: HTMLElement = document.getElementById("solarradiationText");
   labelSolarradiation: HTMLElement = document.getElementById("solarradiation");
+  labelPowerProductionText: HTMLElement = document.getElementById("powerProductionText");
+  labelPowerProduction:HTMLElement = document.getElementById("powerProduction");
+  labelPowerFeedText: HTMLElement = document.getElementById("powerFeedText");
+  labelPowerFeed:HTMLElement = document.getElementById("powerFeed");
 
   update(weatherData: WeatherData): void {
     this.updateLabel(this.labelTime, weatherData.localtime);
@@ -36,6 +40,22 @@ class WeatherArea {
     } else {
       this.updateLabel(this.labelSolarradiationText, "");
       this.updateLabel(this.labelSolarradiation, "");
+    }
+
+    if (weatherData.hasOwnProperty("powerProduction") && weatherData.powerProduction > 0) {
+      this.updateLabel(this.labelPowerProductionText, "Leistung Solaranlage: ");
+      this.updateLabel(this.labelPowerProduction, getOptionalNumber(weatherData.powerProduction, "W"))
+    } else {
+      this.updateLabel(this.labelPowerProductionText, "");
+      this.updateLabel(this.labelPowerProduction, "");
+    }
+
+    if (weatherData.hasOwnProperty("powerFeed") && weatherData.powerFeed > 0) {
+      this.updateLabel(this.labelPowerFeedText, "Einspeisung: ");
+      this.updateLabel(this.labelPowerFeed, getOptionalNumber(weatherData.powerFeed, "W"))
+    } else {
+      this.updateLabel(this.labelPowerFeedText, "");
+      this.updateLabel(this.labelPowerFeed, "");
     }
   }
 
@@ -82,7 +102,7 @@ class WeatherArea {
 
 function repairinit() {
   init();
- 
+
   let today:Date = new Date();
 
   let inputStart:HTMLInputElement = <HTMLInputElement>document.getElementById("starttime");

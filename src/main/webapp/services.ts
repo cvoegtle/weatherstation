@@ -10,11 +10,12 @@ class WeatherData {
   rainLastHour:any;
   temperature:number;
   solarradiation:any;
+  powerProduction:any;
+  powerFeed:any;
 }
 
 
 let testdaten:WeatherData[] = [
-
   {
     timestamp: "Fri Apr 18 20:28:11 UTC 2014",
     localtime: "20:28",
@@ -26,7 +27,9 @@ let testdaten:WeatherData[] = [
     rainToday: 5.015,
     rainLastHour: 2.065,
     temperature: 5.3,
-    solarradiation: null
+    solarradiation: null,
+    powerProduction: null,
+    powerFeed: null
   },
   {
     "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
@@ -39,7 +42,9 @@ let testdaten:WeatherData[] = [
     "rainToday": 1.475,
     "rainLastHour": "",
     "temperature": 8.6,
-    "solarradiation": null
+    "solarradiation": null,
+    "powerProduction": null,
+    "powerFeed": null
   },
   {
     "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
@@ -52,7 +57,9 @@ let testdaten:WeatherData[] = [
     "rainToday": 2.065,
     "rainLastHour": "",
     "temperature": 4.6,
-    "solarradiation": null
+    "solarradiation": null,
+    "powerProduction": null,
+    "powerFeed": null
   }
 
 ];
@@ -67,7 +74,9 @@ let singleTestdaten = {
   "rainToday": 5.015,
   "rainLastHour": 2.065,
   "temperature": 5.3,
-  "solarradiation": null
+  "solarradiation": null,
+  "powerProduction": null,
+  "powerFeed": null
 };
 
 function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:any):void {
