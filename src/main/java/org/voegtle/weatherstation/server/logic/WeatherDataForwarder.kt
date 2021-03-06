@@ -32,27 +32,29 @@ internal class WeatherDataForwarder(pm: PersistenceManager, locationProperties: 
   }
 
   private fun toCachedWeatherDTO(latest: UnformattedWeatherDTO) = CacheWeatherDTO(
-      id = locationProperties.location,
-      time = latest.time,
-      temperature = latest.temperature,
-      insideTemperature = latest.insideTemperature,
-      humidity = latest.humidity,
-      insideHumidity = latest.insideHumidity,
-      rainLastHour = if (latest.rainLastHour > 0.0f) latest.rainLastHour else null ,
-      rainToday = if (latest.rainToday > 0.0f) latest.rainToday else null,
-      raining = latest.isRaining,
-      windspeed = latest.windspeed,
-      barometer = latest.barometer,
-      solarradiation = latest.solarradiation,
-      UV = latest.UV,
-      location = latest.location,
-      locationShort = locationProperties.cityShortcut,
-      localTime = latest.localtime,
+    id = locationProperties.location,
+    time = latest.time,
+    temperature = latest.temperature,
+    insideTemperature = latest.insideTemperature,
+    humidity = latest.humidity,
+    insideHumidity = latest.insideHumidity,
+    rainLastHour = if (latest.rainLastHour > 0.0f) latest.rainLastHour else null,
+    rainToday = if (latest.rainToday > 0.0f) latest.rainToday else null,
+    raining = latest.isRaining,
+    windspeed = latest.windspeed,
+    barometer = latest.barometer,
+    solarradiation = latest.solarradiation,
+    UV = latest.UV,
+    powerProduction = latest.powerProduction,
+    powerFeed = latest.powerFeed,
+    location = latest.location,
+    locationShort = locationProperties.cityShortcut,
+    localTime = latest.localtime,
 
-      forecast = locationProperties.weatherForecast,
+    forecast = locationProperties.weatherForecast,
 
-      latitude = locationProperties.latitude,
-      longitude = locationProperties.longitude
+    latitude = locationProperties.latitude,
+    longitude = locationProperties.longitude
   )
 
 }

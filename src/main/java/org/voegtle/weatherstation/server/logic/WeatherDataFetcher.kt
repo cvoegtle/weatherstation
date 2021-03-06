@@ -8,6 +8,7 @@ import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherD
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
+import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.Date
 import java.util.LinkedHashMap
@@ -18,7 +19,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private var solarRadiationTotal: Float? = null
 
   fun fetchAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
-      if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
+    if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
     val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(begin, end)
@@ -35,31 +36,37 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
       } else {
         it.dailyRain = 0.0f
       }
-      previousRain = currentRain }
+      previousRain = currentRain
+    }
   }
-  
+
   private fun fetchTodaysDataSets(): List<SmoothedWeatherDataSet> {
     val today = dateUtil.today()
     return pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(today))
   }
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
-    val latest: WeewxDataSet = pm.fetchYoungestDataSet()
+    val latestWeewxData: WeewxDataSet = pm.fetchYoungestDataSet()
+    val latestSolarData: SolarDataSet? = pm.fetchYoungestSolarDataSet()
 
-    return UnformattedWeatherDTO(time = latest.time,
-                                 location = locationProperties.city,
-                                 localtime = dateUtil.toLocalTime(latest.time),
-                                 temperature = latest.temperature,
-                                 humidity = latest.humidity,
-                                 barometer = latest.barometer,
-                                 solarradiation = latest.solarRadiation,
-                                 UV = latest.UV,
-                                 isRaining = isRaining(latest),
-                                 windspeed = if (locationProperties.isWindRelevant) latest.windSpeed else null,
-                                 insideTemperature = if (authorized) latest.indoorTemperature else null,
-                                 insideHumidity = if (authorized) latest.indoorHumidity else null,
-                                 rainLastHour = latest.rain,
-                                 rainToday = latest.dailyRain)
+    return UnformattedWeatherDTO(
+      time = latestWeewxData.time,
+      location = locationProperties.city,
+      localtime = dateUtil.toLocalTime(latestWeewxData.time),
+      temperature = latestWeewxData.temperature,
+      humidity = latestWeewxData.humidity,
+      barometer = latestWeewxData.barometer,
+      solarradiation = latestWeewxData.solarRadiation,
+      UV = latestWeewxData.UV,
+      isRaining = isRaining(latestWeewxData),
+      windspeed = if (locationProperties.isWindRelevant) latestWeewxData.windSpeed else null,
+      insideTemperature = if (authorized) latestWeewxData.indoorTemperature else null,
+      insideHumidity = if (authorized) latestWeewxData.indoorHumidity else null,
+      rainLastHour = latestWeewxData.rain,
+      rainToday = latestWeewxData.dailyRain,
+      powerProduction = latestSolarData?.powerProduction,
+      powerFeed = latestSolarData?.powerFeed
+    )
   }
 
   private fun isRaining(latest: WeewxDataSet) = latest.rain > 0.0f

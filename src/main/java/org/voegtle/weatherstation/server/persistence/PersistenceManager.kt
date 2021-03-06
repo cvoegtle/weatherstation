@@ -78,6 +78,14 @@ open class PersistenceManager {
     .first()
     .safe()
 
+  fun fetchYoungestSolarDataSet(): SolarDataSet? = ObjectifyService.ofy()
+    .load()
+    .type(SolarDataSet::class.java)
+    .order("-time")
+    .first()
+    .safe()
+
+
   fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeewxDataSet> = ObjectifyService.ofy().load()
     .type(WeewxDataSet::class.java)
     .filter("time >=", begin)
