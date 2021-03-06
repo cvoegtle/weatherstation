@@ -16,8 +16,7 @@ import java.util.logging.Logger
   @GetMapping("/weatherstation/current")
   fun current(): UnformattedWeatherDTO {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
-    val dataset = dataFetcher.getLatestWeatherDataUnformatted(false)
-    return dataset
+    return dataFetcher.getLatestWeatherDataUnformatted(false)
   }
 
   @GetMapping("/weatherstation/query")
@@ -34,12 +33,12 @@ import java.util.logging.Logger
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
     return dataFetcher.fetchSmoothedWeatherData(begin, end)
   }
-  
+
   @GetMapping("/weatherstation/aggregated")
   fun aggregatedList(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") begin: Date,
            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date?): List<AggregatedWeatherDataSet> {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
     return dataFetcher.fetchAggregatedWeatherData(begin, end)
   }
-  
+
 }
