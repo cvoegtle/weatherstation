@@ -1,5 +1,5 @@
 buildscript {    // Configuration for building
-    ext.kotlin_version = '1.4.30'
+    ext.kotlin_version = '1.4.31'
 
     repositories {
         jcenter()    // Bintray's repository - a fast Maven Central mirror & more
@@ -84,8 +84,8 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '63'
-        projectId = 'leo-wetter'
+        version = '64'
+        projectId = 'wettercentral'
         stopPreviousVersion = true
         promote = true
     }

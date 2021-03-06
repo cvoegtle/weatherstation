@@ -264,6 +264,8 @@ class JSONConverter(private val locationProperties: LocationProperties) {
                            barometer = json.optFloat("barometer"),
                            solarradiation = json.optFloat("solarradiation"),
                            UV = json.optFloat("uv"),
+                           powerProduction = json.optFloat("powerProduction"),
+                           powerFeed = json.optFloat("powerFeed"),
                            insideTemperature = json.optFloat("insideTemperature"),
                            insideHumidity = json.optFloat("insideHumidity"),
                            watt = json.optFloat("watt"),
