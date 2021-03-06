@@ -37,6 +37,10 @@ import java.util.Date
                                      @Ignore private var countUV: Int = 0,
 
                                      var powerFeed: Float? = null,
+                                     @Ignore private var countPowerFeed: Int = 0,
+
+                                     var powerProduction: Float? = null,
+                                     @Ignore private var countPowerProduction: Int = 0,
 
                                      var barometer: Float? = null,
                                      @Ignore private var countBarometer: Int = 0,
@@ -59,6 +63,11 @@ import java.util.Date
     setSolarRadiationIfMax(wds.solarRadiation)
     addUV(wds.UV)
     addBarometer(wds.barometer)
+  }
+
+  fun add(sds: SolarDataSet) {
+    addPowerFeed(sds.powerFeed)
+    addPowerProduction(sds.powerProduction)
   }
 
   fun normalize() {
@@ -85,6 +94,30 @@ import java.util.Date
     }
     if (countBarometer > 0) {
       barometer = barometer!! / countBarometer
+    }
+    if (countPowerFeed > 0) {
+      powerFeed = powerFeed!! / countPowerFeed
+    }
+    if (countPowerProduction > 0) {
+      powerProduction = powerProduction!! / countPowerProduction
+    }
+  }
+
+  private fun addPowerFeed(value: Float) {
+    value?.let {
+      countPowerFeed++
+      var newPowerFeed = powerFeed ?: 0.0f
+      newPowerFeed += it
+      powerFeed = newPowerFeed
+    }
+  }
+
+  private fun addPowerProduction(value: Float) {
+    value?.let {
+      countPowerProduction++
+      var newPowerProduction = powerProduction ?: 0.0f
+      newPowerProduction += it
+      powerFeed = newPowerProduction
     }
   }
 
