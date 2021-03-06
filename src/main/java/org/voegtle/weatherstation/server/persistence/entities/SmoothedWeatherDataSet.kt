@@ -4,6 +4,7 @@ import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Ignore
 import com.googlecode.objectify.annotation.Index
+import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 
 import java.util.Date
@@ -34,10 +35,6 @@ import java.util.Date
 
                                      var UV: Float? = null,
                                      @Ignore private var countUV: Int = 0,
-
-                                     var watt: Float? = null,
-                                     var kwh: Double? = null,
-                                     @Ignore private var countWatt: Int = 0,
 
                                      var powerFeed: Float? = null,
 
@@ -85,9 +82,6 @@ import java.util.Date
     }
     if (countUV > 1) {
       UV = UV!! / countUV
-    }
-    if (countWatt > 0) {
-      watt = watt!! / countWatt
     }
     if (countBarometer > 0) {
       barometer = barometer!! / countBarometer

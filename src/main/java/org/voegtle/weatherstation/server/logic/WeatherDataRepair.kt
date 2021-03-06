@@ -95,10 +95,6 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
 
         ds.dailyRain = if (isSameDay(it, ds)) it.dailyRain else 0.0f
 
-        it.kwh?.let {
-          ds.kwh = getNewValue(it, index, step.kwh)
-        }
-
         it.barometer?.let{
           ds.barometer = getNewValue(it, index, step.barometer)
         }
