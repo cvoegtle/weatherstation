@@ -117,7 +117,7 @@ import java.util.Date
       countPowerProduction++
       var newPowerProduction = powerProduction ?: 0.0f
       newPowerProduction += it
-      powerFeed = newPowerProduction
+      powerProduction = newPowerProduction
     }
   }
 
