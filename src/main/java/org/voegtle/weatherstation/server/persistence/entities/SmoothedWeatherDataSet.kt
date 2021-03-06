@@ -9,43 +9,45 @@ import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 
 import java.util.Date
 
-@Entity class SmoothedWeatherDataSet(@Id var id: Long? = null,
-                                     @Index var timestamp: Date = Date(),
-                                     var outsideTemperature: Float? = null,
-                                     @Ignore private var countOutsideTemperature: Int = 0,
+@Entity class SmoothedWeatherDataSet(
+  @Id var id: Long? = null,
+  @Index var timestamp: Date = Date(),
+  var outsideTemperature: Float? = null,
+  @Ignore private var countOutsideTemperature: Int = 0,
 
-                                     var outsideHumidity: Float? = null,
-                                     @Ignore private var countOutsideHumidity: Int = 0,
+  var outsideHumidity: Float? = null,
+  @Ignore private var countOutsideHumidity: Int = 0,
 
-                                     var insideTemperature: Float? = null,
-                                     @Ignore private var countInsideTemperature: Int = 0,
+  var insideTemperature: Float? = null,
+  @Ignore private var countInsideTemperature: Int = 0,
 
-                                     var insideHumidity: Float? = null,
-                                     @Ignore private var countInsideHumidity: Int = 0,
+  var insideHumidity: Float? = null,
+  @Ignore private var countInsideHumidity: Int = 0,
 
-                                     var dailyRain: Float = 0.0f,
+  var dailyRain: Float = 0.0f,
 
-                                     var windspeed: Float? = null,
-                                     var windspeedMax: Float? = null,
-                                     @Ignore private var countWindspeed: Int = 0,
+  var windspeed: Float? = null,
+  var windspeedMax: Float? = null,
+  @Ignore private var countWindspeed: Int = 0,
 
-                                     var solarRadiation: Float? = null,
-                                     var solarRadiationMax: Float? = null,
-                                     @Ignore private var countSolarRadiation: Int = 0,
+  var solarRadiation: Float? = null,
+  var solarRadiationMax: Float? = null,
+  @Ignore private var countSolarRadiation: Int = 0,
 
-                                     var UV: Float? = null,
-                                     @Ignore private var countUV: Int = 0,
+  var UV: Float? = null,
+  @Ignore private var countUV: Int = 0,
 
-                                     var powerFeed: Float? = null,
-                                     @Ignore private var countPowerFeed: Int = 0,
+  var powerFeed: Float? = null,
+  @Ignore private var countPowerFeed: Int = 0,
 
-                                     var powerProduction: Float? = null,
-                                     @Ignore private var countPowerProduction: Int = 0,
+  var powerProduction: Float? = null,
+  @Ignore private var countPowerProduction: Int = 0,
 
-                                     var barometer: Float? = null,
-                                     @Ignore private var countBarometer: Int = 0,
+  var barometer: Float? = null,
+  @Ignore private var countBarometer: Int = 0,
 
-                                     var repaired: Boolean? = null) {
+  var repaired: Boolean? = null
+) {
 
 
   val isValid: Boolean
@@ -104,21 +106,17 @@ import java.util.Date
   }
 
   private fun addPowerFeed(value: Float) {
-    value?.let {
-      countPowerFeed++
-      var newPowerFeed = powerFeed ?: 0.0f
-      newPowerFeed += it
-      powerFeed = newPowerFeed
-    }
+    countPowerFeed++
+    var newPowerFeed = powerFeed ?: 0.0f
+    newPowerFeed += value
+    powerFeed = newPowerFeed
   }
 
   private fun addPowerProduction(value: Float) {
-    value?.let {
-      countPowerProduction++
-      var newPowerProduction = powerProduction ?: 0.0f
-      newPowerProduction += it
-      powerProduction = newPowerProduction
-    }
+    countPowerProduction++
+    var newPowerProduction = powerProduction ?: 0.0f
+    newPowerProduction += value
+    powerProduction = newPowerProduction
   }
 
   private fun addOutsideTemperature(value: Float?) {
