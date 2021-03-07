@@ -43,9 +43,18 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.dailyRain = wds.dailyRain
         }
       }
-
+      aggregation.totalPowerProduction = calculateDailyPowerProduction(weatherDataSets)
       aggregation.normalize()
     }
+  }
+
+  private fun calculateDailyPowerProduction(weatherDataSets: List<SmoothedWeatherDataSet>): Float? {
+    var totalPowerProductionInitial = weatherDataSets.first().totalPowerProduction
+    var totalPowerProductionFinal = weatherDataSets.last().totalPowerProduction
+    if (totalPowerProductionInitial != null && totalPowerProductionFinal != null) {
+      return (totalPowerProductionFinal - totalPowerProductionInitial).coerceAtLeast(0.0f)
+    }
+    return null
   }
 
   private fun fetchDateOfLastAggregation(): Date {
