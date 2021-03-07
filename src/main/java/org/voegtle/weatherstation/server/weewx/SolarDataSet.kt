@@ -9,5 +9,6 @@ import java.util.Date
   @Id var id: Long? = null,
   @Index var time: Date = Date(),
   var powerProduction: Float = 0.0f,
+  var totalPowerProduction: Float = 0.0f,
   var powerFeed: Float = 0.0f
 )

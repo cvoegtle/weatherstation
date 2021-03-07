@@ -12,13 +12,21 @@ import java.util.logging.Logger
   val intervalChecker = TimeBetweenRequestsChecker("solar_request")
 
   @GetMapping("/weatherstation/solar")
-  fun receive(@RequestParam ID: String,
-              @RequestParam PASSWORD: String,
-              @RequestParam dateutc: String,
-              @RequestParam powerProduction: Float,
-              @RequestParam powerFeed: Float): String {
+  fun receive(
+    @RequestParam ID: String,
+    @RequestParam PASSWORD: String,
+    @RequestParam dateutc: String,
+    @RequestParam powerProduction: Float,
+    @RequestParam totalPowerProduction: Float,
+    @RequestParam powerFeed: Float
+  ): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
-    val dataset = SolarDataSet(time = parseUtcDate(dateutc), powerFeed = powerFeed, powerProduction = powerProduction)
+    val dataset = SolarDataSet(
+      time = parseUtcDate(dateutc),
+      powerFeed = powerFeed,
+      powerProduction = powerProduction,
+      totalPowerProduction = totalPowerProduction
+    )
 
     if (intervalChecker.hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
       pm.makePersistent(dataset)
