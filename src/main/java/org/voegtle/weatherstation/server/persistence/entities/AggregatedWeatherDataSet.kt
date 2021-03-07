@@ -45,6 +45,8 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var solarRadiationTotal: Float? = null,
 
                                var totalPowerProduction: Float? = null,
+                               var powerProductionMax: Float? = null,
+                               var powerProductionMaxTime: Date? = null,
 
                                var dailyRain: Float? = null) {
 
@@ -155,6 +157,15 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
       if (it > 0) {
         firstSolarRadiation = firstSolarRadiation ?: timestamp
         lastSolarRadiation = timestamp
+      }
+    }
+  }
+
+  fun updatePowerProductionMax(powerProduction: Float?, timestamp: Date) {
+    powerProduction?.let {
+      if (powerProductionMax == null || powerProductionMax!! < it) {
+        powerProductionMax = powerProduction
+        powerProductionMaxTime = timestamp
       }
     }
   }

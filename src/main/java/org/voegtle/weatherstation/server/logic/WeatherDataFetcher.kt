@@ -99,6 +99,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
       dataSet.solarRadiationMax?.let {
         stats.updateSolarRadiation(range, it)
       }
+      dataSet.powerProductionMax?.let {
+        stats.updateSolarRadiation(range, it)
+      }
 
 
       stats.setTemperature(range, dataSet.outsideTemperatureMax)
@@ -116,25 +119,27 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   private fun buildTodaysStatistics(stats: Statistics) {
     val latest: WeewxDataSet = pm.fetchYoungestDataSet()
+    val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.time)
 
     stats.rainLastHour = latest.rain
 
     stats.addRain(Statistics.TimeRange.today, latest.dailyRain)
     stats.setTemperature(Statistics.TimeRange.today, latest.temperature)
     updateSolarRadiation(latest.solarRadiation, stats)
+    updateSolarRadiation(latestSolarData?.powerProduction, stats)
 
     val todaysDataSets = fetchTodaysDataSets()
 
     for (dataSet in todaysDataSets) {
       stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
       updateSolarRadiation(dataSet.solarRadiationMax, stats)
+      updateSolarRadiation(dataSet.powerProduction, stats)
       collectSolarRadiationTotal(dataSet.solarRadiation)
     }
     solarRadiationTotal?.let {
       stats.addKwh(Statistics.TimeRange.today, it)
     }
     val firstDataSetOfToday = todaysDataSets.firstOrNull()
-    val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.time)
     if (firstDataSetOfToday?.totalPowerProduction != null && latestSolarData != null) {
       stats.addKwh(Statistics.TimeRange.today, (latestSolarData.totalPowerProduction - firstDataSetOfToday.totalPowerProduction!!) / 1000)
     }

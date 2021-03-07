@@ -41,6 +41,7 @@ import java.util.Date
   @Ignore private var countPowerFeed: Int = 0,
 
   var powerProduction: Float? = null,
+  var powerProductionMax: Float? = null,
   var totalPowerProduction: Float? = null,
   @Ignore private var countPowerProduction: Int = 0,
 
@@ -71,6 +72,7 @@ import java.util.Date
   fun add(sds: SolarDataSet) {
     addPowerFeed(sds.powerFeed)
     addPowerProduction(sds.powerProduction)
+    setPowerProductionIfMax(sds.powerProduction)
     this.totalPowerProduction = sds.totalPowerProduction
   }
 
@@ -194,6 +196,12 @@ import java.util.Date
       if (solarRadiationMax == null || solarRadiationMax!! < it) {
         solarRadiationMax = it
       }
+    }
+  }
+
+  private fun setPowerProductionIfMax(powerProduction: Float) {
+    if (powerProductionMax == null || powerProductionMax!! < powerProduction) {
+      powerProductionMax = powerProduction
     }
   }
 
