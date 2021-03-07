@@ -17,7 +17,7 @@ import java.util.logging.Logger
     @RequestParam PASSWORD: String,
     @RequestParam dateutc: String,
     @RequestParam powerProduction: Float,
-    @RequestParam totalPowerProduction: Float,
+    @RequestParam totalPowerProduction: Float?,
     @RequestParam powerFeed: Float
   ): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
@@ -25,7 +25,7 @@ import java.util.logging.Logger
       time = parseUtcDate(dateutc),
       powerFeed = powerFeed,
       powerProduction = powerProduction,
-      totalPowerProduction = totalPowerProduction
+      totalPowerProduction = totalPowerProduction ?: 0.0f
     )
 
     if (intervalChecker.hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
