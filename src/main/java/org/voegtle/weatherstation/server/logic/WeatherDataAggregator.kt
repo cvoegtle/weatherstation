@@ -39,6 +39,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.updateWindspeedMax(wds.windspeedMax)
           aggregation.addSolarRadiation(wds.solarRadiation)
           aggregation.updateSolarRadiationMax(wds.solarRadiationMax, wds.timestamp)
+          aggregation.totalPowerProduction = wds.totalPowerProduction
           aggregation.dailyRain = wds.dailyRain
         }
       }

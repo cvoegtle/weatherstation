@@ -99,6 +99,10 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
           ds.barometer = getNewValue(it, index, step.barometer)
         }
 
+        it.totalPowerProduction?.let {
+          ds.totalPowerProduction = getNewValue(it, index, step.totalPowerProduction)
+        }
+
         setDefaults(ds)
         pm.updateDataset(ds)
       }
