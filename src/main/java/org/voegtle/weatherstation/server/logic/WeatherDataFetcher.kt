@@ -133,7 +133,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     for (dataSet in todaysDataSets) {
       stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
       updateSolarRadiation(dataSet.solarRadiationMax, stats)
-      updateSolarRadiation(dataSet.powerProduction, stats)
+      updateSolarRadiation(dataSet.powerProductionMax, stats)
       collectSolarRadiationTotal(dataSet.solarRadiation)
     }
     solarRadiationTotal?.let {
