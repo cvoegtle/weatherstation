@@ -85,7 +85,7 @@ open class PersistenceManager {
     .filter("time >=", DateUtil.minutesBefore(time, 15))
     .order("-time")
     .first()
-    .safe()
+    .now()
 
 
   fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeewxDataSet> = ObjectifyService.ofy().load()
