@@ -191,6 +191,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
   fun toJson(stats: Statistics, newFormat: Boolean): JSONObject {
     val json = WeatherJSONObject()
     json.put("id", locationProperties.location)
+    json.put("kind", stats.kind)
 
     val jsonObjects = ArrayList<JSONObject>()
     if (stats.rainLastHour != null) {
