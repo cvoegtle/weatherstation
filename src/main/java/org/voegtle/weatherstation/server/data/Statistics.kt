@@ -1,8 +1,13 @@
 package org.voegtle.weatherstation.server.data
 
 class Statistics {
+  enum class Kind {
+    standard, withSolarRadiation, withSolarPower
+  }
 
+  var kind: Kind = Kind.standard
   var rainLastHour: Float? = null
+
   val today = StatisticsSet()
   val yesterday = StatisticsSet()
   val last7days = StatisticsSet()
