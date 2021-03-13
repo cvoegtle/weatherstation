@@ -2,29 +2,16 @@ package org.voegtle.weatherstation.server.util
 
 import org.json.JSONException
 import org.json.JSONObject
-import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import java.util.ArrayList
-import java.util.logging.Logger
 
 class JSONConverter(private val locationProperties: LocationProperties) {
-  private val log = Logger.getLogger("JSONConverter")
-
-  fun toJson(rain: RainDTO): JSONObject {
-    val json = WeatherJSONObject()
-    json.put("lastHour", rain.lastHour)
-    json.put("today", rain.today)
-    json.put("yesterday", rain.yesterday)
-    json.put("lastWeek", rain.lastWeek)
-    json.put("last30days", rain.last30Days)
-    return json
-  }
-
   fun toJson(stats: Statistics): JSONObject {
     val json = WeatherJSONObject()
     json.put("id", locationProperties.location)
+    json.put("kind", stats.kind)
 
     val jsonObjects = ArrayList<JSONObject>()
     stats.rainLastHour?.let {

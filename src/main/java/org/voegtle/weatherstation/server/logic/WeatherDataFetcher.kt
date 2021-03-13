@@ -97,9 +97,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
       dataSet.totalPowerProduction?.let { stats.addKwh(range, it / 1000) }
 
       dataSet.solarRadiationMax?.let {
+        stats.kind = Statistics.Kind.withSolarRadiation
         stats.updateSolarRadiation(range, it)
       }
       dataSet.powerProductionMax?.let {
+        stats.kind = Statistics.Kind.withSolarPower
         stats.updateSolarRadiation(range, it)
       }
 
