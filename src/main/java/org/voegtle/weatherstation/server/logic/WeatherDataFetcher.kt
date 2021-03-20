@@ -82,6 +82,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     val yesterday = dateUtil.yesterday()
     var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRangeDesc(dateUtil.daysEarlier(yesterday, 29), yesterday)
     dataSets = removeDuplicates(dataSets)
+
+    determineKindOfStatistics(stats, dataSets)
+
     var day = 1
     for (dataSet in dataSets) {
       val range = Statistics.TimeRange.byDay(day++)
@@ -97,17 +100,24 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
       dataSet.totalPowerProduction?.let { stats.addKwh(range, it / 1000) }
 
       dataSet.solarRadiationMax?.let {
-        stats.kind = Statistics.Kind.withSolarRadiation
         stats.updateSolarRadiation(range, it)
       }
       dataSet.powerProductionMax?.let {
-        stats.kind = Statistics.Kind.withSolarPower
         stats.updateSolarRadiation(range, it)
       }
 
-
       stats.setTemperature(range, dataSet.outsideTemperatureMax)
       stats.setTemperature(range, dataSet.outsideTemperatureMin)
+    }
+  }
+
+  private fun determineKindOfStatistics(stats: Statistics, dataSets: Collection<AggregatedWeatherDataSet>) {
+    if (!dataSets.isEmpty()) {
+      if (dataSets.first().powerProductionMax != null) {
+        stats.kind = Statistics.Kind.withSolarPower
+      } else if (dataSets.first().solarRadiationMax != null) {
+        stats.kind = Statistics.Kind.withSolarRadiation
+      }
     }
   }
 
