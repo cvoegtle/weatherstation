@@ -31,7 +31,14 @@ import java.util.logging.Logger
   fun list(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") begin: Date,
            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date): List<SmoothedWeatherDataSet> {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
-    return dataFetcher.fetchSmoothedWeatherData(begin, end)
+
+    return dataFetcher.fetchSmoothedWeatherData(ensureInsideBounds(begin), end)
+  }
+
+  private fun ensureInsideBounds(date: Date): Date {
+    val dateUtil = fetchLocationProperties().dateUtil
+    val minDate = dateUtil.getDate(2021, 3, 20)
+    return if (minDate.after(date)) minDate else date
   }
 
   @GetMapping("/weatherstation/aggregated")
