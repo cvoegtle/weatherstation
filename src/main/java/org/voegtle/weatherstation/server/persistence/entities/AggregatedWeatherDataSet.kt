@@ -48,7 +48,11 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var powerProductionMax: Float? = null,
                                var powerProductionMaxTime: Date? = null,
 
-                               var dailyRain: Float? = null) {
+                               var dailyRain: Float? = null,
+
+                               // zur schleichenden Migration der alten Werte von der ELV Wetterstation
+                               var rainCounter: Int? = null,
+                               var kwh: Float? = null) {
 
   fun addOutsideTemperature(value: Float?, time: Date) {
     value?.let {
