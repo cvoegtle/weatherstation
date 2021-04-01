@@ -161,7 +161,7 @@ import java.util.Date
   }
 
   private fun addDailyRain(dailyRain: Float) {
-    if (this.dailyRain < dailyRain) {
+    if (this.dailyRain!! < dailyRain) {
       this.dailyRain = dailyRain
     }
   }
