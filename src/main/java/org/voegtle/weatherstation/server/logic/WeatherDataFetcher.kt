@@ -22,7 +22,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
-    val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(begin, end)
+    val gmtBegin = dateUtil.fromCESTtoGMT(begin)
+    val gmtEnd = dateUtil.fromCESTtoGMT(end)
+    val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(gmtBegin, gmtEnd)
     calculateRainPerPeriod(smoothedWeatherDataInRange)
     return smoothedWeatherDataInRange
   }
