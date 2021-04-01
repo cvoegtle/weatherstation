@@ -24,7 +24,8 @@ import java.util.Date
   var insideHumidity: Float? = null,
   @Ignore private var countInsideHumidity: Int = 0,
 
-  var dailyRain: Float = 0.0f,
+  var dailyRain: Float? = 0.0f,
+  var rainCounter: Int? = null,  // nur zur Migration von Datensätzen der alten Station
 
   var windspeed: Float? = null,
   var windspeedMax: Float? = null,

@@ -32,7 +32,7 @@ import java.util.logging.Logger
            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS") end: Date): List<SmoothedWeatherDataSet> {
     val dataFetcher = WeatherDataFetcher(pm, fetchLocationProperties())
 
-    return dataFetcher.fetchSmoothedWeatherData(ensureInsideBounds(begin), end)
+    return dataFetcher.fetchSmoothedWeatherData(begin, end)
   }
 
   private fun ensureInsideBounds(date: Date): Date {

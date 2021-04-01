@@ -30,7 +30,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private fun calculateRainPerPeriod(datasets: MutableList<SmoothedWeatherDataSet>) {
     var previousRain: Float? = null
     datasets.forEach {
-      val currentRain = it.dailyRain
+      val currentRain = it.dailyRain ?: (it.rainCounter ?: 0) * 0.295f
       if (previousRain != null && currentRain > previousRain!!) {
         it.dailyRain = currentRain - previousRain!!
       } else {
