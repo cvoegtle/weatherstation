@@ -5,7 +5,7 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataAggregator(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
@@ -71,7 +71,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY)
-    return if (lastAggregatedDay == null) dateUtil.getDate(2016, 5, 11) else lastAggregatedDay.date
+    return if (lastAggregatedDay == null) dateUtil.getDate(2021, 3, 11) else lastAggregatedDay.date
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {

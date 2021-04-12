@@ -6,7 +6,7 @@ import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.io.UnsupportedEncodingException
-import java.util.Properties
+import java.util.*
 import javax.mail.Message
 import javax.mail.MessagingException
 import javax.mail.Session
@@ -26,7 +26,7 @@ internal class HealthReportCreator(private val locationProperties: LocationPrope
     notification.setFrom(InternetAddress("admin@$appId.appspotmail.com", "Administrator"))
     notification.setRecipient(Message.RecipientType.TO, InternetAddress(contact.mailAdress, contact.name))
 
-    val subject = getSubject(health, isIncident, appId)
+    val subject = getSubject(health, isIncident, appId!!)
     notification.subject = subject
     val htmlBody = "<h1><font color='${if (isIncident) "red" else "black"}'>$subject</font></h1>" +
         "<b>Requests:</b><br>${health.requests} of expected ${locationProperties.expectedRequests} requests<br><br>" +
