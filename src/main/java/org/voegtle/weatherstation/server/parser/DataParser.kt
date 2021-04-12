@@ -6,10 +6,7 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.util.StringUtil
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class DataParser(dateUtil: DateUtil, di: DataIndicies) {
 
@@ -122,18 +119,18 @@ class DataParser(dateUtil: DateUtil, di: DataIndicies) {
   companion object {
     // 1;1;;;;;;;;;;;;;;;;;;15,1;78;0,0;616;0;0
 
-    private val INDEX_INSIDE_TEMPERATURE = 7
-    private val INDEX_INSIDE_HUMIDITY = 15
-    private val INDEX_OUTSIDE_TEMPERATURE = 19
-    private val INDEX_OUTSIDE_HUMIDITY = 20
-    private val INDEX_WIND_SPEED = 21
-    private val INDEX_RAINCOUNTER = 22
-    private val INDEX_RAINING = 23
-    private val INDEX_DATE = 25
-    private val INDEX_WATT = 26
-    private val INDEX_KWH = 27
+    private const val INDEX_INSIDE_TEMPERATURE = 7
+    private const val INDEX_INSIDE_HUMIDITY = 15
+    private const val INDEX_OUTSIDE_TEMPERATURE = 19
+    private const val INDEX_OUTSIDE_HUMIDITY = 20
+    private const val INDEX_WIND_SPEED = 21
+    private const val INDEX_RAINCOUNTER = 22
+    private const val INDEX_RAINING = 23
+    private const val INDEX_DATE = 25
+    private const val INDEX_WATT = 26
+    private const val INDEX_KWH = 27
 
-    private val FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ"
+    private const val FORMAT_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssX"
     private val sdf = SimpleDateFormat(FORMAT_TIMESTAMP)
   }
 }
