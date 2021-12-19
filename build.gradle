@@ -28,7 +28,6 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 dependencies {
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
-    implementation("javax.cache:cache-api:1.0.0")
     implementation 'com.google.appengine:appengine:+'
     implementation 'com.google.appengine:appengine-api-1.0-sdk:+'
     implementation 'com.google.appengine:appengine-api-labs:+'
@@ -84,8 +83,8 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '84'
-        projectId = 'baliwetter'
+        version = '85'
+        projectId = 'wettercentral'
         stopPreviousVersion = true
         promote = true
     }
