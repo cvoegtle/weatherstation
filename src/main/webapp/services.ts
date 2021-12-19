@@ -85,8 +85,6 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
   ajaxRequest.onload = function () {
     let weatherData = JSON.parse(ajaxRequest.responseText);
     processWeatherData(weatherData);
-
-
   };
   ajaxRequest.onerror = reportConnectionProblem;
 
@@ -95,7 +93,7 @@ function fetchWeatherData(processWeatherData:Function, reportConnectionProblem:a
 }
 
 function getOptionalNumber(value:any, unit:string):string {
-  if (value != null && value != "") {
+  if (typeof value == 'number') {
     let result = value.toFixed(1);
     return result.replace(".", ",") + " " + unit;
   } else {

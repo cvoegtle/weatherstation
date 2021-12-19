@@ -73,7 +73,7 @@ function fetchWeatherData(processWeatherData, reportConnectionProblem, type) {
     ajaxRequest.send();
 }
 function getOptionalNumber(value, unit) {
-    if (value != null && value != "") {
+    if (typeof value == 'number') {
         var result = value.toFixed(1);
         return result.replace(".", ",") + " " + unit;
     }
