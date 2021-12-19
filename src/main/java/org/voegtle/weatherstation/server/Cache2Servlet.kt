@@ -1,29 +1,28 @@
 package org.voegtle.weatherstation.server
 
+import com.google.appengine.api.memcache.MemcacheService
+import com.google.appengine.api.memcache.MemcacheServiceFactory
 import org.json.JSONException
 import org.voegtle.weatherstation.server.util.JSONConverter
 import java.io.IOException
-import java.util.HashMap
 import java.util.logging.Level
-import javax.cache.Cache
-import javax.cache.CacheManager
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * nimmt Wetterdaten von einer neuen Wetterstation an, die mit weewx laufen. Siehe Branch wetterwolke2
+ */
 class Cache2Servlet : AbstractInputServlet() {
 
-  private var cache: Cache = createCache()
+  private var cache: MemcacheService = createCache()
 
   @Throws(ServletException::class)
   override fun init() {
     super.init()
   }
 
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, Any>())
-  }
+  private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()
 
   @Throws(ServletException::class, IOException::class)
   override fun doPost(request: HttpServletRequest, resp: HttpServletResponse) {

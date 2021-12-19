@@ -1,5 +1,7 @@
 package org.voegtle.weatherstation.server
 
+import com.google.appengine.api.memcache.MemcacheService
+import com.google.appengine.api.memcache.MemcacheServiceFactory
 import org.json.JSONObject
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
@@ -10,10 +12,6 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
-import java.util.ArrayList
-import java.util.HashMap
-import javax.cache.Cache
-import javax.cache.CacheManager
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -22,7 +20,7 @@ class CentralServlet : AbstractServlet() {
   private val TIMEOUT = 10000
 
   private var locations: HashMap<String, WeatherLocation>? = null
-  private val cache: Cache = createCache()
+  private var cache: MemcacheService = createCache()
 
   @Throws(ServletException::class)
   override fun init() {
@@ -30,10 +28,7 @@ class CentralServlet : AbstractServlet() {
     locations = pm.fetchWeatherLocations()
   }
 
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, Any>())
-  }
+  private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()
 
   @Throws(ServletException::class, IOException::class)
   public override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
