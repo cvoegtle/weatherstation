@@ -1,16 +1,18 @@
 package org.voegtle.weatherstation.server
 
-import java.time.LocalDateTime
-import java.util.Date
-import java.util.HashMap
+import com.google.appengine.api.memcache.MemcacheService
+import com.google.appengine.api.memcache.MemcacheServiceFactory
+import java.util.*
 import java.util.logging.Logger
-import javax.cache.Cache
-import javax.cache.CacheManager
 
 class TimeBetweenRequestsChecker(val requestIdentifier: String) {
   private val log = Logger.getLogger("TimeBetweenRequestsChecker")
   private val minimumIntervall = 90_000
-  private val cache: Cache = createCache()
+
+  private var cache: MemcacheService = createCache()
+
+  private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()
+
 
   public fun hasEnoughTimeElapsedSinceLastRequest(time: Date): Boolean {
     val currentTime = time.time
@@ -28,12 +30,7 @@ class TimeBetweenRequestsChecker(val requestIdentifier: String) {
   private fun retrieveLastRequest() = (cache[requestIdentifier] ?: 0L) as Long
 
   private fun storeLastRequest(time: Long) {
-    cache[requestIdentifier] = time
-  }
-
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, LocalDateTime>())
+    cache.put(requestIdentifier, time)
   }
 
 

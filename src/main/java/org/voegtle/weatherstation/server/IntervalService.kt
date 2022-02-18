@@ -26,8 +26,8 @@ import java.util.logging.Logger
               @RequestParam UV: Float?,
               @RequestParam solarradiation: Float?,
               @RequestParam winddir: Int?,
-              @RequestParam windspeed: Float?,
-              @RequestParam windgust: Float?,
+              @RequestParam windspeed: Float?, // in m/s
+              @RequestParam windgust: Float?, // in m/s
               @RequestParam indoortemp: Float?,
               @RequestParam indoorhumidity: Float?): String {
     validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)

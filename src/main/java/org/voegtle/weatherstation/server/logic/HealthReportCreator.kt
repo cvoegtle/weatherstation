@@ -6,7 +6,7 @@ import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.io.UnsupportedEncodingException
-import java.util.Properties
+import java.util.*
 import javax.mail.Message
 import javax.mail.MessagingException
 import javax.mail.Session
@@ -42,7 +42,7 @@ internal class HealthReportCreator(private val locationProperties: LocationPrope
     return notification
   }
 
-  private fun getSubject(health: HealthDTO, isIncident: Boolean, appId: String): String {
+  private fun getSubject(health: HealthDTO, isIncident: Boolean, appId: String?): String {
     val reportType = if (isIncident) "Problembericht" else "Statusbericht"
     return "$appId - $reportType vom ${dateUtil.formatAsDate(health.day)}"
   }

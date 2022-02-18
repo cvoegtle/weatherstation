@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.google.appengine:appengine-endpoints:+'
     implementation 'com.google.appengine:appengine-endpoints-deps:+'
     implementation 'com.google.appengine:appengine-jsr107cache:+'
+    implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
     implementation 'com.google.guava:guava:19.0'
     implementation 'com.googlecode.objectify:objectify:5.1.21'
@@ -70,7 +71,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '86'
+        version = '87'
         projectId = 'leo-wetter'
         stopPreviousVersion = true
         promote = true

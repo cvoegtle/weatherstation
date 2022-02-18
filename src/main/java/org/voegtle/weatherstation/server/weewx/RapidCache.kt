@@ -1,18 +1,14 @@
 package org.voegtle.weatherstation.server.weewx
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.util.HashMap
-import javax.cache.Cache
-import javax.cache.CacheManager
+import com.google.appengine.api.memcache.MemcacheService
+import com.google.appengine.api.memcache.MemcacheServiceFactory
 
 class RapidCache {
-  private var cache: Cache = createCache()
+  private var cache: MemcacheService = createCache()
   var objectMapper: ObjectMapper? = null
 
-  private fun createCache(): Cache {
-    val cacheFactory = CacheManager.getInstance().cacheFactory
-    return cacheFactory.createCache(HashMap<Any, String>())
-  }
+  private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()
 
   fun getLatest(): AggregatedRapidDataSet? {
     val json: String? = cache.get("latest") as String?

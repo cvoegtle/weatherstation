@@ -10,8 +10,7 @@ import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDat
 import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
-import java.util.Date
-import java.util.LinkedHashMap
+import java.util.*
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
 
@@ -26,6 +25,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     val gmtEnd = dateUtil.fromCESTtoGMT(end)
     val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(gmtBegin, gmtEnd)
     calculateRainPerPeriod(smoothedWeatherDataInRange)
+    convertWindSpeed2KmH(smoothedWeatherDataInRange)
     return smoothedWeatherDataInRange
   }
 
@@ -39,6 +39,13 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         it.dailyRain = 0.0f
       }
       previousRain = currentRain
+    }
+  }
+
+  private fun convertWindSpeed2KmH(datasets: MutableList<SmoothedWeatherDataSet>) {
+    datasets.forEach {
+      it.windspeed = toKilometerPerHour(it.windspeed)
+      it.windspeedMax = toKilometerPerHour(it.windspeedMax)
     }
   }
 
