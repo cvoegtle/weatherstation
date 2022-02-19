@@ -41,7 +41,7 @@ internal class WeatherDataForwarder(pm: PersistenceManager, locationProperties: 
         rainLastHour = if (latest.rainLastHour > 0.0f) latest.rainLastHour else null,
         rainToday = if (latest.rainToday > 0.0f) latest.rainToday else null,
         raining = latest.isRaining,
-        windspeed = toKilometerPerHour(latest.windspeed),
+        windspeed = latest.windspeed,
         barometer = latest.barometer,
         solarradiation = latest.solarradiation,
         UV = latest.UV,

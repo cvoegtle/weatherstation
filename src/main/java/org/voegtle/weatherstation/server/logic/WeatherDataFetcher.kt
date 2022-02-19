@@ -25,7 +25,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     val gmtEnd = dateUtil.fromCESTtoGMT(end)
     val smoothedWeatherDataInRange = pm.fetchSmoothedWeatherDataInRange(gmtBegin, gmtEnd)
     calculateRainPerPeriod(smoothedWeatherDataInRange)
-    convertWindSpeed2KmH(smoothedWeatherDataInRange)
     return smoothedWeatherDataInRange
   }
 
@@ -39,13 +38,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         it.dailyRain = 0.0f
       }
       previousRain = currentRain
-    }
-  }
-
-  private fun convertWindSpeed2KmH(datasets: MutableList<SmoothedWeatherDataSet>) {
-    datasets.forEach {
-      it.windspeed = toKilometerPerHour(it.windspeed)
-      it.windspeedMax = toKilometerPerHour(it.windspeedMax)
     }
   }
 
