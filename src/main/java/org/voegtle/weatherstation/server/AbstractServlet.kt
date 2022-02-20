@@ -98,7 +98,7 @@ abstract class AbstractServlet : HttpServlet() {
   }
 
   @JvmOverloads internal fun writeResponse(response: HttpServletResponse, jsonObjects: List<JSONObject>,
-                                           encoding: String = "ISO-8859-1") {
+                                           encoding: String = "UTF-8") {
     val jsonArray = JSONArray(jsonObjects)
     try {
       response.characterEncoding = encoding

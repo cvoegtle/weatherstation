@@ -35,7 +35,7 @@ class CentralServlet : AbstractServlet() {
 
     var collectedWeatherData = fetchLocationsFromCache(param)
 
-    writeResponse(response, collectedWeatherData, if (param.isUtf8) "UTF-8" else "ISO-8859-1")
+    writeResponse(response, collectedWeatherData)
   }
 
   private fun fetchLocationsFromCache(param: CentralUrlParameter): ArrayList<JSONObject> {
