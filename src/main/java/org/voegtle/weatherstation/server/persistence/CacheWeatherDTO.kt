@@ -24,5 +24,5 @@ data class CacheWeatherDTO(var id: String,
                            var rainLastHour: Float? = null,
                            var rainToday: Float? = null,
                            var windspeed: Float? = null,
-                           var windspeedMax: Float? = null,
+                           var windgust: Float? = null,
                            var forecast: String? = null)

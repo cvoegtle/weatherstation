@@ -15,7 +15,7 @@ class UnformattedWeatherDTO(
   val rainLastHour: Float = 0.0f,
   val rainToday: Float = 0.0f,
   val windspeed: Float?,
-  val windGust: Float?,
+  val windgust: Float?,
   val insideHumidity: Float?,
   val solarradiation: Float? = null,
   val UV: Float? = null,
