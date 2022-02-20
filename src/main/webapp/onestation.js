@@ -9,6 +9,8 @@ var WeatherArea = /** @class */ (function () {
         this.labelBarometer = document.getElementById("barometer");
         this.labelWindText = document.getElementById("windText");
         this.labelWind = document.getElementById("wind");
+        this.labelWindgustText = document.getElementById("windgustText");
+        this.labelWindgust = document.getElementById("windgust");
         this.labelRain = document.getElementById("rain");
         this.labelRainText = document.getElementById("rainText");
         this.labelSolarradiationText = document.getElementById("solarradiationText");
@@ -24,9 +26,15 @@ var WeatherArea = /** @class */ (function () {
         this.updateLabel(this.labelHumidity, weatherData.humidity + " %");
         this.updateLabel(this.labelBarometer, getOptionalNumber(weatherData.barometer, "hPa"));
         if (this.labelWind !== undefined) {
-            if (weatherData.wind != null) {
+            if (weatherData.windspeed != null) {
                 this.updateLabel(this.labelWindText, "Wind:");
-                this.updateLabel(this.labelWind, getOptionalNumber(weatherData.wind, "km/h"));
+                this.updateLabel(this.labelWind, getOptionalNumber(weatherData.windspeed, "km/h"));
+            }
+        }
+        if (this.labelWindgust !== undefined) {
+            if (weatherData.windgust != null) {
+                this.updateLabel(this.labelWindgustText, "Böen:");
+                this.updateLabel(this.labelWindgust, getOptionalNumber(weatherData.windgust, "km/h"));
             }
         }
         if (weatherData.rainToday != null) {

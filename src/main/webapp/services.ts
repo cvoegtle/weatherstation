@@ -1,7 +1,8 @@
 class WeatherData {
   timestamp:string;
   localtime:string;
-  wind:number;
+  windspeed:number;
+  windgust:number;
   humidity:number;
   barometer:number;
   raining:boolean;
@@ -20,6 +21,7 @@ let testdaten:WeatherData[] = [
     timestamp: "Fri Apr 18 20:28:11 UTC 2014",
     localtime: "20:28",
     wind: 0,
+    windgust: 0,
     barometer: 1000,
     humidity: 85,
     raining: false,
@@ -35,6 +37,7 @@ let testdaten:WeatherData[] = [
     "timestamp": "Fri Apr 18 20:28:50 UTC 2014",
     "localtime": "20:28",
     "wind": 0,
+    "windgust": 0,
     barometer: 1000,
     "humidity": 76,
     "raining": false,
@@ -50,6 +53,7 @@ let testdaten:WeatherData[] = [
     "timestamp": "Fri Apr 18 20:29:39 UTC 2014",
     "localtime": "20:29",
     "wind": 0,
+    "windgust": 0,
     barometer: 1000,
     "humidity": 84,
     "raining": false,
