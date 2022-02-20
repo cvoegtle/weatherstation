@@ -61,6 +61,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
       UV = latestWeewxData.UV,
       isRaining = isRaining(latestWeewxData),
       windspeed = if (locationProperties.isWindRelevant) latestWeewxData.windSpeed else null,
+      windGust = if (locationProperties.isWindRelevant) latestWeewxData.windGust else null,
       insideTemperature = if (authorized) latestWeewxData.indoorTemperature else null,
       insideHumidity = if (authorized) latestWeewxData.indoorHumidity else null,
       rainLastHour = latestWeewxData.rain,

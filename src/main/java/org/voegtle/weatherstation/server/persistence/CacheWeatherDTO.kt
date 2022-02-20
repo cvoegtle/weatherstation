@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.persistence
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import java.util.Date
+import java.util.*
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class CacheWeatherDTO(var id: String,
@@ -24,4 +24,5 @@ data class CacheWeatherDTO(var id: String,
                            var rainLastHour: Float? = null,
                            var rainToday: Float? = null,
                            var windspeed: Float? = null,
+                           var windspeedMax: Float? = null,
                            var forecast: String? = null)
