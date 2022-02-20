@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.persistence
 
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 
 class CacheWeatherDTO (var id: String,
                        var time: Date,
@@ -23,6 +23,7 @@ class CacheWeatherDTO (var id: String,
                        var rainLastHour: Float? = null,
                        var rainToday: Float? = null,
                        var windspeed: Float? = null,
+                       var windgust: Float? = null,
                        var watt: Float? = null,
                        var forecast: String? = null
                          ) : Serializable
