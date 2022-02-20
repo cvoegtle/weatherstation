@@ -1,5 +1,5 @@
 buildscript {    // Configuration for building
-    ext.kotlin_version = '1.4.31'
+    ext.kotlin_version = '1.6.10'
     ext.spring_boot_version = '2.4.0'
 
     repositories {
@@ -35,12 +35,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    implementation 'com.google.appengine:appengine:+'
-    implementation 'com.google.appengine:appengine-api-1.0-sdk:+'
-    implementation 'com.google.appengine:appengine-api-labs:+'
-    implementation 'com.google.appengine:appengine-endpoints:+'
-    implementation 'com.google.appengine:appengine-endpoints-deps:+'
-    implementation 'com.google.appengine:appengine-jsr107cache:+'
+    implementation 'com.google.appengine:appengine:1.9.94'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.3'
+    implementation 'com.google.appengine:appengine-api-labs:1.9.88'
+    implementation 'com.google.appengine:appengine-endpoints:1.9.86'
+    implementation 'com.google.appengine:appengine-endpoints-deps:1.9.86'
+    implementation 'com.google.appengine:appengine-jsr107cache:1.9.94'
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
     implementation 'com.google.guava:guava:19.0'
@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation("org.mockito:mockito-core:2.+")
+    testImplementation('org.mockito:mockito-core:4.3.1')
 }
 
 war {
@@ -70,8 +70,8 @@ appengine {  // App Engine tasks configuration
 
     deploy {   // deploy configuration
         // leo-wetter, tegelwetter
-        version = '91'
-        projectId = 'tegelwetter'
+        version = '92'
+        projectId = 'leo-wetter'
         stopPreviousVersion = true
         promote = true
     }
