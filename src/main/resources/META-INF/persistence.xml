@@ -11,7 +11,7 @@
         <class>org.voegtle.weatherstation.server.persistence.entities.Health</class>
         <class>org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier</class>
         <class>org.voegtle.weatherstation.server.persistence.entities.LocationProperties</class>
-        <class>org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet</class>
+        <class>org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2</class>
         <class>org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet</class>
         <class>org.voegtle.weatherstation.server.persistence.entities.WeatherLocation</class>
         <class> org.voegtle.weatherstation.server.image.Image</class>

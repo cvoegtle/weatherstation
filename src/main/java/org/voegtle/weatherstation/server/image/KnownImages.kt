@@ -1,8 +1,7 @@
 package org.voegtle.weatherstation.server.image
 
-import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
-import java.util.HashMap
+import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
 
 class KnownImages(internal var pm: PersistenceManager) {
   internal var identifiers = HashMap<String, ImageIdentifier>()
@@ -16,7 +15,7 @@ class KnownImages(internal var pm: PersistenceManager) {
 
   fun put(identifier: ImageIdentifier) {
     if (identifiers.put(identifier.oid, identifier) == null) {
-      pm.makePersistant(identifier)
+      pm.makePersistent(identifier)
     }
   }
 

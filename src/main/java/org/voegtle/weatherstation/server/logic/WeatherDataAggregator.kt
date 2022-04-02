@@ -3,7 +3,7 @@ package org.voegtle.weatherstation.server.logic
 import org.voegtle.weatherstation.server.persistence.PeriodEnum
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 import java.util.logging.Logger
@@ -24,12 +24,12 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
       aggregate(aggregatedDay, weatherDataSets)
 
-      pm.makePersitant(aggregatedDay)
+      pm.makePersistent(aggregatedDay)
       dateOfLastAggregation = aggregatedDay.date
     }
   }
 
-  private fun aggregate(aggregation: AggregatedWeatherDataSet, weatherDataSets: List<SmoothedWeatherDataSet>) {
+  private fun aggregate(aggregation: AggregatedWeatherDataSet, weatherDataSets: List<SmoothedWeatherDataSet2>) {
     if (weatherDataSets.isNotEmpty()) {
       var rainCountStart: Int? = null
       var rainCountLast: Int? = null
@@ -71,7 +71,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet(PeriodEnum.DAY)
-    return if (lastAggregatedDay == null) dateUtil.getDate(2021, 3, 11) else lastAggregatedDay.date
+    return if (lastAggregatedDay == null) dateUtil.getDate(2022, 3, 31) else lastAggregatedDay.date
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {

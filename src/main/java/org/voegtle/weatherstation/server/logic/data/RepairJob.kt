@@ -1,14 +1,12 @@
 package org.voegtle.weatherstation.server.logic.data
 
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-
-import java.util.ArrayList
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 
 class RepairJob {
 
-  var first: SmoothedWeatherDataSet? = null
-  var last: SmoothedWeatherDataSet? = null
-  val defectDataSets = ArrayList<SmoothedWeatherDataSet>()
+  var first: SmoothedWeatherDataSet2? = null
+  var last: SmoothedWeatherDataSet2? = null
+  val defectDataSets = ArrayList<SmoothedWeatherDataSet2>()
   val step = RepairStep()
 
   inner class RepairStep {
@@ -20,7 +18,7 @@ class RepairJob {
     var kwh: Double? = null
   }
 
-  fun addDefectDataSet(dataset: SmoothedWeatherDataSet) {
+  fun addDefectDataSet(dataset: SmoothedWeatherDataSet2) {
     defectDataSets.add(dataset)
   }
 

@@ -6,10 +6,9 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 
 class WeatherDataFetcherTest {
   companion object {
@@ -17,11 +16,11 @@ class WeatherDataFetcherTest {
     val dateUtil = locationProperties.dateUtil
     val startTime: Date = dateUtil.today()
     val endTime: Date = dateUtil.incrementHour(startTime)
-    val defaultResponse = ArrayList<SmoothedWeatherDataSet>()
+    val defaultResponse = ArrayList<SmoothedWeatherDataSet2>()
     val latestWeatherData = createDefaultWeatherDataSet()
 
-    val twentyMinutesBefore: SmoothedWeatherDataSet
-    val oneHourBefore: SmoothedWeatherDataSet
+    val twentyMinutesBefore: SmoothedWeatherDataSet2
+    val oneHourBefore: SmoothedWeatherDataSet2
 
     init {
       val cal = Calendar.getInstance()
@@ -39,8 +38,8 @@ class WeatherDataFetcherTest {
     }
 
     private fun createSmoothedWeatherDataSet(time: Date, temperature: Float, humidity: Float,
-                                             rain: Int): SmoothedWeatherDataSet {
-      var dataSet = SmoothedWeatherDataSet(time)
+                                             rain: Int): SmoothedWeatherDataSet2 {
+      var dataSet = SmoothedWeatherDataSet2(time)
       dataSet.rainCounter = rain
       dataSet.outsideTemperature = temperature
       dataSet.insideTemperature = temperature + 8

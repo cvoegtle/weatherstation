@@ -9,7 +9,7 @@ import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -119,7 +119,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         return json
     }
 
-    fun toJson(list: List<SmoothedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
+    fun toJson(list: List<SmoothedWeatherDataSet2>, extended: Boolean): ArrayList<JSONObject> {
         val dateUtil = locationProperties.dateUtil
 
         var previousRainCounter: Int? = null

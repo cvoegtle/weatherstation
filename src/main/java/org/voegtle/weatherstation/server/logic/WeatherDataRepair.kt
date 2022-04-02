@@ -4,18 +4,16 @@ import com.google.appengine.api.datastore.Key
 import org.voegtle.weatherstation.server.logic.data.RepairJob
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import java.util.ArrayList
-import java.util.Date
-import java.util.HashMap
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataRepair(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-  private var datasets: MutableList<SmoothedWeatherDataSet> = ArrayList<SmoothedWeatherDataSet>()
+  private var datasets: MutableList<SmoothedWeatherDataSet2> = ArrayList<SmoothedWeatherDataSet2>()
 
   private fun fetchNextRepairJob(): RepairJob {
       val repairJob = RepairJob()
-      var previousDataset: SmoothedWeatherDataSet? = null
+      var previousDataset: SmoothedWeatherDataSet2? = null
       val iter = datasets.iterator()
       while (iter.hasNext()) {
         val dataset = iter.next()
@@ -35,8 +33,8 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
       return repairJob
     }
 
-  fun repair(begin: Date, end: Date?): List<SmoothedWeatherDataSet> {
-    val repaired = ArrayList<SmoothedWeatherDataSet>()
+  fun repair(begin: Date, end: Date?): List<SmoothedWeatherDataSet2> {
+    val repaired = ArrayList<SmoothedWeatherDataSet2>()
     val weatherDataFetcher = WeatherDataFetcher(pm, locationProperties)
     datasets = weatherDataFetcher.fetchSmoothedWeatherData(begin, end)
 
@@ -54,9 +52,9 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
     return repaired
   }
 
-  private fun removeDuplicates(): Collection<SmoothedWeatherDataSet> {
-    val duplicate = HashMap<Key, SmoothedWeatherDataSet>()
-    var previousDataset: SmoothedWeatherDataSet? = null
+  private fun removeDuplicates(): Collection<SmoothedWeatherDataSet2> {
+    val duplicate = HashMap<Key, SmoothedWeatherDataSet2>()
+    var previousDataset: SmoothedWeatherDataSet2? = null
 
     for (dataset in datasets) {
       if (previousDataset != null) {
@@ -106,7 +104,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
     }
   }
 
-  private fun setDefaults(ds: SmoothedWeatherDataSet) {
+  private fun setDefaults(ds: SmoothedWeatherDataSet2) {
     ds.isRaining = false
     ds.windspeed = 0.0.toFloat()
     ds.windspeedMax = 0.0.toFloat()

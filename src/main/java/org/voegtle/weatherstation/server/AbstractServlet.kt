@@ -5,7 +5,7 @@ import org.json.JSONObject
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
@@ -77,7 +77,7 @@ abstract class AbstractServlet : HttpServlet() {
     return location
   }
 
-  internal fun returnDetailedResult(response: HttpServletResponse, list: List<SmoothedWeatherDataSet>,
+  internal fun returnDetailedResult(response: HttpServletResponse, list: List<SmoothedWeatherDataSet2>,
                                     extended: Boolean) {
     val jsonObjects = jsonConverter!!.toJson(list, extended)
     writeResponse(response, jsonObjects)

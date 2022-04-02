@@ -2,11 +2,15 @@ package org.voegtle.weatherstation.server.persistence.entities;
 
 import com.google.appengine.api.datastore.Key;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
 
 @Entity
-public class SmoothedWeatherDataSet {
+public class SmoothedWeatherDataSet2 {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Key key;
@@ -38,15 +42,15 @@ public class SmoothedWeatherDataSet {
   @Transient
   private int countWatt = 0;
 
-  public static boolean hasRainCounter(SmoothedWeatherDataSet sds) {
+  public static boolean hasRainCounter(SmoothedWeatherDataSet2 sds) {
     return sds != null && sds.getRainCounter() != null;
   }
 
-  public SmoothedWeatherDataSet() {
+  public SmoothedWeatherDataSet2() {
     timestamp = new Date();
   }
 
-  public SmoothedWeatherDataSet(Date timestamp) {
+  public SmoothedWeatherDataSet2(Date timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -296,10 +300,10 @@ public class SmoothedWeatherDataSet {
   @Override public String toString() {
     return "SmoothedWeatherDataSet{" +
         "timestamp=" + timestamp +
-        ", rainCounter=" + rainCounter + 
+        ", rainCounter=" + rainCounter +
         ", dailyRain=" + dailyRain +
         "}";
-    
+
 
   }
 }

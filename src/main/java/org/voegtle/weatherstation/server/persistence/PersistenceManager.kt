@@ -1,17 +1,9 @@
 package org.voegtle.weatherstation.server.persistence
 
 import org.voegtle.weatherstation.server.image.Image
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.Contact
-import org.voegtle.weatherstation.server.persistence.entities.Health
-import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
+import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
-import java.util.HashMap
+import java.util.*
 import java.util.logging.Logger
 import javax.persistence.EntityManager
 import javax.persistence.Persistence
@@ -26,7 +18,7 @@ open class PersistenceManager {
     private val log = Logger.getLogger(PersistenceManager::class.java.name)
   }
 
-  fun makePersitant(dataSet: WeatherDataSet): Boolean {
+  fun makePersistent(dataSet: WeatherDataSet): Boolean {
     if (dataSet.isValid) {
       val em = factory.createEntityManager()
       try {
@@ -41,7 +33,7 @@ open class PersistenceManager {
     return dataSet.isValid
   }
 
-  fun makePersitant(dataSet: SmoothedWeatherDataSet) {
+  fun makePersistent(dataSet: SmoothedWeatherDataSet2) {
     val em = factory.createEntityManager()
 
     try {
@@ -53,7 +45,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(id: ImageIdentifier) {
+  fun makePersistent(id: ImageIdentifier) {
     val em = factory.createEntityManager()
 
     try {
@@ -65,7 +57,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(lp: LocationProperties): Boolean {
+  fun makePersistent(lp: LocationProperties): Boolean {
     if (lp.isValid) {
       val em = factory.createEntityManager()
       try {
@@ -81,7 +73,7 @@ open class PersistenceManager {
     return lp.isValid
   }
 
-  fun makePersistant(location: WeatherLocation) {
+  fun makePersistent(location: WeatherLocation) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
@@ -92,7 +84,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(image: Image) {
+  fun makePersistent(image: Image) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
@@ -152,12 +144,12 @@ open class PersistenceManager {
     return result
   }
 
-  fun updateDataset(ds: SmoothedWeatherDataSet) {
+  fun updateDataset(ds: SmoothedWeatherDataSet2) {
     val em = factory.createEntityManager()
 
     try {
       em.transaction.begin()
-      val managedDS = em.find(SmoothedWeatherDataSet::class.java, ds.key)
+      val managedDS = em.find(SmoothedWeatherDataSet2::class.java, ds.key)
       managedDS.outsideHumidity = ds.outsideHumidity
       managedDS.outsideTemperature = ds.outsideTemperature
       managedDS.rainCounter = ds.rainCounter
@@ -172,12 +164,12 @@ open class PersistenceManager {
     }
   }
 
-  fun updateSmoothedDataset(ds: SmoothedWeatherDataSet) {
+  fun updateSmoothedDataset(ds: SmoothedWeatherDataSet2) {
     val em = factory.createEntityManager()
 
     try {
       em.transaction.begin()
-      val managedDS = em.find(SmoothedWeatherDataSet::class.java, ds.key)
+      val managedDS = em.find(SmoothedWeatherDataSet2::class.java, ds.key)
       managedDS.dailyRain = ds.dailyRain
       em.transaction.commit()
     } finally {
@@ -191,19 +183,19 @@ open class PersistenceManager {
     try {
       em.transaction.begin()
       val managedDS = em.find(AggregatedWeatherDataSet::class.java, ds.key)
-      managedDS.dailyRain = ds.dailyRain 
+      managedDS.dailyRain = ds.dailyRain
       em.transaction.commit()
     } finally {
       em.close()
     }
   }
 
-  fun removeDataset(ds: SmoothedWeatherDataSet) {
+  fun removeDataset(ds: SmoothedWeatherDataSet2) {
     val em = factory.createEntityManager()
 
     try {
       em.transaction.begin()
-      val managedDS = em.find(SmoothedWeatherDataSet::class.java, ds.key)
+      val managedDS = em.find(SmoothedWeatherDataSet2::class.java, ds.key)
       em.remove(managedDS)
       em.transaction.commit()
     } finally {
@@ -211,7 +203,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersitant(dataSet: AggregatedWeatherDataSet) {
+  fun makePersistent(dataSet: AggregatedWeatherDataSet) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
@@ -222,14 +214,14 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet? {
+  fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet2? {
     val minAge = DateUtil.minutesBefore(referenceDate, minutes)
     val maxAge = DateUtil.minutesBefore(referenceDate, minutes + 30)
 
     val em = factory.createEntityManager()
     try {
       val q = em.createQuery(
-          "SELECT wds FROM SmoothedWeatherDataSet wds WHERE wds.timestamp < :minAge AND  wds.timestamp > :maxAge ORDER by wds.timestamp desc")
+          "SELECT wds FROM SmoothedWeatherDataSet2 wds WHERE wds.timestamp < :minAge AND  wds.timestamp > :maxAge ORDER by wds.timestamp desc")
       q.setParameter("minAge", minAge, TemporalType.DATE)
       q.setParameter("maxAge", maxAge, TemporalType.DATE)
 
@@ -263,11 +255,11 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> {
+  fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet2> {
     val em = factory.createEntityManager()
     try {
-      val q = createQueryForRange("SmoothedWeatherDataSet", begin, end, em)
-      return (q.resultList as List<SmoothedWeatherDataSet>).toMutableList()
+      val q = createQueryForRange("SmoothedWeatherDataSet2", begin, end, em)
+      return (q.resultList as List<SmoothedWeatherDataSet2>).toMutableList()
     } finally {
       em.close()
     }
@@ -299,11 +291,11 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? {
+  fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet2? {
     val em = factory.createEntityManager()
     val q = em
         .createQuery(
-            "SELECT wds FROM SmoothedWeatherDataSet wds  WHERE wds.timestamp >= :begin and wds.timestamp <= :end ORDER by wds.timestamp")
+            "SELECT wds FROM SmoothedWeatherDataSet2 wds  WHERE wds.timestamp >= :begin and wds.timestamp <= :end ORDER by wds.timestamp")
     q.setParameter("begin", begin, TemporalType.DATE)
     q.setParameter("end", end, TemporalType.DATE)
     val result = selectFirstSmoothedResult(q)
@@ -312,9 +304,9 @@ open class PersistenceManager {
     return result
   }
 
-  fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? {
+  fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet2? {
     val em = factory.createEntityManager()
-    val q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds ORDER by wds.timestamp DESC")
+    val q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet2 wds ORDER by wds.timestamp DESC")
     val result = selectFirstSmoothedResult(q)
     em.close()
 
@@ -386,16 +378,16 @@ open class PersistenceManager {
   }
 
 
-  private fun selectFirstSmoothedResult(q: Query): SmoothedWeatherDataSet? {
+  private fun selectFirstSmoothedResult(q: Query): SmoothedWeatherDataSet2? {
     val list = selectNumberOfSmoothedResult(q, 1)
     return if (list.isNotEmpty()) {
       list[0]
     } else null
   }
 
-  private fun selectNumberOfSmoothedResult(q: Query, number: Int): List<SmoothedWeatherDataSet> {
+  private fun selectNumberOfSmoothedResult(q: Query, number: Int): List<SmoothedWeatherDataSet2> {
     q.maxResults = number
-    return (q.resultList as List<SmoothedWeatherDataSet>).toList()
+    return (q.resultList as List<SmoothedWeatherDataSet2>).toList()
   }
 
   private fun selectFirstAggregatedResult(q: Query): AggregatedWeatherDataSet? {
@@ -420,7 +412,7 @@ open class PersistenceManager {
     } else Health(day)
   }
 
-  fun makePersistant(dto: HealthDTO) {
+  fun makePersistent(dto: HealthDTO) {
     val em = factory.createEntityManager()
     try {
       val health = selectHealth(em, dto.day)
@@ -433,7 +425,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(contact: Contact) {
+  fun makePersistent(contact: Contact) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
