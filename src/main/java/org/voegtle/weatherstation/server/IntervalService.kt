@@ -11,41 +11,46 @@ import org.voegtle.weatherstation.server.util.parseUtcDate
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 import java.util.logging.Logger
 
-@RestController class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
-  val intervalChecker = TimeBetweenRequestsChecker("interval_request")
+@RestController
+class IntervalService : AbstractWeewxService(Logger.getLogger("IntervalService")) {
+    val intervalChecker = TimeBetweenRequestsChecker("interval_request")
 
-  @GetMapping("/weatherstation/interval")
-  fun receive(@RequestParam ID: String,
-              @RequestParam PASSWORD: String,
-              @RequestParam dateutc: String,
-              @RequestParam temp: Float,
-              @RequestParam humidity: Float,
-              @RequestParam barometer: Float,
-              @RequestParam dailyrain: Float,
-              @RequestParam rain: Float,
-              @RequestParam UV: Float?,
-              @RequestParam solarradiation: Float?,
-              @RequestParam winddir: Int?,
-              @RequestParam windspeed: Float?, // in km/h
-              @RequestParam windgust: Float?, // in km/h
-              @RequestParam indoortemp: Float?,
-              @RequestParam indoorhumidity: Float?): String {
-    validateReceivedRequest(fetchLocationProperties(), ID, PASSWORD)
-    val dataset = WeewxDataSet(time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer,
-                               dailyRain = 12 * dailyrain,
-                               rain = 12 * rain, UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
-                               windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity)
+    @GetMapping("/weatherstation/interval")
+    fun receive(
+        @RequestParam ID: String,
+        @RequestParam PASSWORD: String,
+        @RequestParam dateutc: String,
+        @RequestParam temp: Float,
+        @RequestParam humidity: Float,
+        @RequestParam barometer: Float,
+        @RequestParam dailyrain: Float,
+        @RequestParam rain: Float,
+        @RequestParam UV: Float?,
+        @RequestParam solarradiation: Float?,
+        @RequestParam winddir: Int?,
+        @RequestParam windspeed: Float?, // in km/h
+        @RequestParam windgust: Float?, // in km/h
+        @RequestParam indoortemp: Float?,
+        @RequestParam indoorhumidity: Float?
+    ): String {
+        val locationProperties = fetchLocationProperties()
+        validateReceivedRequest(locationProperties, ID, PASSWORD)
+        val dataset = WeewxDataSet(
+            time = parseUtcDate(dateutc), temperature = temp, humidity = humidity, barometer = barometer,
+            dailyRain = locationProperties.rainMultiplier * dailyrain, rain = locationProperties.rainMultiplier * rain,
+            UV = UV, solarRadiation = solarradiation, windDirection = winddir, windSpeed = windspeed,
+            windGust = windgust, indoorTemperature = indoortemp, indoorHumidity = indoorhumidity
+        )
 
-    if (intervalChecker.hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
-      val locationProperties = fetchLocationProperties()
-      pm.makePersistent(dataset)
-      WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
-      WeatherDataAggregator(pm, locationProperties.dateUtil).aggregateWeatherData()
-      WeatherDataForwarder(pm, locationProperties).forwardLastDataset()
-      return ResponseCode.ACKNOWLEDGE
-    } else {
-      return ResponseCode.IGNORED
+        if (intervalChecker.hasEnoughTimeElapsedSinceLastRequest(dataset.time)) {
+            pm.makePersistent(dataset)
+            WeatherDataSmoother(pm, locationProperties.dateUtil).smoothWeatherData()
+            WeatherDataAggregator(pm, locationProperties.dateUtil).aggregateWeatherData()
+            WeatherDataForwarder(pm, locationProperties).forwardLastDataset()
+            return ResponseCode.ACKNOWLEDGE
+        } else {
+            return ResponseCode.IGNORED
+        }
     }
-  }
 
 }

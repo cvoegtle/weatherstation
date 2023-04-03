@@ -34,6 +34,8 @@ public class LocationProperties {
   private Float latitude;
   private Float longitude;
 
+  private Float rainMultiplier;
+
   public LocationProperties() {
   }
 
@@ -161,5 +163,16 @@ public class LocationProperties {
 
   public void setLongitude(Float longitude) {
     this.longitude = longitude;
+  }
+
+  public Float getRainMultiplier() {
+    if (rainMultiplier == null) {
+      rainMultiplier = 10.0f;
+    }
+    return rainMultiplier;
+  }
+
+  public void setRainMultiplier(Float rainMultiplier) {
+    this.rainMultiplier = rainMultiplier;
   }
 }
