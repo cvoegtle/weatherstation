@@ -2,7 +2,6 @@ package org.voegtle.weatherstation.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.appengine.api.log.InvalidRequestException
-import com.sun.corba.se.impl.util.RepositoryId
 import org.springframework.beans.factory.annotation.Autowired
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -36,15 +35,13 @@ abstract class AbstractWeewxService(val log: Logger) {
   }
 
   fun fetchLocationProperties(): LocationProperties {
-    val jsonLocation = RepositoryId.cache.get("location")
-    if (jsonLocation == null) {
-      val locationProperties = pm.fetchLocationProperties()
-      val json = objectMapper!!.writeValueAsString(locationProperties)
-      RepositoryId.cache.set("location", json)
+    var locationProperties = rapidCache.getLocationProperties()
+    if (locationProperties == null) {
+      locationProperties = pm.fetchLocationProperties()
+      rapidCache.saveLocationProperties(locationProperties)
       return locationProperties
-    } else {
-      return objectMapper!!.readValue(jsonLocation as String, LocationProperties::class.java)
     }
+    return locationProperties
   }
 
   private fun isSecretValid(locationProperties: LocationProperties, secret: String?): Boolean {

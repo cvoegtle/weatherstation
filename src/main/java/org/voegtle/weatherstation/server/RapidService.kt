@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server
 
-import com.sun.corba.se.impl.util.RepositoryId.cache
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -42,11 +41,11 @@ import java.util.logging.Logger
     }
 
     storeReceivedDataInCache(aggregatedDataSet)
-    return cache.size.toString()
+    return aggregatedDataSet.age().toString()
   }
 
   fun storeReceivedDataInCache(aggregatedDataSet: AggregatedRapidDataSet) {
-    rapidCache.save(aggregatedDataSet)
+    rapidCache.saveLatest(aggregatedDataSet)
   }
 
 }
