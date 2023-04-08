@@ -29,13 +29,13 @@ abstract class AbstractServlet : HttpServlet() {
     super.init()
 
 //    val location = createWeatherLocation()
-//    pm.makePersistant(location)
+//    pm.makePersistent(location)
 
 //    val lp = createLocationProperties()
-//    pm.makePersistant(lp)
+//    pm.makePersistent(lp)
 
 //    val contact = createContact()
-//    pm.makePersistant(contact)
+//    pm.makePersistent(contact)
 
     locationProperties = pm.fetchLocationProperties()
     jsonConverter = JSONConverter(locationProperties!!)

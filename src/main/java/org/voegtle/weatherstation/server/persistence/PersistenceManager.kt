@@ -1,17 +1,9 @@
 package org.voegtle.weatherstation.server.persistence
 
 import org.voegtle.weatherstation.server.image.Image
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.Contact
-import org.voegtle.weatherstation.server.persistence.entities.Health
-import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
+import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
-import java.util.HashMap
+import java.util.*
 import java.util.logging.Logger
 import javax.persistence.EntityManager
 import javax.persistence.Persistence
@@ -53,7 +45,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(id: ImageIdentifier) {
+  fun makePersistent(id: ImageIdentifier) {
     val em = factory.createEntityManager()
 
     try {
@@ -65,7 +57,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(lp: LocationProperties): Boolean {
+  fun makePersistent(lp: LocationProperties): Boolean {
     if (lp.isValid) {
       val em = factory.createEntityManager()
       try {
@@ -81,7 +73,7 @@ open class PersistenceManager {
     return lp.isValid
   }
 
-  fun makePersistant(location: WeatherLocation) {
+  fun makePersistent(location: WeatherLocation) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
@@ -92,7 +84,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(image: Image) {
+  fun makePersistent(image: Image) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()
@@ -191,7 +183,7 @@ open class PersistenceManager {
     try {
       em.transaction.begin()
       val managedDS = em.find(AggregatedWeatherDataSet::class.java, ds.key)
-      managedDS.dailyRain = ds.dailyRain 
+      managedDS.dailyRain = ds.dailyRain
       em.transaction.commit()
     } finally {
       em.close()
@@ -420,7 +412,7 @@ open class PersistenceManager {
     } else Health(day)
   }
 
-  fun makePersistant(dto: HealthDTO) {
+  fun makePersistent(dto: HealthDTO) {
     val em = factory.createEntityManager()
     try {
       val health = selectHealth(em, dto.day)
@@ -433,7 +425,7 @@ open class PersistenceManager {
     }
   }
 
-  fun makePersistant(contact: Contact) {
+  fun makePersistent(contact: Contact) {
     val em = factory.createEntityManager()
     try {
       em.transaction.begin()

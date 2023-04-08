@@ -1,14 +1,11 @@
 package org.voegtle.weatherstation.server.image
 
-import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
-
+import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.net.URL
-import java.net.URLConnection
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 class ImageCache(private val pm: PersistenceManager) {
@@ -50,7 +47,7 @@ class ImageCache(private val pm: PersistenceManager) {
       image = fetchImageRepeated(identifier)
       if (image != null) {
         knownImages.put(identifier)
-        pm.makePersistant(image)
+        pm.makePersistent(image)
       }
     }
     return image
