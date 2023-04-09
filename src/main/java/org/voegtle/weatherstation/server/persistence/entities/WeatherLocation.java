@@ -1,17 +1,11 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class WeatherLocation {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  @Id Long id;
 
   private String location;
   private String host;
@@ -19,14 +13,6 @@ public class WeatherLocation {
   private String readHash;
 
   public WeatherLocation() {
-  }
-
-  public Key getKey() {
-    return key;
-  }
-
-  public void setKey(Key key) {
-    this.key = key;
   }
 
   public String getLocation() {
@@ -60,5 +46,5 @@ public class WeatherLocation {
   public void setReadHash(String readHash) {
     this.readHash = readHash;
   }
-  
+
 }

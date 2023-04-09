@@ -36,7 +36,7 @@ import java.util.Iterator;
 public class XML {
 
   /** The Character '&'. */
-  public static final Character AMP ='&';
+  public static final Character AMP = '&';
 
   /** The Character '''. */
   public static final Character APOS = '\'';

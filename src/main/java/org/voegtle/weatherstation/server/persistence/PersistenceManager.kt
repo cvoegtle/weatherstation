@@ -1,132 +1,61 @@
 package org.voegtle.weatherstation.server.persistence
 
+import com.googlecode.objectify.ObjectifyService
 import org.voegtle.weatherstation.server.image.Image
 import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 import java.util.logging.Logger
-import javax.persistence.EntityManager
-import javax.persistence.Persistence
-import javax.persistence.Query
-import javax.persistence.TemporalType
 
 open class PersistenceManager {
   companion object {
-    private val PERSISTENCE_UNIT_NAME = "transactions-optional"
-    private val factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME)
 
     private val log = Logger.getLogger(PersistenceManager::class.java.name)
   }
 
-  fun makePersitant(dataSet: WeatherDataSet): Boolean {
-    if (dataSet.isValid) {
-      val em = factory.createEntityManager()
-      try {
-        em.transaction.begin()
-        em.persist(dataSet)
-        em.transaction.commit()
-      } finally {
-        em.close()
-      }
-    }
-
-    return dataSet.isValid
+  fun makePersitant(dataSet: WeatherDataSet) {
+    ObjectifyService.ofy().save().entity(dataSet).now()
   }
 
   fun makePersitant(dataSet: SmoothedWeatherDataSet) {
-    val em = factory.createEntityManager()
-
-    try {
-      em.transaction.begin()
-      em.persist(dataSet)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(dataSet).now()
   }
 
   fun makePersistent(id: ImageIdentifier) {
-    val em = factory.createEntityManager()
-
-    try {
-      em.transaction.begin()
-      em.persist(id)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(id).now()
   }
 
-  fun makePersistent(lp: LocationProperties): Boolean {
-    if (lp.isValid) {
-      val em = factory.createEntityManager()
-      try {
-        em.transaction.begin()
-        em.persist(lp)
-        em.transaction.commit()
-      } finally {
-        em.close()
-
-      }
-    }
-
-    return lp.isValid
+  fun makePersistent(lp: LocationProperties) {
+    ObjectifyService.ofy().save().entity(lp).now()
   }
 
   fun makePersistent(location: WeatherLocation) {
-    val em = factory.createEntityManager()
-    try {
-      em.transaction.begin()
-      em.persist(location)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(location).now()
   }
 
   fun makePersistent(image: Image) {
-    val em = factory.createEntityManager()
-    try {
-      em.transaction.begin()
-      em.persist(image)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(image).now()
   }
 
   fun clearImages() {
-    val em = factory.createEntityManager()
-
-    em.createQuery("DELETE FROM Image img").executeUpdate()
-
-    em.close()
+    val keys = ObjectifyService.ofy().load().type(Image::class.java).keys().list()
+    ObjectifyService.ofy().delete().keys(keys).now()
   }
 
   fun countImages(): Int {
-    val em = factory.createEntityManager()
-
-    val q = em.createQuery("SELECT count(img.oid) FROM Image img")
-    val count = q.singleResult as Long?
-    return (count ?: 0).toInt()
+    val keys = ObjectifyService.ofy().load().type(Image::class.java).keys().list()
+    return keys.size
   }
 
 
   fun fetchImage(oid: String): Image? {
-    var result: Image? = null
 
-    val em = factory.createEntityManager()
-    try {
-      val q = em.createQuery("SELECT img FROM Image img WHERE img.oid = :oid")
-      q.setParameter("oid", oid)
-      q.maxResults = 1
-      val it = q.resultList.listIterator()
-      if (it.hasNext()) {
-        result = it.next() as Image
-      }
-    } finally {
-      em.close()
-    }
+    val result = ObjectifyService.ofy()
+      .load()
+      .type(Image::class.java)
+      .filter("oid =", oid)
+      .first()
+      .safe()
 
     return result
   }
@@ -204,14 +133,7 @@ open class PersistenceManager {
   }
 
   fun makePersitant(dataSet: AggregatedWeatherDataSet) {
-    val em = factory.createEntityManager()
-    try {
-      em.transaction.begin()
-      em.persist(dataSet)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(dataSet).now()
   }
 
   fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet? {
@@ -234,104 +156,80 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchYoungestDataSet(): WeatherDataSet? {
-    val em = factory.createEntityManager()
-    try {
-      val q = em.createQuery("SELECT wds FROM WeatherDataSet wds ORDER by wds.timestamp DESC")
-      return selectFirstResult(q)
-    } finally {
-      em.close()
-    }
-  }
+  fun fetchYoungestDataSet(): WeatherDataSet? = ObjectifyService.ofy()
+    .load()
+    .type(WeatherDataSet::class.java)
+    .order("-timestamp")
+    .first()
+    .safe()
 
-  fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeatherDataSet> {
-    val em = factory.createEntityManager()
+  fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeatherDataSet> = ObjectifyService.ofy().load()
+    .type(WeatherDataSet::class.java)
+    .filter("timestamp >=", begin)
+    .filter("timestamp <=", end)
+    .order("timestamp")
+    .list()
 
-    try {
-      val q = createQueryForRange("WeatherDataSet", begin, end, em)
-      return (q.resultList as List<WeatherDataSet>).toList()
-    } finally {
-      em.close()
-    }
-  }
+  fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet>  =
+    ObjectifyService.ofy().load()
+      .type(SmoothedWeatherDataSet::class.java)
+      .filter("timestamp >=", begin)
+      .filter("timestamp <=", end)
+      .order("timestamp")
+      .list()
 
-  fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> {
-    val em = factory.createEntityManager()
-    try {
-      val q = createQueryForRange("SmoothedWeatherDataSet", begin, end, em)
-      return (q.resultList as List<SmoothedWeatherDataSet>).toMutableList()
-    } finally {
-      em.close()
-    }
-  }
+  fun fetchAggregatedWeatherDataInRange(begin: Date, end: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
+    .type(AggregatedWeatherDataSet::class.java)
+    .filter("date >=", begin)
+    .filter("date <=", end)
+    .order("date")
+    .list()
 
+  fun fetchAggregatedWeatherDataInRange(begin: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
+    .type(AggregatedWeatherDataSet::class.java)
+    .filter("date >=", begin)
+    .order("date")
+    .list()
 
-  fun fetchAggregatedWeatherDataInRange(begin: Date, end: Date?): List<AggregatedWeatherDataSet> {
-    return fetchAggregatedWeatherDataInRange(begin, end, true)
-  }
+  fun fetchAggregatedWeatherDataInRangeDesc(begin: Date, end: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
+    .type(AggregatedWeatherDataSet::class.java)
+    .filter("date >=", begin)
+    .filter("date <=", end)
+    .order("-date")
+    .list()
 
-  fun fetchAggregatedWeatherDataInRange(begin: Date, end: Date?, ascending: Boolean): List<AggregatedWeatherDataSet> {
-    val em = factory.createEntityManager()
-    try {
-      val q: Query
-      if (end != null) {
-        q = em.createQuery(
-            "SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin and wds.date <= :end ORDER by wds.date " + if (ascending) "" else "DESC")
-        q.setParameter("begin", begin, TemporalType.DATE)
-        q.setParameter("end", end, TemporalType.DATE)
-      } else {
-        q = em.createQuery(
-            "SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.date >= :begin ORDER by wds.date" + if (ascending) "" else "DESC")
-        q.setParameter("begin", begin, TemporalType.DATE)
-      }
+  fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
+    .type(SmoothedWeatherDataSet::class.java)
+    .filter("timestamp >=", begin)
+    .filter("timestamp <=", end)
+    .order("timestamp")
+    .limit(1)
+    .list()
+    .firstOrNull()
 
-      return (q.resultList as List<AggregatedWeatherDataSet>).toList()
-    } finally {
-      em.close()
-    }
-  }
+  fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
+    .type(SmoothedWeatherDataSet::class.java)
+    .order("-timestamp")
+    .limit(1)
+    .list()
+    .firstOrNull()
 
-  fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? {
-    val em = factory.createEntityManager()
-    val q = em
-        .createQuery(
-            "SELECT wds FROM SmoothedWeatherDataSet wds  WHERE wds.timestamp >= :begin and wds.timestamp <= :end ORDER by wds.timestamp")
-    q.setParameter("begin", begin, TemporalType.DATE)
-    q.setParameter("end", end, TemporalType.DATE)
-    val result = selectFirstSmoothedResult(q)
-    em.close()
-
-    return result
-  }
-
-  fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? {
-    val em = factory.createEntityManager()
-    val q = em.createQuery("SELECT wds FROM SmoothedWeatherDataSet wds ORDER by wds.timestamp DESC")
-    val result = selectFirstSmoothedResult(q)
-    em.close()
-
-    return result
-  }
-
-  fun fetchYoungestAggregatedDataSet(period: PeriodEnum): AggregatedWeatherDataSet? {
-    val em = factory.createEntityManager()
-    val q = em.createQuery(
-        "SELECT wds FROM AggregatedWeatherDataSet wds WHERE wds.period = :periodEnum ORDER by wds.date DESC")
-    q.setParameter("periodEnum", period)
-    val result = selectFirstAggregatedResult(q)
-    em.close()
-
-    return result
-  }
+  fun fetchYoungestAggregatedDataSet(): AggregatedWeatherDataSet? = ObjectifyService.ofy().load()
+    .type(AggregatedWeatherDataSet::class.java)
+    .order("-date")
+    .limit(1)
+    .list()
+    .firstOrNull()
 
   fun removeWeatherDataInRange(begin: Date, end: Date) {
-    val em = factory.createEntityManager()
-    val q = em.createQuery("DELETE FROM WeatherDataSet wds WHERE wds.timestamp >= :begin and wds.timestamp <= :end")
-    q.setParameter("begin", begin, TemporalType.DATE)
-    q.setParameter("end", end, TemporalType.DATE)
-    q.executeUpdate()
+    val ids = ObjectifyService.ofy().load()
+      .type(WeatherDataSet::class.java)
+      .filter("time >=", begin)
+      .filter("time <=", end)
+      .list()
+      .map { it.id }
 
-    em.close()
+    ObjectifyService.ofy().delete().type(WeatherDataSet::class.java).ids(ids).now()
   }
 
   fun fetchImageIdentifiers(): List<ImageIdentifier> {
