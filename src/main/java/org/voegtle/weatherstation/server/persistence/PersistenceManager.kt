@@ -156,7 +156,7 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchYoungestDataSet(): WeatherDataSet? = ObjectifyService.ofy()
+  fun fetchYoungestDataSet(): WeatherDataSet = ObjectifyService.ofy()
     .load()
     .type(WeatherDataSet::class.java)
     .order("-timestamp")

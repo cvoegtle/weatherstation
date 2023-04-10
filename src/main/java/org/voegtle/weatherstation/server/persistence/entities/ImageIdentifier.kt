@@ -1,71 +1,36 @@
-package org.voegtle.weatherstation.server.persistence.entities;
+package org.voegtle.weatherstation.server.persistence.entities
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import org.voegtle.weatherstation.server.util.StringUtil;
-
+import com.googlecode.objectify.annotation.Entity
+import com.googlecode.objectify.annotation.Id
+import org.voegtle.weatherstation.server.util.StringUtil.isEmpty
 
 @Entity
-public class ImageIdentifier {
-  @Id Long id;
+class ImageIdentifier {
+    @Id
+    var id: Long? = null
+    var sheet: Int? = null
+    var oid: String? = null
+    var zx: String? = null
+    var format: String? = null
 
-  private Integer sheet;
-  private String oid;
-  private String zx;
-  private String format;
-
-  public ImageIdentifier() {
-  }
-
-  public ImageIdentifier(String oid, String zx) {
-    this.sheet = 0;
-    this.oid = oid;
-    this.zx = zx;
-  }
-
-  public ImageIdentifier(Integer sheet, String oid, String format) {
-    this.sheet = sheet;
-    this.oid = oid;
-    this.format = format;
-  }
-
-  public String asUrlParameter() {
-    if (StringUtil.INSTANCE.isEmpty(zx)) {
-      return "?oid=" + oid + "&format=" + format;
-    } else {
-      return "&oid=" + oid + "&zx=" + zx;
+    constructor()
+    constructor(oid: String?, zx: String?) {
+        sheet = 0
+        this.oid = oid
+        this.zx = zx
     }
-  }
 
-  public void setOid(String oid) {
-    this.oid = oid;
-  }
+    constructor(sheet: Int?, oid: String?, format: String?) {
+        this.sheet = sheet
+        this.oid = oid
+        this.format = format
+    }
 
-  public void setZx(String zx) {
-    this.zx = zx;
-  }
-
-  public String getOid() {
-    return oid;
-  }
-
-  public String getZx() {
-    return zx;
-  }
-
-  public Integer getSheet() {
-    return sheet;
-  }
-
-  public void setSheet(Integer sheet) {
-    this.sheet = sheet;
-  }
-
-  public String getFormat() {
-    return format;
-  }
-
-  public void setFormat(String format) {
-    this.format = format;
-  }
+    fun asUrlParameter(): String {
+        return if (isEmpty(zx)) {
+            "?oid=$oid&format=$format"
+        } else {
+            "&oid=$oid&zx=$zx"
+        }
+    }
 }

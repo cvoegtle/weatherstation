@@ -1,69 +1,33 @@
-package org.voegtle.weatherstation.server.persistence.entities;
+package org.voegtle.weatherstation.server.persistence.entities
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import org.voegtle.weatherstation.server.persistence.HealthDTO;
-
-import java.util.Date;
+import com.googlecode.objectify.annotation.Entity
+import com.googlecode.objectify.annotation.Id
+import org.voegtle.weatherstation.server.persistence.HealthDTO
+import java.util.*
 
 @Entity
-public class Health {
-  @Id Long id;
+class Health {
+    @Id
+    var id: Long? = null
+    var day: Date? = null
+    var requests = 0
+    var lines = 0
+    var persisted = 0
 
-  private Date day;
+    constructor()
+    constructor(day: Date?) {
+        this.day = day
+    }
 
-  private int requests;
-  private int lines;
-  private int persisted;
+    fun fromDTO(dto: HealthDTO) {
+        day = dto.day
+        requests = dto.requests
+        lines = dto.lines
+        persisted = dto.persisted
+    }
 
-  public Health() {
-  }
-
-  public Health(Date day) {
-    this.day = day;
-  }
-
-  public void fromDTO(HealthDTO dto) {
-    this.day = dto.getDay();
-    this.requests = dto.getRequests();
-    this.lines = dto.getLines();
-    this.persisted = dto.getPersisted();
-  }
-
-  public HealthDTO toDTO() {
-    Date day = new Date(this.getDay().getTime()); // convert from datanucleus date to java.util.Date
-    return new HealthDTO(day, this.getRequests(), this.getLines(), this.getPersisted());
-  }
-
-  public Date getDay() {
-    return day;
-  }
-
-  public void setDay(Date day) {
-    this.day = day;
-  }
-
-  public int getRequests() {
-    return requests;
-  }
-
-  public void setRequests(int requests) {
-    this.requests = requests;
-  }
-
-  public int getLines() {
-    return lines;
-  }
-
-  public void setLines(int validDatasets) {
-    this.lines = validDatasets;
-  }
-
-  public int getPersisted() {
-    return persisted;
-  }
-
-  public void setPersisted(int invalidDatasets) {
-    this.persisted = invalidDatasets;
-  }
+    fun toDTO(): HealthDTO {
+        val day = Date(day!!.time) // convert from datanucleus date to java.util.Date
+        return HealthDTO(day, requests, lines, persisted)
+    }
 }

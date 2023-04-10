@@ -9,8 +9,7 @@ import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
-import java.util.LinkedHashMap
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
@@ -25,7 +24,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
   }
 
-  fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
+  fun getAggregatedWeatherData(begin: Date, end: Date): List<AggregatedWeatherDataSet> =
       pm.fetchAggregatedWeatherDataInRange(begin, end)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> =
@@ -38,7 +37,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val today = firstDataSetOfToday()
-    val latest: WeatherDataSet = pm.fetchYoungestDataSet()!!
+    val latest: WeatherDataSet = pm.fetchYoungestDataSet()
     val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 

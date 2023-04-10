@@ -6,6 +6,7 @@ import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherD
 import org.voegtle.weatherstation.server.request.DataType
 import org.voegtle.weatherstation.server.request.OutgoingUrlParameter
 import java.io.IOException
+import java.util.*
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -23,7 +24,7 @@ class OutgoingServlet : AbstractServlet() {
 
     when {
       param.type == DataType.AGGREGATED -> {
-        val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end)
+        val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end ?: Date())
         returnAggregatedResult(response, result, param.isExtended)
       }
       param.type == DataType.CURRENT -> {
