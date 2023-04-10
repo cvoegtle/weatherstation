@@ -8,7 +8,7 @@ import java.util.*
 class WeatherDataSet {
     @Id
     var id: Long? = null
-    var timestamp: Date? = null
+    var timestamp: Date = Date()
     var outsideTemperature: Float? = null
     var outsideHumidity: Float? = null
     var insideTemperature: Float? = null
@@ -20,7 +20,7 @@ class WeatherDataSet {
     var kwh: Double? = null
 
     constructor()
-    constructor(timestamp: Date?) {
+    constructor(timestamp: Date) {
         this.timestamp = timestamp
     }
 

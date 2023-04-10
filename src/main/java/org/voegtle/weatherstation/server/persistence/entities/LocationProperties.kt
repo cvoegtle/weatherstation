@@ -19,8 +19,7 @@ class LocationProperties {
     var secretHash: String? = null
     var readHash: String? = null
     var weatherForecast: String? = null
-    var isWindRelevant: Boolean? = null
-        get() = field != null && field!!
+    var isWindRelevant: Boolean = false
     var windMultiplier: Float? = null
         get() {
             if (field == null) {

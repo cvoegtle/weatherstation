@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server.logic
 
-import org.voegtle.weatherstation.server.persistence.PeriodEnum
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
@@ -82,7 +81,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
   }
 
   private fun createNewDay(lastDay: Date): AggregatedWeatherDataSet {
-    return AggregatedWeatherDataSet(dateUtil.incrementDay(lastDay), PeriodEnum.DAY)
+    return AggregatedWeatherDataSet(dateUtil.incrementDay(lastDay))
   }
 
 }

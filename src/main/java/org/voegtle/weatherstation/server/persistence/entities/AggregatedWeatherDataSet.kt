@@ -10,7 +10,7 @@ import java.util.*
 class AggregatedWeatherDataSet {
     @Id
     var id: Long? = null
-    var date: Date? = null
+    var date: Date = Date()
         private set
     var period: PeriodEnum? = null
     var isFinished = false
@@ -66,9 +66,9 @@ class AggregatedWeatherDataSet {
     var kwh: Double? = null
 
     constructor()
-    constructor(date: Date?, period: PeriodEnum?) {
+    constructor(date: Date) {
         this.date = date
-        this.period = period
+        this.period = PeriodEnum.DAY
     }
 
     fun addOutsideTemperature(value: Float?, time: Date?) {
