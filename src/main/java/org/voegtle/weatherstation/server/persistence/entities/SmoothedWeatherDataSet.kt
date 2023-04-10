@@ -1,300 +1,180 @@
-package org.voegtle.weatherstation.server.persistence.entities;
+package org.voegtle.weatherstation.server.persistence.entities
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-
-import java.util.Date;
+import com.googlecode.objectify.annotation.Entity
+import com.googlecode.objectify.annotation.Id
+import com.googlecode.objectify.annotation.Ignore
+import java.util.*
 
 @Entity
-public class SmoothedWeatherDataSet {
-  @Id Long id;
+class SmoothedWeatherDataSet {
+    @Id
+    var id: Long? = null
+    var timestamp: Date
+    var outsideTemperature: Float? = null
+    var outsideHumidity: Float? = null
+    var insideTemperature: Float? = null
+    var insideHumidity: Float? = null
+    var rainCounter: Int? = null
+    var dailyRain: Float? = null
+    var isRaining: Boolean? = null
+    var windspeed: Float? = null
+    var windspeedMax: Float? = null
+    var watt: Float? = null
+    var kwh: Double? = null
+    var repaired: Boolean? = null
 
-  private Date timestamp;
-  private Float outsideTemperature;
-  private Float outsideHumidity;
-  private Float insideTemperature;
-  private Float insideHumidity;
-  private Integer rainCounter;
-  private Float dailyRain;
-  private Boolean raining;
-  private Float windspeed;
-  private Float windspeedMax;
-  private Float watt;
-  private Double kwh;
-  private Boolean repaired;
+    @Ignore
+    private var countOutsideTemperature = 0
 
-  @Transient
-  private int countOutsideTemperature = 0;
-  @Transient
-  private int countOutsideHumidity = 0;
-  @Transient
-  private int countInsideTemperature = 0;
-  @Transient
-  private int countInsideHumidity = 0;
-  @Transient
-  private int countWindspeed = 0;
-  @Transient
-  private int countWatt = 0;
+    @Ignore
+    private var countOutsideHumidity = 0
 
-  public static boolean hasRainCounter(SmoothedWeatherDataSet sds) {
-    return sds != null && sds.getRainCounter() != null;
-  }
+    @Ignore
+    private var countInsideTemperature = 0
 
-  public SmoothedWeatherDataSet() {
-    timestamp = new Date();
-  }
+    @Ignore
+    private var countInsideHumidity = 0
 
-  public SmoothedWeatherDataSet(Date timestamp) {
-    this.timestamp = timestamp;
-  }
+    @Ignore
+    private var countWindspeed = 0
 
-  public void add(WeatherDataSet wds) {
-    addOutsideTemperature(wds.getOutsideTemperature());
-    addOutsideHumidity(wds.getOutsideHumidity());
-    addInsideTemperature(wds.getInsideTemperature());
-    addInsideHumidity(wds.getInsideHumidity());
-    addRainCount(wds.getRainCounter());
-    addRaining(wds.isRaining());
-    addWindspeed(wds.getWindspeed());
-    setWindspeedMaxIfMax(wds.getWindspeed());
-    addWatt(wds.getWatt());
-    addKwh(wds.getKwh());
-  }
+    @Ignore
+    private var countWatt = 0
 
-  public void normalize() {
-    if (countOutsideTemperature > 1) {
-      setOutsideTemperature(getOutsideTemperature() / countOutsideTemperature);
+    constructor() {
+        timestamp = Date()
     }
-    if (countOutsideHumidity > 1) {
-      setOutsideHumidity(getOutsideHumidity() / countOutsideHumidity);
+
+    constructor(timestamp: Date) {
+        this.timestamp = timestamp
     }
-    if (countInsideTemperature > 1) {
-      setInsideTemperature(getInsideTemperature() / countInsideTemperature);
+
+    fun add(wds: WeatherDataSet) {
+        addOutsideTemperature(wds.outsideTemperature)
+        addOutsideHumidity(wds.outsideHumidity)
+        addInsideTemperature(wds.insideTemperature)
+        addInsideHumidity(wds.insideHumidity)
+        addRainCount(wds.rainCounter)
+        addRaining(wds.isRaining)
+        addWindspeed(wds.windspeed)
+        setWindspeedMaxIfMax(wds.windspeed)
+        addWatt(wds.watt)
+        addKwh(wds.kwh)
     }
-    if (countInsideHumidity > 1) {
-      setInsideHumidity(getInsideHumidity() / countInsideHumidity);
+
+    fun normalize() {
+        if (countOutsideTemperature > 1) {
+            outsideTemperature = outsideTemperature!! / countOutsideTemperature
+        }
+        if (countOutsideHumidity > 1) {
+            outsideHumidity = outsideHumidity!! / countOutsideHumidity
+        }
+        if (countInsideTemperature > 1) {
+            insideTemperature = insideTemperature!! / countInsideTemperature
+        }
+        if (countInsideHumidity > 1) {
+            insideHumidity = insideHumidity!! / countInsideHumidity
+        }
+        if (countWindspeed > 1) {
+            windspeed = windspeed!! / countWindspeed
+        }
+        if (countWatt > 0) {
+            watt = watt!! / countWatt
+        }
     }
-    if (countWindspeed > 1) {
-      setWindspeed(getWindspeed() / countWindspeed);
+
+    private fun addOutsideTemperature(value: Float?) {
+        value?.let {
+            countOutsideTemperature++
+            outsideTemperature = (outsideTemperature ?: 0.0f) + it
+        }
     }
-    if (countWatt > 0) {
-      setWatt(getWatt() / countWatt);
+
+    private fun addOutsideHumidity(value: Float?) {
+        value?.let {
+            countOutsideHumidity++
+            outsideHumidity = (outsideHumidity ?: 0.0f) + it
+        }
     }
-  }
 
-  private void addOutsideTemperature(Float value) {
-    if (value != null) {
-      countOutsideTemperature++;
-      if (getOutsideTemperature() != null) {
-        value = value + getOutsideTemperature();
-      }
-      setOutsideTemperature(value);
+    private fun addInsideTemperature(value: Float?) {
+        value?.let {
+            countInsideTemperature++
+            insideTemperature = (insideTemperature ?: 0.0f) + it
+        }
     }
-  }
 
-  private void addOutsideHumidity(Float value) {
-    if (value != null) {
-      countOutsideHumidity++;
-      if (getOutsideHumidity() != null) {
-        value = value + getOutsideHumidity();
-      }
-      setOutsideHumidity(value);
+    private fun addInsideHumidity(value: Float?) {
+        value?.let {
+            countInsideHumidity++
+            insideHumidity = (insideHumidity ?: 0.0f) + value
+        }
     }
-  }
 
-  private void addInsideTemperature(Float value) {
-    if (value != null) {
-      countInsideTemperature++;
-      if (getInsideTemperature() != null) {
-        value = value + getInsideTemperature();
-      }
-      setInsideTemperature(value);
+    private fun addRainCount(rainCounter: Int?) {
+        rainCounter?.let {
+            if (this.rainCounter == null) {
+                this.rainCounter = it
+            } else if (it > this.rainCounter!!) {
+                this.rainCounter = rainCounter
+            }
+        }
     }
-  }
 
-  private void addInsideHumidity(Float value) {
-    if (value != null) {
-      countInsideHumidity++;
-      if (getInsideHumidity() != null) {
-        value = value + getInsideHumidity();
-      }
-      setInsideHumidity(value);
+    private fun addRaining(raining: Boolean?) {
+        raining?.let {
+            if (isRaining == null) {
+                isRaining = it
+            } else if (it) {
+                isRaining = true
+            }
+        }
     }
-  }
 
-  private void addRainCount(Integer rainCounter) {
-    if (rainCounter != null) {
-      if (getRainCounter() == null) {
-        setRainCounter(rainCounter);
-      } else if (rainCounter > getRainCounter()) {
-        setRainCounter(rainCounter);
-      }
+    private fun addWindspeed(value: Float?) {
+        value?.let {
+            countWindspeed++
+            windspeed = (windspeed ?: 0.0f) + it
+        }
     }
-  }
 
-  private void addRaining(Boolean raining) {
-    if (raining != null) {
-      if (isRaining() == null) {
-        setRaining(raining);
-      } else if (raining) {
-        setRaining(true);
-      }
+    private fun setWindspeedMaxIfMax(value: Float?) {
+        value?.let {
+            if (windspeedMax == null || windspeedMax!!.compareTo(it) < 0) {
+                windspeedMax = it
+            }
+        }
     }
-  }
 
-  private void addWindspeed(Float value) {
-    if (value != null) {
-      countWindspeed++;
-      if (getWindspeed() != null) {
-        value = value + getWindspeed();
-      }
-      setWindspeed(value);
+    private fun addWatt(value: Float?) {
+        value?.let {
+            countWatt++
+            watt = (watt ?: 0.0f) + it
+        }
     }
-  }
 
-  private void setWindspeedMaxIfMax(Float value) {
-    if (value != null) {
-      if (getWindspeedMax() == null || getWindspeedMax().compareTo(value) < 0) {
-        setWindspeedMax(value);
-      }
+    private fun addKwh(value: Double?) {
+        value?.let {
+            if (kwh == null || it > kwh!!) {
+                kwh = value
+            }
+        }
     }
-  }
 
-  private void addWatt(Float value) {
-    if (value != null) {
-      countWatt++;
-      if (getWatt() != null) {
-        value = value + getWatt();
-      }
-      setWatt(value);
+    val isValid: Boolean
+        get() = outsideTemperature != null && outsideHumidity != null
+
+    override fun toString(): String {
+        return "SmoothedWeatherDataSet{" +
+                "timestamp=" + timestamp +
+                ", rainCounter=" + rainCounter +
+                ", dailyRain=" + dailyRain +
+                "}"
     }
-  }
 
-  private void addKwh(Double value) {
-    if (value != null) {
-      if (getKwh() == null || value > getKwh()) {
-        setKwh(value);
-      }
+    companion object {
+        fun hasRainCounter(sds: SmoothedWeatherDataSet?): Boolean {
+            return sds != null && sds.rainCounter != null
+        }
     }
-  }
-
-  public Date getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(Date timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public Float getOutsideTemperature() {
-    return outsideTemperature;
-  }
-
-  public void setOutsideTemperature(Float outsideTemperature) {
-    this.outsideTemperature = outsideTemperature;
-  }
-
-  public Float getInsideTemperature() {
-    return insideTemperature;
-  }
-
-  public void setInsideTemperature(Float insideTemperature) {
-    this.insideTemperature = insideTemperature;
-  }
-
-  public Integer getRainCounter() {
-    return rainCounter;
-  }
-
-  public void setRainCounter(Integer rainCounter) {
-    this.rainCounter = rainCounter;
-  }
-
-
-  public Float getOutsideHumidity() {
-    return outsideHumidity;
-  }
-
-  public void setOutsideHumidity(Float outsideHumidity) {
-    this.outsideHumidity = outsideHumidity;
-  }
-
-  public Float getInsideHumidity() {
-    return insideHumidity;
-  }
-
-  public void setInsideHumidity(Float insideHumidity) {
-    this.insideHumidity = insideHumidity;
-  }
-
-  public Boolean isRaining() {
-    return raining;
-  }
-
-  public void setRaining(Boolean raining) {
-    this.raining = raining;
-  }
-
-  public boolean isValid() {
-    return outsideTemperature != null && outsideHumidity != null;
-  }
-
-  public Float getWindspeed() {
-    return windspeed;
-  }
-
-  public void setWindspeed(Float windspeed) {
-    this.windspeed = windspeed;
-  }
-
-  public Float getWindspeedMax() {
-    return windspeedMax;
-  }
-
-  public void setWindspeedMax(Float windspeedMax) {
-    this.windspeedMax = windspeedMax;
-  }
-
-  public Float getWatt() {
-    return watt;
-  }
-
-  public void setWatt(Float watt) {
-    this.watt = watt;
-  }
-
-  public Double getKwh() {
-    return kwh;
-  }
-
-  public void setKwh(Double kwh) {
-    this.kwh = kwh;
-  }
-
-
-  public Boolean getRepaired() {
-    return repaired;
-  }
-
-  public void setRepaired(Boolean repaired) {
-    this.repaired = repaired;
-  }
-
-  public Float getDailyRain() {
-    return dailyRain;
-  }
-
-  public void setDailyRain(Float dailyRain) {
-    this.dailyRain = dailyRain;
-  }
-
-  @Override public String toString() {
-    return "SmoothedWeatherDataSet{" +
-        "timestamp=" + timestamp +
-        ", rainCounter=" + rainCounter +
-        ", dailyRain=" + dailyRain +
-        "}";
-
-
-  }
 }

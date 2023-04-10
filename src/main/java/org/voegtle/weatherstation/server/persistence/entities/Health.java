@@ -1,19 +1,14 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import org.voegtle.weatherstation.server.persistence.HealthDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class Health {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  @Id Long id;
 
   private Date day;
 

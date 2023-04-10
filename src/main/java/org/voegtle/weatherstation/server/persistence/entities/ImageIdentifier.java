@@ -1,18 +1,13 @@
 package org.voegtle.weatherstation.server.persistence.entities;
 
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import org.voegtle.weatherstation.server.util.StringUtil;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 public class ImageIdentifier {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Key key;
+  @Id Long id;
 
   private Integer sheet;
   private String oid;
@@ -40,14 +35,6 @@ public class ImageIdentifier {
     } else {
       return "&oid=" + oid + "&zx=" + zx;
     }
-  }
-
-  public Key getKey() {
-    return key;
-  }
-
-  public void setKey(Key key) {
-    this.key = key;
   }
 
   public void setOid(String oid) {
