@@ -7,6 +7,8 @@ import com.googlecode.objectify.annotation.Id;
 @Entity
 public class Contact {
   @Id
+  Long id;
+
   private String mailAdress;
 
   private String name;
