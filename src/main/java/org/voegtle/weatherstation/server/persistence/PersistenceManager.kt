@@ -74,23 +74,18 @@ open class PersistenceManager {
   }
 
   fun updateDataset(ds: SmoothedWeatherDataSet) {
-    val em = factory.createEntityManager()
+    val managedDS = ObjectifyService.ofy().load().type(SmoothedWeatherDataSet::class.java).id(ds.id!!).now()
 
-    try {
-      em.transaction.begin()
-      val managedDS = em.find(SmoothedWeatherDataSet::class.java, ds.key)
-      managedDS.outsideHumidity = ds.outsideHumidity
-      managedDS.outsideTemperature = ds.outsideTemperature
-      managedDS.rainCounter = ds.rainCounter
-      managedDS.isRaining = ds.isRaining
-      managedDS.insideTemperature = ds.insideTemperature
-      managedDS.insideHumidity = ds.insideHumidity
-      managedDS.kwh = ds.kwh
-      managedDS.repaired = ds.repaired
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    managedDS.outsideHumidity = ds.outsideHumidity
+    managedDS.outsideTemperature = ds.outsideTemperature
+    managedDS.rainCounter = ds.rainCounter
+    managedDS.isRaining = ds.isRaining
+    managedDS.insideTemperature = ds.insideTemperature
+    managedDS.insideHumidity = ds.insideHumidity
+    managedDS.kwh = ds.kwh
+    managedDS.repaired = ds.repaired
+
+    makePersitant(managedDS)
   }
 
   fun updateSmoothedDataset(ds: SmoothedWeatherDataSet) {
@@ -242,16 +237,11 @@ open class PersistenceManager {
     }
   }
 
-  fun fetchLocationProperties(): LocationProperties {
-    val em = factory.createEntityManager()
-    try {
-      val q = em.createQuery("SELECT lp FROM LocationProperties lp")
-      q.maxResults = 1
-      return q.singleResult as LocationProperties
-    } finally {
-      em.close()
-    }
-  }
+  fun fetchLocationProperties(): LocationProperties = ObjectifyService.ofy().load()
+    .type(LocationProperties::class.java)
+    .limit(1)
+    .first().now()
+
 
   private fun createQueryForRange(dataType: String, begin: Date, end: Date?, em: EntityManager): Query {
     val q: Query
@@ -297,47 +287,24 @@ open class PersistenceManager {
   }
 
   fun selectHealth(day: Date): Health {
-    val em = factory.createEntityManager()
-    return selectHealth(em, day)
-  }
-
-  private fun selectHealth(em: EntityManager, day: Date): Health {
-    val q = em.createQuery("SELECT h from  Health h where h.day = :day")
-    q.setParameter("day", day, TemporalType.DATE)
-    val resultList = q.resultList
-    return if (resultList.size > 0) {
-      resultList[0] as Health
-    } else Health(day)
+    val health = ObjectifyService.ofy().load().type(Health::class.java)
+      .filter("day", day)
+      .limit(1)
+      .list()
+      .firstOrNull()
+    return health ?: Health(day)
   }
 
   fun makePersistent(dto: HealthDTO) {
-    val em = factory.createEntityManager()
-    try {
-      val health = selectHealth(em, dto.day)
-      health.fromDTO(dto)
-      em.transaction.begin()
-      em.persist(health)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    val health = selectHealth(dto.day)
+    health.fromDTO(dto)
+    ObjectifyService.ofy().save().entity(health)
   }
 
   fun makePersistent(contact: Contact) {
-    val em = factory.createEntityManager()
-    try {
-      em.transaction.begin()
-      em.persist(contact)
-      em.transaction.commit()
-    } finally {
-      em.close()
-    }
+    ObjectifyService.ofy().save().entity(contact)
   }
 
-  fun fetchContacts(): List<Contact> {
-    val em = factory.createEntityManager()
-    val q = em.createQuery("SELECT c from Contact c")
-    return (q.resultList as List<Contact>).toList()
-  }
+  fun fetchContacts(): List<Contact> = ObjectifyService.ofy().load().type(Contact::class.java).list()
 
 }

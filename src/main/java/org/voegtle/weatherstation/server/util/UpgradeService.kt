@@ -2,8 +2,7 @@ package org.voegtle.weatherstation.server.util
 
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 class UpgradeService(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
@@ -30,11 +29,11 @@ class UpgradeService(private val pm: PersistenceManager, private val locationPro
         it.dailyRain = 0.0f
       }
       log.info(it.toString())
-      pm.updateSmoothedDataset(it)
+      pm.makePersitant(it)
       rainCounterOfFirstDataSetOfDay = if (isNewDay(it.timestamp)) currentRainCounter else rainCounterOfFirstDataSetOfDay
     }
   }
-  
+
   fun isNewDay(date: Date): Boolean {
     val cal = Calendar.getInstance()
     cal.time = date
