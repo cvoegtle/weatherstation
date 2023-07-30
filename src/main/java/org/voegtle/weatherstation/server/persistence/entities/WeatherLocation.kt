@@ -4,11 +4,11 @@ import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 
 @Entity
-class WeatherLocation {
+data class WeatherLocation(
     @Id
-    var id: Long? = null
-    var location: String? = null
-    var host: String? = null
-    var isForwardSecret = false
+    var id: Long? = null,
+    var location: String,
+    var host: String,
+    var isForwardSecret:Boolean = false,
     var readHash: String? = null
-}
+)
