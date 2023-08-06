@@ -7,8 +7,8 @@ import com.googlecode.objectify.annotation.Id
 data class WeatherLocation(
     @Id
     var id: Long? = null,
-    var location: String,
-    var host: String,
+    var location: String = "- undefined -",
+    var host: String? = null,
     var isForwardSecret:Boolean = false,
     var readHash: String? = null
 )

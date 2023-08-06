@@ -7,14 +7,25 @@ import org.voegtle.weatherstation.server.persistence.entities.*
 
 class ServletInitializer : SpringBootServletInitializer() {
     override fun configure(builder: SpringApplicationBuilder): SpringApplicationBuilder {
+        registerClassesForPersistence()
+
+        return builder.sources(Application::class.java)
+    }
+
+}
+
+var classesRegistered = false
+fun registerClassesForPersistence() {
+    if (!classesRegistered) {
         ObjectifyService.register(AggregatedWeatherDataSet::class.java)
         ObjectifyService.register(Contact::class.java)
         ObjectifyService.register(Health::class.java)
         ObjectifyService.register(LocationProperties::class.java)
         ObjectifyService.register(SmoothedWeatherDataSet::class.java)
+        ObjectifyService.register(WeatherDataSet::class.java)
         ObjectifyService.register(Image::class.java)
+        ObjectifyService.register(ImageIdentifier::class.java)
         ObjectifyService.register(WeatherLocation::class.java)
-
-        return builder.sources(Application::class.java)
+        classesRegistered = true
     }
 }

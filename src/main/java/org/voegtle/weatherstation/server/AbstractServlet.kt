@@ -1,5 +1,7 @@
 package org.voegtle.weatherstation.server
 
+import com.googlecode.objectify.ObjectifyService
+import com.googlecode.objectify.VoidWork
 import org.json.JSONArray
 import org.json.JSONObject
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
@@ -9,6 +11,7 @@ import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDat
 import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
+import registerClassesForPersistence
 import java.io.IOException
 import java.io.PrintWriter
 import java.util.logging.Logger
@@ -27,18 +30,31 @@ abstract class AbstractServlet : HttpServlet() {
     @Throws(ServletException::class)
     override fun init() {
         super.init()
+        registerClassesForPersistence()
 
-    val location = createWeatherLocation()
-    pm.makePersistent(location)
+        runInObjectifyContext {
 
-    val lp = createLocationProperties()
-    pm.makePersistent(lp)
+//                val location = createWeatherLocation()
+//                pm.makePersistent(location)
+//
+//                val lp = createLocationProperties()
+//                pm.makePersistent(lp)
+//
+//                val contact = createContact()
+//                pm.makePersistent(contact)
 
-    val contact = createContact()
-    pm.makePersistent(contact)
+            locationProperties = pm.fetchLocationProperties()
+            jsonConverter = JSONConverter(locationProperties!!)
+        }
 
-        locationProperties = pm.fetchLocationProperties()
-        jsonConverter = JSONConverter(locationProperties!!)
+    }
+
+    protected fun runInObjectifyContext(work: () -> Unit) {
+        ObjectifyService.run(object : VoidWork() {
+            override fun vrun() {
+                work()
+            }
+        })
     }
 
     private fun createContact(): Contact {

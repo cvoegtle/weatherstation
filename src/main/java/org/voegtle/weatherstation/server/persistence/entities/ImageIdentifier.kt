@@ -11,19 +11,13 @@ class ImageIdentifier {
     var sheet: Int? = null
     var oid: String? = null
     var zx: String? = null
-    var format: String? = null
+    var format: String = FORMAT_IMAGE
 
     constructor()
-    constructor(oid: String?, zx: String?) {
-        sheet = 0
-        this.oid = oid
-        this.zx = zx
-    }
 
-    constructor(sheet: Int?, oid: String?, format: String?) {
+    constructor(sheet: Int?, oid: String?) {
         this.sheet = sheet
         this.oid = oid
-        this.format = format
     }
 
     fun asUrlParameter(): String {
@@ -32,5 +26,9 @@ class ImageIdentifier {
         } else {
             "&oid=$oid&zx=$zx"
         }
+    }
+
+    companion object {
+        const val FORMAT_IMAGE = "image"
     }
 }

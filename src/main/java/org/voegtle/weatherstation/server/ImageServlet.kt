@@ -3,7 +3,6 @@ package org.voegtle.weatherstation.server
 import org.voegtle.weatherstation.server.image.ImageCache
 import org.voegtle.weatherstation.server.persistence.entities.ImageIdentifier
 import org.voegtle.weatherstation.server.request.ImageUrlParameter
-import org.voegtle.weatherstation.server.util.StringUtil
 import java.io.IOException
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
@@ -15,7 +14,12 @@ class ImageServlet : AbstractServlet() {
   @Throws(ServletException::class)
   override fun init() {
     super.init()
-    imageCache.init()
+    runInObjectifyContext {
+      val imageIdentifier = ImageIdentifier(1, "92028519")
+      pm.makePersistent(imageIdentifier)
+
+      imageCache.init()
+    }
   }
 
   @Throws(ServletException::class, IOException::class)
@@ -34,11 +38,8 @@ class ImageServlet : AbstractServlet() {
         response.writer.close()
       }
       else -> param.oid?.let {
-        val identifier = if (StringUtil.isNotEmpty(param.zx)) {
-          ImageIdentifier(it, param.zx)
-        } else {
-          ImageIdentifier(param.sheet, it, param.format)
-        }
+        val identifier = ImageIdentifier(param.sheet, it)
+
         val image = imageCache[identifier]
 
         image?.let {
