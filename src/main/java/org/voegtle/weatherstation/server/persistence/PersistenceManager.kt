@@ -53,9 +53,8 @@ open class PersistenceManager {
         val result = ObjectifyService.ofy()
             .load()
             .type(Image::class.java)
-            .filter("oid =", oid)
-            .first()
-            .safe()
+            .id(oid)
+            .now()
 
         return result
     }
