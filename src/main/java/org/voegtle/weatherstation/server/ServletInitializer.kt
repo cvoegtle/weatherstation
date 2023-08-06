@@ -1,3 +1,4 @@
+import com.googlecode.objectify.ObjectifyFactory
 import com.googlecode.objectify.ObjectifyService
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -17,6 +18,7 @@ class ServletInitializer : SpringBootServletInitializer() {
 var classesRegistered = false
 fun registerClassesForPersistence() {
     if (!classesRegistered) {
+        ObjectifyService.init(ObjectifyFactory())
         ObjectifyService.register(AggregatedWeatherDataSet::class.java)
         ObjectifyService.register(Contact::class.java)
         ObjectifyService.register(Health::class.java)

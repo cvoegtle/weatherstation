@@ -21,10 +21,10 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
     private set
 
   private fun findDateOfLastDataSet(): Date {
-      var lastImport = dateUtil.getDate(2017, 10, 1)
+      var lastImport = dateUtil.getDate(2023, 8, 1)
 
       val youngestDataSet = pm.fetchYoungestDataSet()
-      if (youngestDataSet != null && youngestDataSet.timestamp.after(lastImport)) {
+      if (youngestDataSet.timestamp.after(lastImport)) {
         lastImport = youngestDataSet.timestamp
       }
 

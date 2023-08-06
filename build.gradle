@@ -45,8 +45,8 @@ dependencies {
     implementation 'com.google.appengine:appengine-jsr107cache:1.9.94'
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
-    implementation 'com.google.guava:guava:30.0-jre'
-    implementation 'com.googlecode.objectify:objectify:5.1.21'
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.googlecode.objectify:objectify:6.0.9'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -70,7 +70,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '97'
+        version = '103'
         projectId = 'christianwetter'
         stopPreviousVersion = true
         promote = true

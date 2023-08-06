@@ -11,6 +11,10 @@
     <max-idle-instances>1</max-idle-instances>
   </automatic-scaling>
 
+  <env-variables>
+    <env-var name="JAVA_USER_OPTS" value="--add-opens java.base/java.util=ALL-UNNAMED" />
+  </env-variables>
+
   <static-files>
     <include path="**"/>
 

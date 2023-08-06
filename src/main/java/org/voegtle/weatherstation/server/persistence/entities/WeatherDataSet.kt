@@ -2,13 +2,13 @@ package org.voegtle.weatherstation.server.persistence.entities
 
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
+import com.googlecode.objectify.annotation.Index
 import java.util.*
 
 @Entity
 class WeatherDataSet {
-    @Id
-    var id: Long? = null
-    var timestamp: Date = Date()
+    @Id var id: Long? = null
+    @Index var timestamp: Date = Date()
     var outsideTemperature: Float? = null
     var outsideHumidity: Float? = null
     var insideTemperature: Float? = null

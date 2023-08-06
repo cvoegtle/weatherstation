@@ -3,6 +3,7 @@ package org.voegtle.weatherstation.server.persistence.entities
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Ignore
+import com.googlecode.objectify.annotation.Index
 import org.voegtle.weatherstation.server.persistence.PeriodEnum
 import java.util.*
 
@@ -10,6 +11,7 @@ import java.util.*
 class AggregatedWeatherDataSet {
     @Id
     var id: Long? = null
+    @Index
     var date: Date = Date()
         private set
     var period: PeriodEnum? = null
