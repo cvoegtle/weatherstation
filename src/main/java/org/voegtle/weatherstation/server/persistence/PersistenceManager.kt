@@ -48,16 +48,11 @@ open class PersistenceManager {
     }
 
 
-    fun fetchImage(oid: String): Image? {
-
-        val result = ObjectifyService.ofy()
+    fun fetchImage(oid: String): Image? = ObjectifyService.ofy()
             .load()
             .type(Image::class.java)
             .id(oid)
             .now()
-
-        return result
-    }
 
     fun fetchWeatherLocations(): HashMap<String, WeatherLocation> {
         val weatherLocations = ObjectifyService.ofy().load()
