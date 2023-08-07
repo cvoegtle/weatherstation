@@ -1,19 +1,7 @@
 import com.googlecode.objectify.ObjectifyFactory
 import com.googlecode.objectify.ObjectifyService
-import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import org.voegtle.weatherstation.server.Application
 import org.voegtle.weatherstation.server.image.Image
 import org.voegtle.weatherstation.server.persistence.entities.*
-
-class ServletInitializer : SpringBootServletInitializer() {
-    override fun configure(builder: SpringApplicationBuilder): SpringApplicationBuilder {
-        registerClassesForPersistence()
-
-        return builder.sources(Application::class.java)
-    }
-
-}
 
 var classesRegistered = false
 fun registerClassesForPersistence() {

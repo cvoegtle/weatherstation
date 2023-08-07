@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {    // Configuration for building
     ext.kotlin_version = '1.8.20'
-    ext.spring_boot_version = '2.7.10'
+    ext.spring_boot_version = '3.1.2'
 
     repositories {
         jcenter()    // Bintray's repository - a fast Maven Central mirror & more
@@ -70,8 +70,8 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter instantwetter leo-wetter
         // oxenwetter shenzhenwetter tegelwetter testwetter wettercentral wetterimages
-        version = '102'
-        projectId = 'wetterimages'
+        version = '105'
+        projectId = 'christianwetter'
         stopPreviousVersion = true
         promote = true
     }
