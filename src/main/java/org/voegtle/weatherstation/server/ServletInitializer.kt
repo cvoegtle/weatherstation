@@ -1,3 +1,4 @@
+import com.googlecode.objectify.ObjectifyFactory
 import com.googlecode.objectify.ObjectifyService
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -12,6 +13,8 @@ import org.voegtle.weatherstation.server.weewx.WeewxDataSet
 
 class ServletInitializer : SpringBootServletInitializer() {
   override fun configure(builder: SpringApplicationBuilder): SpringApplicationBuilder {
+    ObjectifyService.init(ObjectifyFactory())
+
     ObjectifyService.register(AggregatedWeatherDataSet::class.java)
     ObjectifyService.register(Contact::class.java)
     ObjectifyService.register(Health::class.java)
