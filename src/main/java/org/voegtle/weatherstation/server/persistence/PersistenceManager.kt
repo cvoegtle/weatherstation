@@ -54,23 +54,6 @@ open class PersistenceManager {
     ObjectifyService.ofy().save().entity(dataSet).now()
   }
 
-  fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet? {
-    val minAge = DateUtil.minutesBefore(referenceDate, minutes)
-    val maxAge = DateUtil.minutesBefore(referenceDate, minutes + 30)
-
-    val result = ObjectifyService.ofy()
-      .load()
-      .type(SmoothedWeatherDataSet::class.java)
-      .filter("timestamp <", minAge)
-      .filter("timestamp >", maxAge)
-      .order("-timestamp")
-      .first()
-      .safe()
-
-    log.info("found dataset: " + result.timestamp)
-    return result
-  }
-
   fun fetchYoungestDataSet(): WeewxDataSet = ObjectifyService.ofy()
     .load()
     .type(WeewxDataSet::class.java)
