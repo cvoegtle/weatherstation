@@ -1,6 +1,6 @@
 buildscript {    // Configuration for building
     ext.kotlin_version = '1.8.20'
-    ext.spring_boot_version = '2.7.10'
+    ext.spring_boot_version = '3.1.2'
 
     repositories {
         jcenter()    // Bintray's repository - a fast Maven Central mirror & more
@@ -36,11 +36,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.4'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.12'
     implementation 'com.google.appengine:appengine-api-labs:1.9.88'
     implementation 'com.google.appengine:appengine-endpoints:1.9.86'
     implementation 'com.google.appengine:appengine-endpoints-deps:1.9.86'
-    implementation 'com.google.appengine:appengine-jsr107cache:1.9.94'
+    implementation 'com.google.appengine:appengine-jsr107cache:1.9.98'
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
     implementation 'com.google.guava:guava:31.0.1-jre'
@@ -67,7 +67,7 @@ appengine {  // App Engine tasks configuration
 
     deploy {   // deploy configuration
         // leo-wetter, tegelwetter
-        version = '100'
+        version = '101'
         projectId = 'tegelwetter'
         stopPreviousVersion = true
         promote = true
