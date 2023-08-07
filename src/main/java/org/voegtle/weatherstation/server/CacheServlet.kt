@@ -5,6 +5,7 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory
 import org.json.JSONException
 import org.voegtle.weatherstation.server.util.JSONConverter
 import java.io.IOException
+import java.util.logging.Level
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -31,7 +32,7 @@ class CacheServlet : AbstractInputServlet() {
 
       returnResult(resp, "ACK")
     } catch (e: JSONException) {
-      log.severe("failed to decode CacheWeatherDTO")
+      log.log(Level.SEVERE, "failed to decode CacheWeatherDTO", e)
     }
 
   }
