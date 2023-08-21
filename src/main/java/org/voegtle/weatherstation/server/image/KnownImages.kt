@@ -9,13 +9,17 @@ class KnownImages(internal var pm: PersistenceManager) {
   fun init() {
     val imageIdentifiers = pm.fetchImageIdentifiers()
     for (id in imageIdentifiers) {
-      identifiers.put(id.oid, id)
+      id.oid?.let {
+        identifiers.put(it, id)
+      }
     }
   }
 
   fun put(identifier: ImageIdentifier) {
-    if (identifiers.put(identifier.oid, identifier) == null) {
-      pm.makePersistent(identifier)
+    identifier.oid?.let {
+      if (identifiers.put(it, identifier) == null) {
+        pm.makePersistent(identifier)
+      }
     }
   }
 

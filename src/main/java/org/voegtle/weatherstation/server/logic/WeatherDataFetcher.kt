@@ -9,8 +9,7 @@ import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
-import java.util.LinkedHashMap
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
@@ -25,7 +24,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
   }
 
-  fun getAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
+  fun getAggregatedWeatherData(begin: Date, end: Date): List<AggregatedWeatherDataSet> =
       pm.fetchAggregatedWeatherDataInRange(begin, end)
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet> =
@@ -38,12 +37,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
   fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
     val today = firstDataSetOfToday()
-    val latest: WeatherDataSet = pm.fetchYoungestDataSet()!!
+    val latest: WeatherDataSet = pm.fetchYoungestDataSet()
     val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
     val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
     return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
-                                 temperature = latest.outsideTemperature, humidity = latest.outsideHumidity,
+                                 temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
                                  isRaining = isRaining(latest, twentyMinutesBefore),
                                  windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
                                  watt = latest.watt,
@@ -76,7 +75,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private fun buildHistoricStatistics(stats: Statistics) {
     val yesterday = dateUtil.yesterday()
     var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
-        dateUtil.daysEarlier(yesterday, 29), yesterday, false)
+        dateUtil.daysEarlier(yesterday, 29), yesterday)
     dataSets = removeDuplicates(dataSets)
     var day = 1
     for (dataSet in dataSets) {
