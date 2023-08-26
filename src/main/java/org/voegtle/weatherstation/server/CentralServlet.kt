@@ -25,7 +25,9 @@ class CentralServlet : AbstractServlet() {
   @Throws(ServletException::class)
   override fun init() {
     super.init()
-    locations = pm.fetchWeatherLocations()
+    runInObjectifyContext {
+      locations = pm.fetchWeatherLocations()
+    }
   }
 
   private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()

@@ -22,8 +22,8 @@ object HashService {
 
 }
 
-fun main(args: Array<String>) {
-  for (str in args) {
-    println(HashService.calculateHash(str))
-  }
-}
+//fun main(args: Array<String>) {
+//  for (str in args) {
+//    println(HashService.calculateHash(str))
+//  }
+//}

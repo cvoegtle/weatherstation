@@ -42,7 +42,7 @@ class ImageCache(private val pm: PersistenceManager) {
   }
 
   private operator fun get(identifier: ImageIdentifier, forceReload: Boolean): Image? {
-    var image = pm.fetchImage(identifier.oid)
+    var image = pm.fetchImage(identifier.oid!!)
     if (image == null || image.isOld || forceReload) {
       image = fetchImageRepeated(identifier)
       if (image != null) {

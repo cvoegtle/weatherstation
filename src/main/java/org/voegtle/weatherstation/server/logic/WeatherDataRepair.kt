@@ -1,6 +1,5 @@
 package org.voegtle.weatherstation.server.logic
 
-import com.google.appengine.api.datastore.Key
 import org.voegtle.weatherstation.server.logic.data.RepairJob
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -60,9 +59,9 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
       if (previousDataset != null) {
         if (dataset.timestamp == previousDataset.timestamp) {
           if (!dataset.isValid) {
-            duplicate.put(dataset.key, dataset)
+            duplicate.put(dataset.id!!, dataset)
           } else {
-            duplicate.put(previousDataset.key, previousDataset)
+            duplicate.put(previousDataset.id!!, previousDataset)
           }
         }
       }
@@ -91,9 +90,8 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
         ds.insideHumidity = getNewValue(it.insideHumidity, index, step.insideHumidity)
         ds.insideTemperature = getNewValue(it.insideTemperature, index, step.insideTemperature)
 
-        if (it.rainCounter != null) {
-          ds.rainCounter = getNewValue(it.rainCounter, index, step.rain)
-        }
+        it.rainCounter?.let { rainCounter -> ds.rainCounter = getNewValue(rainCounter, index, step.rain) }
+
         it.kwh?.let {
           ds.kwh = getNewValue(it, index, step.kwh)
         }

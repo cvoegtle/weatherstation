@@ -1,10 +1,9 @@
 package org.voegtle.weatherstation.server.image;
 
 import com.google.appengine.api.datastore.Blob;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,7 +12,6 @@ public class Image {
   @Id
   private String oid;
   private Date creation;
-  @Basic
   private Blob png;
 
   public Image() {

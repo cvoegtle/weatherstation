@@ -2,8 +2,7 @@ package org.voegtle.weatherstation.server.util
 
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 class UpgradeService(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
@@ -11,11 +10,11 @@ class UpgradeService(private val pm: PersistenceManager, private val locationPro
 
   fun upgradeAggregated() {
     val startDate = locationProperties.dateUtil.getDate(2018, 7, 1)
-    val aggregatedWeatherData = pm.fetchAggregatedWeatherDataInRange(startDate, null)
+    val aggregatedWeatherData = pm.fetchAggregatedWeatherDataInRange(startDate)
     aggregatedWeatherData.forEach {
       it.dailyRain = it.rainCounter * 0.295f
       log.info(it.toString())
-      pm.upgradeAggregatedDataset(it)
+      pm.makePersitant(it)
     }
   }
 
@@ -23,18 +22,19 @@ class UpgradeService(private val pm: PersistenceManager, private val locationPro
     val smoothedWeatherData = pm.fetchSmoothedWeatherDataInRange(startDate, end)
     var rainCounterOfFirstDataSetOfDay: Int = 0
     smoothedWeatherData.forEach {
-      val currentRainCounter = it.rainCounter
-      if (currentRainCounter != null && currentRainCounter > rainCounterOfFirstDataSetOfDay) {
-        it.dailyRain = 0.295f * (currentRainCounter - rainCounterOfFirstDataSetOfDay)
-      } else {
-        it.dailyRain = 0.0f
+      it.rainCounter?.let { currentRainCounter ->
+        if (currentRainCounter > rainCounterOfFirstDataSetOfDay) {
+          it.dailyRain = 0.295f * (currentRainCounter - rainCounterOfFirstDataSetOfDay)
+        } else {
+          it.dailyRain = 0.0f
+        }
+        log.info(it.toString())
+        pm.makePersitant(it)
+        rainCounterOfFirstDataSetOfDay = if (isNewDay(it.timestamp)) currentRainCounter else rainCounterOfFirstDataSetOfDay
       }
-      log.info(it.toString())
-      pm.updateSmoothedDataset(it)
-      rainCounterOfFirstDataSetOfDay = if (isNewDay(it.timestamp)) currentRainCounter else rainCounterOfFirstDataSetOfDay
     }
   }
-  
+
   fun isNewDay(date: Date): Boolean {
     val cal = Calendar.getInstance()
     cal.time = date
