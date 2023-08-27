@@ -68,10 +68,9 @@ appengine {  // App Engine tasks configuration
 
 
     deploy {   // deploy configuration
-        // baliwetter elbwetter forstwetter herzowetter instantwetter
-        // oxenwetter shenzhenwetter wettercentral wetterimages
+        // instantwetter
         version = '100'
-        projectId = 'wetterimages'
+        projectId = 'instantwetter'
         stopPreviousVersion = true
         promote = true
     }

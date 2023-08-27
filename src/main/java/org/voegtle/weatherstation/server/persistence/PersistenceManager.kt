@@ -17,7 +17,7 @@ open class PersistenceManager {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 
-    fun makePersitant(dataSet: SmoothedWeatherDataSet2) {
+    fun makePersistent(dataSet: SmoothedWeatherDataSet2) {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 
@@ -75,7 +75,7 @@ open class PersistenceManager {
         managedDS.kwh = ds.kwh
         managedDS.repaired = ds.repaired
 
-        makePersitant(managedDS)
+        makePersistent(managedDS)
     }
 
     fun removeDataset(ds: SmoothedWeatherDataSet2) {

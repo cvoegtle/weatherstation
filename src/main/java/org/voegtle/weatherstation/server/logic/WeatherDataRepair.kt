@@ -52,7 +52,7 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
   }
 
   private fun removeDuplicates(): Collection<SmoothedWeatherDataSet2> {
-    val duplicate = HashMap<Key, SmoothedWeatherDataSet2>()
+    val duplicate = HashMap<Long, SmoothedWeatherDataSet2>()
     var previousDataset: SmoothedWeatherDataSet2? = null
 
     for (dataset in datasets) {

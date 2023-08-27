@@ -29,7 +29,7 @@ class UpgradeService(private val pm: PersistenceManager, private val locationPro
           it.dailyRain = 0.0f
         }
         log.info(it.toString())
-        pm.makePersitant(it)
+        pm.makePersistent(it)
         rainCounterOfFirstDataSetOfDay = if (isNewDay(it.timestamp)) currentRainCounter else rainCounterOfFirstDataSetOfDay
       }
     }

@@ -11,7 +11,7 @@ fun registerClassesForPersistence() {
         ObjectifyService.register(Contact::class.java)
         ObjectifyService.register(Health::class.java)
         ObjectifyService.register(LocationProperties::class.java)
-        ObjectifyService.register(SmoothedWeatherDataSet::class.java)
+        ObjectifyService.register(SmoothedWeatherDataSet2::class.java)
         ObjectifyService.register(WeatherDataSet::class.java)
         ObjectifyService.register(Image::class.java)
         ObjectifyService.register(ImageIdentifier::class.java)
