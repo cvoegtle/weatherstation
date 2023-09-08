@@ -117,11 +117,18 @@ open class PersistenceManager {
         .order("timestamp")
         .list()
 
-    fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date?): MutableList<SmoothedWeatherDataSet2> =
+    fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet2> =
         ObjectifyService.ofy().load()
             .type(SmoothedWeatherDataSet2::class.java)
             .filter("timestamp >=", begin)
             .filter("timestamp <=", end)
+            .order("timestamp")
+            .list()
+
+    fun fetchSmoothedWeatherDataInRange(begin: Date): MutableList<SmoothedWeatherDataSet2> =
+        ObjectifyService.ofy().load()
+            .type(SmoothedWeatherDataSet2::class.java)
+            .filter("timestamp >=", begin)
             .order("timestamp")
             .list()
 
