@@ -106,7 +106,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     if (todaysDataSets.size > 0) {
       val firstSet = todaysDataSets[0]
-      val latest: WeatherDataSet = pm.fetchYoungestDataSet()!!
+      val latest: WeatherDataSet = pm.fetchYoungestDataSet()
       val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
       stats.rainLastHour = calculateRain(latest, oneHourBefore)
 
