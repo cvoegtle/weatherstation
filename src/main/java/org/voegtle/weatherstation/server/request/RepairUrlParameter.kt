@@ -6,6 +6,4 @@ import javax.servlet.http.HttpServletRequest
 
 class RepairUrlParameter(request: HttpServletRequest, dateUtil: DateUtil) : UrlParameter(request, dateUtil,
                                                                                          DataType.UNDEFINED) {
-  private val PARAM_UPGRADE = "upgrade"
-  val upgrade = getUrlParameterBoolean(PARAM_UPGRADE)
 }
