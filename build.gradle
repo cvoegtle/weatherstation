@@ -69,7 +69,7 @@ appengine {  // App Engine tasks configuration
 
     deploy {   // deploy configuration
         // instantwetter
-        version = '100'
+        version = '102'
         projectId = 'instantwetter'
         stopPreviousVersion = true
         promote = true
