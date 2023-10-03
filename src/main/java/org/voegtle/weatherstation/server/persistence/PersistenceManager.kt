@@ -86,7 +86,7 @@ open class PersistenceManager {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 
-    fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet? {
+    fun fetchDataSetMinutesBefore(referenceDate: Date, minutes: Int): SmoothedWeatherDataSet {
         val minAge = DateUtil.minutesBefore(referenceDate, minutes)
         val maxAge = DateUtil.minutesBefore(referenceDate, minutes + 30)
 
@@ -96,6 +96,7 @@ open class PersistenceManager {
             .filter("timestamp <", minAge)
             .filter("timestamp >", maxAge)
             .order("-timestamp")
+            .limit(1)
             .first()
             .safe()
 
@@ -107,6 +108,7 @@ open class PersistenceManager {
         .load()
         .type(WeatherDataSet::class.java)
         .order("-timestamp")
+        .limit(1)
         .first()
         .safe()
 
@@ -139,40 +141,24 @@ open class PersistenceManager {
         .order("date")
         .list()
 
-    fun fetchAggregatedWeatherDataInRange(begin: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
-        .type(AggregatedWeatherDataSet::class.java)
-        .filter("date >=", begin)
-        .order("date")
-        .list()
-
-    fun fetchAggregatedWeatherDataInRangeDesc(begin: Date, end: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
-        .type(AggregatedWeatherDataSet::class.java)
-        .filter("date >=", begin)
-        .filter("date <=", end)
-        .order("-date")
-        .list()
-
     fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
         .type(SmoothedWeatherDataSet::class.java)
         .filter("timestamp >=", begin)
         .filter("timestamp <=", end)
         .order("timestamp")
         .limit(1)
-        .list()
         .firstOrNull()
 
     fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
         .type(SmoothedWeatherDataSet::class.java)
         .order("-timestamp")
         .limit(1)
-        .list()
         .firstOrNull()
 
     fun fetchYoungestAggregatedDataSet(): AggregatedWeatherDataSet? = ObjectifyService.ofy().load()
         .type(AggregatedWeatherDataSet::class.java)
         .order("-date")
         .limit(1)
-        .list()
         .firstOrNull()
 
     fun removeWeatherDataInRange(begin: Date, end: Date) {

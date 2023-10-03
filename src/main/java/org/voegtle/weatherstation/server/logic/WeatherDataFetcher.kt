@@ -19,7 +19,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
         var today: Date = dateUtil.today()
-        today = dateUtil.fromLocalToGMT(today)!!
+        today = dateUtil.fromLocalToGMT(today)
         val oneHourLater = dateUtil.incrementHour(today)
         return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
     }
@@ -45,8 +45,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
         val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
 
-        return UnformattedWeatherDTO(
-            time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
+        return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
             isRaining = isRaining(latest, twentyMinutesBefore),
             windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
@@ -58,8 +57,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             else null,
             rainToday = if (today != null)
                 calculateRain(latest.rainCounter, today.rainCounter)
-            else null
-        )
+            else null)
     }
 
     private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {
@@ -81,8 +79,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     private fun buildHistoricStatistics(stats: Statistics) {
         val yesterday = dateUtil.yesterday()
         var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
-            dateUtil.daysEarlier(yesterday, 29), yesterday
-        )
+            dateUtil.daysEarlier(yesterday, 29), yesterday)
         dataSets = removeDuplicates(dataSets)
         var day = 1
         for (dataSet in dataSets) {
