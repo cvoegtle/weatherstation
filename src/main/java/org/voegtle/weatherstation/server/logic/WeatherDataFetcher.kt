@@ -41,8 +41,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
         val today = firstDataSetOfToday()
         val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
-        val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
-        val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
+        val twentyMinutesBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(20)
+        val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
 
         return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
@@ -110,7 +110,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         if (todaysDataSets.size > 0) {
             val firstSet = todaysDataSets[0]
             val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
-            val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
+            val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
             stats.rainLastHour = calculateRain(latest, oneHourBefore)
 
             stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
