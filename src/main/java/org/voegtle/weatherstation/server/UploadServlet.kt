@@ -1,13 +1,12 @@
 package org.voegtle.weatherstation.server
 
-import org.voegtle.weatherstation.server.logic.HealthProvider
 import org.voegtle.weatherstation.server.logic.WeatherDataImporter
+import org.voegtle.weatherstation.server.logic.caching.HealthProvider
 import org.voegtle.weatherstation.server.parser.DataLine
 import org.voegtle.weatherstation.server.request.IncomingUrlParameter
 import org.voegtle.weatherstation.server.request.ResponseCode
 import java.io.BufferedReader
 import java.io.IOException
-import java.util.ArrayList
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

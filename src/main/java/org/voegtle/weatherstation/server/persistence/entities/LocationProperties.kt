@@ -5,10 +5,11 @@ import com.googlecode.objectify.annotation.Id
 import org.voegtle.weatherstation.server.persistence.DataIndicies
 import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.util.StringUtil.isNotEmpty
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class LocationProperties {
+class LocationProperties : Serializable {
     @Id
     var id: Long? = null
     var location: String? = null
