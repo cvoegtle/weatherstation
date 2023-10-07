@@ -1,11 +1,13 @@
 package org.voegtle.weatherstation.server.logic
 
+import org.voegtle.weatherstation.server.logic.caching.WeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
 internal class WeatherDataSmoother(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
+  private val weatherDataProvider = WeatherDataProvider(pm)
 
   fun smoothWeatherData() {
     val endTime = calculateEndTime()
@@ -43,9 +45,9 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
   }
 
   private fun calculateEndTime(): Date {
-    val youngest = pm.fetchYoungestDataSet()
+    val youngest = weatherDataProvider.getYoungestWeatherDataSet()
     val cal = Calendar.getInstance(Locale.GERMANY)
-    cal.time = youngest!!.timestamp
+    cal.time = youngest.timestamp
     cal.add(Calendar.MINUTE, -8)
     return cal.time
   }

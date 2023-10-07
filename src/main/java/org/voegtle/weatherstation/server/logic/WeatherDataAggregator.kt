@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.logic
 
+import org.voegtle.weatherstation.server.logic.caching.WeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
@@ -8,6 +9,7 @@ import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataAggregator(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
+  private val weatherDataProvider = WeatherDataProvider(pm)
   private val log = Logger.getLogger(WeatherDataAggregator::class.java.name)
 
   fun aggregateWeatherData() {
@@ -73,7 +75,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {
-    val youngest = pm.fetchYoungestDataSet()
+    val youngest = weatherDataProvider.getYoungestWeatherDataSet()
     var timestamp = dateUtil.daysEarlier(youngest.timestamp, 1)
     timestamp = dateUtil.fromGMTtoLocal(timestamp)
     return timestamp
