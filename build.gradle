@@ -70,8 +70,8 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter
         // oxenwetter shenzhenwetter wettercentral wetterimages
-        version = '101'
-        projectId = 'wetterimages'
+        version = '103'
+        projectId = 'christianwetter'
         stopPreviousVersion = true
         promote = true
     }

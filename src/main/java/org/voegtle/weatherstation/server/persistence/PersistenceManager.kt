@@ -13,11 +13,11 @@ open class PersistenceManager {
         private val log = Logger.getLogger(PersistenceManager::class.java.name)
     }
 
-    fun makePersitant(dataSet: WeatherDataSet) {
+    fun makePersistent(dataSet: WeatherDataSet) {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 
-    fun makePersitant(dataSet: SmoothedWeatherDataSet) {
+    fun makePersistent(dataSet: SmoothedWeatherDataSet) {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 
@@ -75,14 +75,14 @@ open class PersistenceManager {
         managedDS.kwh = ds.kwh
         managedDS.repaired = ds.repaired
 
-        makePersitant(managedDS)
+        makePersistent(managedDS)
     }
 
     fun removeDataset(ds: SmoothedWeatherDataSet) {
         ObjectifyService.ofy().delete().type(SmoothedWeatherDataSet::class.java).id(ds.id!!).now()
     }
 
-    fun makePersitant(dataSet: AggregatedWeatherDataSet) {
+    fun makePersistent(dataSet: AggregatedWeatherDataSet) {
         ObjectifyService.ofy().save().entity(dataSet).now()
     }
 

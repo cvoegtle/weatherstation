@@ -45,7 +45,7 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
       dataSets
           .filter { isNotOutdated(it) }
           .forEach {
-              pm.makePersitant(it)
+              pm.makePersistent(it)
               persisted++
           }
 

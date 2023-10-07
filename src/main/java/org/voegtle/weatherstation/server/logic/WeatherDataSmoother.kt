@@ -3,9 +3,7 @@ package org.voegtle.weatherstation.server.logic
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 internal class WeatherDataSmoother(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
 
@@ -20,7 +18,7 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
       val smoothed = SmoothedWeatherDataSet(currentTime)
       weatherData.forEach { wds -> smoothed.add(wds) }
       smoothed.normalize()
-      pm.makePersitant(smoothed)
+      pm.makePersistent(smoothed)
       pm.removeWeatherDataInRange(range.begin, range.end)
 
       currentTime = dateUtil.incrementDateBy15min(currentTime)
