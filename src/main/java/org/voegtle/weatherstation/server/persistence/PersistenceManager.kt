@@ -196,7 +196,7 @@ open class PersistenceManager {
             .order("-date")
             .limit(1)
             .firstOrNull()
-        log.info("fetchYoungestSmoothedDataSet() = "  + (youngest?.date ?: "null"))
+        log.info("fetchYoungestAggregatedDataSet() = "  + (youngest?.date ?: "null"))
         return youngest
     }
 

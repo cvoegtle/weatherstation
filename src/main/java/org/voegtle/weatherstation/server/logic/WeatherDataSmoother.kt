@@ -7,7 +7,7 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
 internal class WeatherDataSmoother(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
-  private val weatherDataProvider = CachedWeatherDataProvider(pm)
+  private val weatherDataProvider = CachedWeatherDataProvider(pm, dateUtil)
 
   fun smoothWeatherData() {
     val endTime = calculateEndTime()

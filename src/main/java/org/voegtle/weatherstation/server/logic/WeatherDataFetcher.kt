@@ -13,15 +13,8 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-    val weatherDataProvider = CachedWeatherDataProvider(pm)
+    val weatherDataProvider = CachedWeatherDataProvider(pm, locationProperties.dateUtil)
     private val dateUtil: DateUtil = locationProperties.dateUtil
-
-    private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
-        var today: Date = dateUtil.today()
-        today = dateUtil.fromLocalToGMT(today)
-        val oneHourLater = dateUtil.incrementHour(today)
-        return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
-    }
 
     fun getAggregatedWeatherData(begin: Date, end: Date): List<AggregatedWeatherDataSet> =
         pm.fetchAggregatedWeatherDataInRange(begin, end)
@@ -39,7 +32,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     }
 
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
-        val today = firstDataSetOfToday()
+        val today = weatherDataProvider.getFirstSmoothedWeatherDataSetOfToday()
         val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
         val twentyMinutesBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(20)
         val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)

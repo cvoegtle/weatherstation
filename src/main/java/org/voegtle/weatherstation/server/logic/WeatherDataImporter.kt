@@ -14,7 +14,7 @@ import java.util.logging.Logger
 
 class WeatherDataImporter(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
     private val log = Logger.getLogger(WeatherDataImporter::class.java.name)
-    val weatherDataProvider = CachedWeatherDataProvider(pm)
+    private val weatherDataProvider = CachedWeatherDataProvider(pm, locationProperties.dateUtil)
 
     private val dateUtil = locationProperties.dateUtil
     private val importedUntil = findDateOfLastDataSet()

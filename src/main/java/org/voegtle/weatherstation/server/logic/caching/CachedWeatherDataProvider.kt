@@ -7,7 +7,7 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 import java.util.logging.Logger
 
-class CachedWeatherDataProvider(private val pm: PersistenceManager) {
+class CachedWeatherDataProvider(private val pm: PersistenceManager, val dateUtil: DateUtil) {
     companion object {
         private val log = Logger.getLogger(CachedWeatherDataProvider::class.java.name)
     }
@@ -39,6 +39,7 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager) {
         }
         return youngest
     }
+
     fun write(smoothedWeatherDataSet: SmoothedWeatherDataSet) {
         pm.makePersistent(smoothedWeatherDataSet)
         cache[CacheKey.YoungestSmoothedWeatherDataSet] = smoothedWeatherDataSet
@@ -52,6 +53,27 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager) {
             cache.put(CacheKey.SmoothedWeatherDataSet, minutesBefore, smoothedWeatherDataSet)
         }
         return smoothedWeatherDataSet
+    }
+
+    fun getFirstSmoothedWeatherDataSetOfToday(): SmoothedWeatherDataSet? {
+        var today: Date = dateUtil.today()
+        today = dateUtil.fromLocalToGMT(today)
+
+        var first = cache[CacheKey.FirstSmoothedWeatherDataSetOfToday] as SmoothedWeatherDataSet?
+        if (first == null || first.timestamp.before(today)) {
+            first = firstDataSetOfToday()
+            first?.let {
+                cache[CacheKey.FirstSmoothedWeatherDataSetOfToday] = first
+            }
+        }
+        return first
+    }
+
+    private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {
+        var today: Date = dateUtil.today()
+        today = dateUtil.fromLocalToGMT(today)
+        val oneHourLater = dateUtil.incrementHour(today)
+        return pm.fetchOldestSmoothedDataSetInRange(today, oneHourLater)
     }
 
     private fun isOutDated(smoothedWeatherDataSet: SmoothedWeatherDataSet, minutesBefore: Int): Boolean {
