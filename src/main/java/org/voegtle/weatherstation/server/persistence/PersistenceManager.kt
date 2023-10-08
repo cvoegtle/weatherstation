@@ -9,7 +9,6 @@ import java.util.logging.Logger
 
 open class PersistenceManager {
     companion object {
-
         private val log = Logger.getLogger(PersistenceManager::class.java.name)
     }
 
@@ -44,15 +43,21 @@ open class PersistenceManager {
 
     fun countImages(): Int {
         val keys = ObjectifyService.ofy().load().type(Image::class.java).keys().list()
+        log.warning("countImages(): " + keys.size)
         return keys.size
     }
 
 
-    fun fetchImage(oid: String): Image? = ObjectifyService.ofy()
+    fun fetchImage(oid: String): Image? {
+        log.warning("fetchImage() oid: " + oid)
+
+        return ObjectifyService.ofy()
             .load()
             .type(Image::class.java)
             .id(oid)
             .now()
+
+    }
 
     fun fetchWeatherLocations(): HashMap<String, WeatherLocation> {
         val weatherLocations = ObjectifyService.ofy().load()
@@ -60,6 +65,9 @@ open class PersistenceManager {
             .list()
         val map = HashMap<String, WeatherLocation>()
         weatherLocations.forEach { map[it.location] = it }
+
+        log.warning("fetchWeatherLocations() map.size: " + map.size)
+
         return map
     }
 
@@ -80,6 +88,7 @@ open class PersistenceManager {
 
     fun removeDataset(ds: SmoothedWeatherDataSet) {
         ObjectifyService.ofy().delete().type(SmoothedWeatherDataSet::class.java).id(ds.id!!).now()
+        log.warning("removeDataset() ds.timestamp: " + ds.timestamp)
     }
 
     fun makePersistent(dataSet: AggregatedWeatherDataSet) {
@@ -100,66 +109,96 @@ open class PersistenceManager {
             .first()
             .safe()
 
-        log.info("found dataset: " + result.timestamp)
+        log.info("fetchDataSetMinutesBefore() found dataset: " + result.timestamp)
         return result
     }
 
-    fun fetchYoungestDataSet(): WeatherDataSet = ObjectifyService.ofy()
-        .load()
-        .type(WeatherDataSet::class.java)
-        .order("-timestamp")
-        .limit(1)
-        .first()
-        .safe()
+    fun fetchYoungestDataSet(): WeatherDataSet {
+        log.info("fetchYoungestDataSet()")
 
-    fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeatherDataSet> = ObjectifyService.ofy().load()
-        .type(WeatherDataSet::class.java)
-        .filter("timestamp >=", begin)
-        .filter("timestamp <=", end)
-        .order("timestamp")
-        .list()
+        return ObjectifyService.ofy()
+            .load()
+            .type(WeatherDataSet::class.java)
+            .order("-timestamp")
+            .limit(1)
+            .first()
+            .safe()
+    }
 
-    fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> =
-        ObjectifyService.ofy().load()
+    fun fetchWeatherDataInRange(begin: Date, end: Date): List<WeatherDataSet> {
+        val list = ObjectifyService.ofy().load()
+            .type(WeatherDataSet::class.java)
+            .filter("timestamp >=", begin)
+            .filter("timestamp <=", end)
+            .order("timestamp")
+            .list()
+        log.info("fetchWeatherDataInRange() list.size=" + list.size)
+        return list
+    }
+
+    fun fetchSmoothedWeatherDataInRange(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
+        val list = ObjectifyService.ofy().load()
             .type(SmoothedWeatherDataSet::class.java)
             .filter("timestamp >=", begin)
             .filter("timestamp <=", end)
             .order("timestamp")
             .list()
+        log.info("fetchSmoothedWeatherDataInRange() list.size=" + list.size)
+        return list;
+    }
 
-    fun fetchSmoothedWeatherDataInRange(begin: Date): MutableList<SmoothedWeatherDataSet> =
-        ObjectifyService.ofy().load()
+    fun fetchSmoothedWeatherDataInRange(begin: Date): MutableList<SmoothedWeatherDataSet> {
+        val list = ObjectifyService.ofy().load()
             .type(SmoothedWeatherDataSet::class.java)
             .filter("timestamp >=", begin)
             .order("timestamp")
             .list()
+        log.info("fetchSmoothedWeatherDataInRange() list.size=" + list.size)
+        return list
+    }
 
-    fun fetchAggregatedWeatherDataInRange(begin: Date, end: Date): List<AggregatedWeatherDataSet> = ObjectifyService.ofy().load()
-        .type(AggregatedWeatherDataSet::class.java)
-        .filter("date >=", begin)
-        .filter("date <=", end)
-        .order("date")
-        .list()
+    fun fetchAggregatedWeatherDataInRange(begin: Date, end: Date): List<AggregatedWeatherDataSet> {
+        val list = ObjectifyService.ofy().load()
+            .type(AggregatedWeatherDataSet::class.java)
+            .filter("date >=", begin)
+            .filter("date <=", end)
+            .order("date")
+            .list()
+        log.info("fetchAggregatedWeatherDataInRange() list.size=" + list.size)
+        return list
+    }
 
-    fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
-        .type(SmoothedWeatherDataSet::class.java)
-        .filter("timestamp >=", begin)
-        .filter("timestamp <=", end)
-        .order("timestamp")
-        .limit(1)
-        .firstOrNull()
+    fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? {
+        val dataSet = ObjectifyService.ofy().load()
+            .type(SmoothedWeatherDataSet::class.java)
+            .filter("timestamp >=", begin)
+            .filter("timestamp <=", end)
+            .order("timestamp")
+            .limit(1)
+            .firstOrNull()
+        log.info("fetchOldestSmoothedDataSetInRange() = "  + (dataSet?.timestamp ?: "null"))
+        return dataSet
+    }
 
-    fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
-        .type(SmoothedWeatherDataSet::class.java)
-        .order("-timestamp")
-        .limit(1)
-        .firstOrNull()
+    fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? {
+        val youngest = ObjectifyService.ofy().load()
+            .type(SmoothedWeatherDataSet::class.java)
+            .order("-timestamp")
+            .limit(1)
+            .firstOrNull()
+        log.info("fetchYoungestSmoothedDataSet() = "  + (youngest?.timestamp ?: "null"))
+        return youngest
+    }
 
-    fun fetchYoungestAggregatedDataSet(): AggregatedWeatherDataSet? = ObjectifyService.ofy().load()
-        .type(AggregatedWeatherDataSet::class.java)
-        .order("-date")
-        .limit(1)
-        .firstOrNull()
+    fun fetchYoungestAggregatedDataSet(): AggregatedWeatherDataSet? {
+        val youngest = ObjectifyService.ofy().load()
+            .type(AggregatedWeatherDataSet::class.java)
+            .order("-date")
+            .limit(1)
+            .firstOrNull()
+        log.info("fetchYoungestSmoothedDataSet() = "  + (youngest?.date ?: "null"))
+        return youngest
+    }
 
     fun removeWeatherDataInRange(begin: Date, end: Date) {
         val ids = ObjectifyService.ofy().load()
@@ -168,19 +207,26 @@ open class PersistenceManager {
             .filter("timestamp <=", end)
             .list()
             .map { it.id }
-
+        log.info("removeWeatherDataInRange() ids.size= " + ids.size)
         ObjectifyService.ofy().delete().type(WeatherDataSet::class.java).ids(ids).now()
     }
 
-    fun fetchImageIdentifiers(): List<ImageIdentifier> =
-        ObjectifyService.ofy().load()
+    fun fetchImageIdentifiers(): List<ImageIdentifier> {
+        val list = ObjectifyService.ofy().load()
             .type(ImageIdentifier::class.java).list()
+        log.info("fetchImageIdentifiers() list.size= " + list.size)
+        return list
+    }
 
 
-    fun fetchLocationProperties(): LocationProperties = ObjectifyService.ofy().load()
-        .type(LocationProperties::class.java)
-        .limit(1)
-        .first().now()
+    fun fetchLocationProperties(): LocationProperties {
+        val locationProperties = ObjectifyService.ofy().load()
+            .type(LocationProperties::class.java)
+            .limit(1)
+            .first().now()
+        log.info("fetchLocationProperties()")
+        return locationProperties
+    }
 
 
     fun selectHealth(day: Date): Health {
@@ -189,6 +235,8 @@ open class PersistenceManager {
             .limit(1)
             .list()
             .firstOrNull()
+        log.info("selectHealth() = "  + (health?.day ?: "null"))
+
         return health ?: Health(day)
     }
 
