@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.logic.caching
 
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
@@ -27,8 +27,8 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager) {
         cache[CacheKey.YoungestWeatherDataSet] = weatherDataSet
     }
 
-    fun getYoungestSmoothedWeatherDataSet(): SmoothedWeatherDataSet? {
-        var youngest = cache[CacheKey.YoungestSmoothedWeatherDataSet] as SmoothedWeatherDataSet?
+    fun getYoungestSmoothedWeatherDataSet(): SmoothedWeatherDataSet2? {
+        var youngest = cache[CacheKey.YoungestSmoothedWeatherDataSet] as SmoothedWeatherDataSet2?
         if (youngest == null) {
             log.warning("getYoungestSmoothedWeatherDataSet() cache miss")
             youngest = pm.fetchYoungestSmoothedDataSet()
@@ -39,14 +39,14 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager) {
         }
         return youngest
     }
-    fun write(smoothedWeatherDataSet: SmoothedWeatherDataSet) {
+    fun write(smoothedWeatherDataSet: SmoothedWeatherDataSet2) {
         pm.makePersistent(smoothedWeatherDataSet)
         cache[CacheKey.YoungestSmoothedWeatherDataSet] = smoothedWeatherDataSet
     }
 
 
-    fun getSmoothedWeatherDataSetMinutesBefore(minutesBefore: Int): SmoothedWeatherDataSet {
-        var smoothedWeatherDataSet = cache.get(CacheKey.SmoothedWeatherDataSet, minutesBefore) as SmoothedWeatherDataSet?
+    fun getSmoothedWeatherDataSetMinutesBefore(minutesBefore: Int): SmoothedWeatherDataSet2 {
+        var smoothedWeatherDataSet = cache.get(CacheKey.SmoothedWeatherDataSet, minutesBefore) as SmoothedWeatherDataSet2?
         if (smoothedWeatherDataSet == null || isOutDated(smoothedWeatherDataSet, minutesBefore)) {
             smoothedWeatherDataSet = pm.fetchDataSetMinutesBefore(Date(), minutesBefore)
             cache.put(CacheKey.SmoothedWeatherDataSet, minutesBefore, smoothedWeatherDataSet)
@@ -54,7 +54,7 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager) {
         return smoothedWeatherDataSet
     }
 
-    private fun isOutDated(smoothedWeatherDataSet: SmoothedWeatherDataSet, minutesBefore: Int): Boolean {
+    private fun isOutDated(smoothedWeatherDataSet: SmoothedWeatherDataSet2, minutesBefore: Int): Boolean {
         val maxAge = DateUtil.minutesBefore(Date(), minutesBefore + 15)
         return smoothedWeatherDataSet.timestamp.before(maxAge)
     }
