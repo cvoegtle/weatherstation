@@ -3,10 +3,11 @@ package org.voegtle.weatherstation.server.persistence.entities
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Index
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class WeatherDataSet {
+class WeatherDataSet : Serializable {
     @Id var id: Long? = null
     @Index var timestamp: Date = Date()
     var outsideTemperature: Float? = null

@@ -3,6 +3,7 @@ package org.voegtle.weatherstation.server.logic
 import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
+import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -10,11 +11,9 @@ import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDat
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
-import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-    private val log = Logger.getLogger(WeatherDataFetcher::class.java.name)
-
+    val weatherDataProvider = CachedWeatherDataProvider(pm)
     private val dateUtil: DateUtil = locationProperties.dateUtil
 
     private fun firstDataSetOfToday(): SmoothedWeatherDataSet2? {
@@ -41,9 +40,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
         val today = firstDataSetOfToday()
-        val latest: WeatherDataSet = pm.fetchYoungestDataSet()
-        val twentyMinutesBefore = pm.fetchDataSetMinutesBefore(Date(), 20)
-        val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
+        val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+        val twentyMinutesBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(20)
+        val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
 
         return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
@@ -110,8 +109,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
         if (todaysDataSets.size > 0) {
             val firstSet = todaysDataSets[0]
-            val latest: WeatherDataSet = pm.fetchYoungestDataSet()
-            val oneHourBefore = pm.fetchDataSetMinutesBefore(Date(), 60)
+            val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+            val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
             stats.rainLastHour = calculateRain(latest, oneHourBefore)
 
             stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))

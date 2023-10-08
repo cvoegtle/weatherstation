@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.logic
 
+import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
@@ -8,6 +9,7 @@ import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataAggregator(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
+  private val weatherDataProvider = CachedWeatherDataProvider(pm)
   private val log = Logger.getLogger(WeatherDataAggregator::class.java.name)
 
   fun aggregateWeatherData() {
@@ -17,14 +19,13 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
     while (dateUtil.isClearlyBefore(dateOfLastAggregation, dateOfLastWeatherDataSet)) {
       val aggregatedDay = createNewDay(dateOfLastAggregation)
       log.info("aggregate " + aggregatedDay.date)
-      val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date)!!,
-                                                               dateUtil.fromLocalToGMT(
-                                                                   dateUtil.nextDay(aggregatedDay.date!!)))
+      val weatherDataSets = pm.fetchSmoothedWeatherDataInRange(dateUtil.fromLocalToGMT(aggregatedDay.date),
+                                                               dateUtil.fromLocalToGMT(dateUtil.nextDay(aggregatedDay.date)))
 
       aggregate(aggregatedDay, weatherDataSets)
 
-      pm.makePersitant(aggregatedDay)
-      dateOfLastAggregation = aggregatedDay.date!!
+      pm.makePersistent(aggregatedDay)
+      dateOfLastAggregation = aggregatedDay.date
     }
   }
 
@@ -70,12 +71,12 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()
-    return lastAggregatedDay?.date ?: dateUtil.getDate(2023, 4, 1)
+    return lastAggregatedDay?.date ?: dateUtil.getDate(2023, 10, 1)
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {
-    val youngest = pm.fetchYoungestDataSet()
-    var timestamp = dateUtil.daysEarlier(youngest.timestamp!!, 1)
+    val youngest = weatherDataProvider.getYoungestWeatherDataSet()
+    var timestamp = dateUtil.daysEarlier(youngest.timestamp, 1)
     timestamp = dateUtil.fromGMTtoLocal(timestamp)
     return timestamp
   }

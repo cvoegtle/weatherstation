@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.logic
 
+import org.voegtle.weatherstation.server.logic.caching.HealthProvider
 import org.voegtle.weatherstation.server.persistence.HealthDTO
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties

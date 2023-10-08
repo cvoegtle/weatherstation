@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyService
 import com.googlecode.objectify.VoidWork
 import org.json.JSONArray
 import org.json.JSONObject
+import org.voegtle.weatherstation.server.logic.caching.LocationPropertiesProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -43,7 +44,7 @@ abstract class AbstractServlet : HttpServlet() {
 //                val contact = createContact()
 //                pm.makePersistent(contact)
 
-            locationProperties = pm.fetchLocationProperties()
+            locationProperties = LocationPropertiesProvider(pm).getLocationProperties()
             jsonConverter = JSONConverter(locationProperties!!)
         }
 

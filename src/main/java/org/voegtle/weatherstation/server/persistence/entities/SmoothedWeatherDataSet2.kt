@@ -2,11 +2,13 @@ package org.voegtle.weatherstation.server.persistence.entities
 
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
+import com.googlecode.objectify.annotation.Ignore
 import com.googlecode.objectify.annotation.Index
+import java.io.Serializable
 import java.util.*
 
 @Entity
-class SmoothedWeatherDataSet2 {
+class SmoothedWeatherDataSet2 : Serializable {
     @Id
     var id: Long? = null
     @Index
@@ -24,22 +26,22 @@ class SmoothedWeatherDataSet2 {
     var kwh: Double? = null
     var repaired: Boolean? = null
 
-    @Transient
+    @Ignore
     private var countOutsideTemperature = 0
 
-    @Transient
+    @Ignore
     private var countOutsideHumidity = 0
 
-    @Transient
+    @Ignore
     private var countInsideTemperature = 0
 
-    @Transient
+    @Ignore
     private var countInsideHumidity = 0
 
-    @Transient
+    @Ignore
     private var countWindspeed = 0
 
-    @Transient
+    @Ignore
     private var countWatt = 0
 
     constructor() {
@@ -85,102 +87,78 @@ class SmoothedWeatherDataSet2 {
     }
 
     private fun addOutsideTemperature(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countOutsideTemperature++
-            if (outsideTemperature != null) {
-                value = value + outsideTemperature!!
-            }
-            outsideTemperature = value
+            outsideTemperature = (outsideTemperature ?: 0.0f) + it
         }
     }
 
     private fun addOutsideHumidity(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countOutsideHumidity++
-            if (outsideHumidity != null) {
-                value = value + outsideHumidity!!
-            }
-            outsideHumidity = value
+            outsideHumidity = (outsideHumidity ?: 0.0f) + it
         }
     }
 
     private fun addInsideTemperature(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countInsideTemperature++
-            if (insideTemperature != null) {
-                value = value + insideTemperature!!
-            }
-            insideTemperature = value
+            insideTemperature = (insideTemperature ?: 0.0f) + it
         }
     }
 
     private fun addInsideHumidity(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countInsideHumidity++
-            if (insideHumidity != null) {
-                value = value + insideHumidity!!
-            }
-            insideHumidity = value
+            insideHumidity = (insideHumidity ?: 0.0f) + value
         }
     }
 
     private fun addRainCount(rainCounter: Int?) {
-        if (rainCounter != null) {
+        rainCounter?.let {
             if (this.rainCounter == null) {
-                this.rainCounter = rainCounter
-            } else if (rainCounter > this.rainCounter!!) {
+                this.rainCounter = it
+            } else if (it > this.rainCounter!!) {
                 this.rainCounter = rainCounter
             }
         }
     }
 
     private fun addRaining(raining: Boolean?) {
-        if (raining != null) {
+        raining?.let {
             if (isRaining == null) {
-                isRaining = raining
-            } else if (raining) {
+                isRaining = it
+            } else if (it) {
                 isRaining = true
             }
         }
     }
 
     private fun addWindspeed(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countWindspeed++
-            if (windspeed != null) {
-                value = value + windspeed!!
-            }
-            windspeed = value
+            windspeed = (windspeed ?: 0.0f) + it
         }
     }
 
     private fun setWindspeedMaxIfMax(value: Float?) {
-        if (value != null) {
-            if (windspeedMax == null || windspeedMax!!.compareTo(value) < 0) {
-                windspeedMax = value
+        value?.let {
+            if (windspeedMax == null || windspeedMax!!.compareTo(it) < 0) {
+                windspeedMax = it
             }
         }
     }
 
     private fun addWatt(value: Float?) {
-        var value = value
-        if (value != null) {
+        value?.let {
             countWatt++
-            if (watt != null) {
-                value = value + watt!!
-            }
-            watt = value
+            watt = (watt ?: 0.0f) + it
         }
     }
 
     private fun addKwh(value: Double?) {
-        if (value != null) {
-            if (kwh == null || value > kwh!!) {
+        value?.let {
+            if (kwh == null || it > kwh!!) {
                 kwh = value
             }
         }
@@ -190,7 +168,7 @@ class SmoothedWeatherDataSet2 {
         get() = outsideTemperature != null && outsideHumidity != null
 
     override fun toString(): String {
-        return "SmoothedWeatherDataSet2{" +
+        return "SmoothedWeatherDataSet{" +
                 "timestamp=" + timestamp +
                 ", rainCounter=" + rainCounter +
                 ", dailyRain=" + dailyRain +

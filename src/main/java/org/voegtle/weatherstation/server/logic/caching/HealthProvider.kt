@@ -1,7 +1,5 @@
-package org.voegtle.weatherstation.server.logic
+package org.voegtle.weatherstation.server.logic.caching
 
-import com.google.appengine.api.memcache.MemcacheService
-import com.google.appengine.api.memcache.MemcacheServiceFactory
 import org.voegtle.weatherstation.server.persistence.HealthDTO
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -9,12 +7,10 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
 class HealthProvider(private val pm: PersistenceManager, locationProperties: LocationProperties) {
-  private val HEALTH = "health"
-  private var cache: MemcacheService = createCache()
+  private val HEALTH = CacheKey.Health
+  private var cache: Cache = Cache()
 
   private val dateUtil: DateUtil = locationProperties.dateUtil
-
-  private fun createCache(): MemcacheService = MemcacheServiceFactory.getMemcacheService()
 
   fun get(): HealthDTO {
     val today = dateUtil.today()
