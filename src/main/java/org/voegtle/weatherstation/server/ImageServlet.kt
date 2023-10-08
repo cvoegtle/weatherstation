@@ -15,9 +15,6 @@ class ImageServlet : AbstractServlet() {
   override fun init() {
     super.init()
     runInObjectifyContext {
-      val imageIdentifier = ImageIdentifier(1, "92028519")
-      pm.makePersistent(imageIdentifier)
-
       imageCache.init()
     }
   }
