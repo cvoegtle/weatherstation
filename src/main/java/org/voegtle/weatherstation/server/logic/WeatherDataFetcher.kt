@@ -3,7 +3,7 @@ package org.voegtle.weatherstation.server.logic
 import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
-import org.voegtle.weatherstation.server.logic.caching.WeatherDataProvider
+import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
@@ -13,7 +13,7 @@ import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
-    val weatherDataProvider = WeatherDataProvider(pm)
+    val weatherDataProvider = CachedWeatherDataProvider(pm)
     private val dateUtil: DateUtil = locationProperties.dateUtil
 
     private fun firstDataSetOfToday(): SmoothedWeatherDataSet? {

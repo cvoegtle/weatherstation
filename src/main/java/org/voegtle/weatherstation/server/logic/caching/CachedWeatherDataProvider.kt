@@ -6,7 +6,7 @@ import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 
-class WeatherDataProvider(private val pm: PersistenceManager) {
+class CachedWeatherDataProvider(private val pm: PersistenceManager) {
     private var cache: Cache = Cache()
 
     fun getYoungestWeatherDataSet(): WeatherDataSet {
@@ -22,6 +22,22 @@ class WeatherDataProvider(private val pm: PersistenceManager) {
         pm.makePersistent(weatherDataSet)
         cache[CacheKey.YoungestWeatherDataSet] = weatherDataSet
     }
+
+    fun getYoungestSmoothedWeatherDataSet(): SmoothedWeatherDataSet? {
+        var youngest = cache[CacheKey.YoungestSmoothedWeatherDataSet] as SmoothedWeatherDataSet?
+        if (youngest == null) {
+            youngest = pm.fetchYoungestSmoothedDataSet()
+            youngest?.let {
+                cache[CacheKey.YoungestSmoothedWeatherDataSet] = it
+            }
+        }
+        return youngest
+    }
+    fun write(smoothedWeatherDataSet: SmoothedWeatherDataSet) {
+        pm.makePersistent(smoothedWeatherDataSet)
+        cache[CacheKey.YoungestSmoothedWeatherDataSet] = smoothedWeatherDataSet
+    }
+
 
     fun getSmoothedWeatherDataSetMinutesBefore(minutesBefore: Int): SmoothedWeatherDataSet {
         var smoothedWeatherDataSet = cache.get(CacheKey.SmoothedWeatherDataSet, minutesBefore) as SmoothedWeatherDataSet?

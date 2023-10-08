@@ -1,5 +1,5 @@
 package org.voegtle.weatherstation.server.logic.caching
 
 enum class CacheKey {
-    Health, LocationProperties, YoungestWeatherDataSet, SmoothedWeatherDataSet
+    Health, LocationProperties, YoungestWeatherDataSet, YoungestSmoothedWeatherDataSet, SmoothedWeatherDataSet
 }

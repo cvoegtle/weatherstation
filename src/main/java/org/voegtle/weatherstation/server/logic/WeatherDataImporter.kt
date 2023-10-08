@@ -1,6 +1,6 @@
 package org.voegtle.weatherstation.server.logic
 
-import org.voegtle.weatherstation.server.logic.caching.WeatherDataProvider
+import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.parser.DataLine
 import org.voegtle.weatherstation.server.parser.DataParser
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
@@ -14,7 +14,7 @@ import java.util.logging.Logger
 
 class WeatherDataImporter(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
     private val log = Logger.getLogger(WeatherDataImporter::class.java.name)
-    val weatherDataProvider = WeatherDataProvider(pm)
+    val weatherDataProvider = CachedWeatherDataProvider(pm)
 
     private val dateUtil = locationProperties.dateUtil
     private val importedUntil = findDateOfLastDataSet()
@@ -30,7 +30,7 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
             lastImport = youngestDataSet.timestamp
         }
 
-        val youngestSmoothedDS = pm.fetchYoungestSmoothedDataSet()
+        val youngestSmoothedDS = weatherDataProvider.getYoungestSmoothedWeatherDataSet()
         if (youngestSmoothedDS != null && youngestSmoothedDS.timestamp.after(lastImport)) {
             lastImport = youngestSmoothedDS.timestamp
         }
