@@ -15,6 +15,10 @@
     <env-var name="JAVA_USER_OPTS" value="--add-opens java.base/java.util=ALL-UNNAMED" />
   </env-variables>
 
+  <staging>
+    <enable-jar-classes>true</enable-jar-classes>
+  </staging>
+
   <static-files>
     <include path="**"/>
 
