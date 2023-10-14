@@ -1,7 +1,6 @@
 package org.voegtle.weatherstation.server.persistence
 
 import com.googlecode.objectify.ObjectifyService
-import org.voegtle.weatherstation.server.image.Image
 import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
@@ -30,33 +29,6 @@ open class PersistenceManager {
 
     fun makePersistent(location: WeatherLocation) {
         ObjectifyService.ofy().save().entity(location).now()
-    }
-
-    fun makePersistent(image: Image) {
-        ObjectifyService.ofy().save().entity(image).now()
-    }
-
-    fun clearImages() {
-        val keys = ObjectifyService.ofy().load().type(Image::class.java).keys().list()
-        ObjectifyService.ofy().delete().keys(keys).now()
-    }
-
-    fun countImages(): Int {
-        val keys = ObjectifyService.ofy().load().type(Image::class.java).keys().list()
-        log.warning("countImages(): " + keys.size)
-        return keys.size
-    }
-
-
-    fun fetchImage(oid: String): Image? {
-        log.warning("fetchImage() oid: " + oid)
-
-        return ObjectifyService.ofy()
-            .load()
-            .type(Image::class.java)
-            .id(oid)
-            .now()
-
     }
 
     fun fetchWeatherLocations(): HashMap<String, WeatherLocation> {

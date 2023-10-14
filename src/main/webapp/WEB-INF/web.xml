@@ -59,17 +59,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>image</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.ImageServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>image</servlet-name>
-    <url-pattern>/weatherstation/image</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>central</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.CentralServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
