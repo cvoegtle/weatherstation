@@ -9,7 +9,7 @@ import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataAggregator(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
-  private val weatherDataProvider = CachedWeatherDataProvider(pm)
+  private val weatherDataProvider = CachedWeatherDataProvider(pm, dateUtil)
   private val log = Logger.getLogger(WeatherDataAggregator::class.java.name)
 
   fun aggregateWeatherData() {
