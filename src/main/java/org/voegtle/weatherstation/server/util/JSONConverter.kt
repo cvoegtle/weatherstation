@@ -6,7 +6,6 @@ import org.voegtle.weatherstation.server.data.RainDTO
 import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.StatisticsSet
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
-import org.voegtle.weatherstation.server.persistence.CacheWeatherDTO
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
@@ -43,40 +42,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         return json
     }
 
-    fun toJson(currentWeatherData: CacheWeatherDTO): JSONObject {
-        val json = WeatherJSONObject()
-        json.put("timestamp", currentWeatherData.time)
-        json.putOpt("temperature", currentWeatherData.temperature)
-        json.putOpt("inside_temperature", currentWeatherData.insideTemperature)
-        json.putOpt("humidity", currentWeatherData.humidity)
-        json.putOpt("inside_humidity", currentWeatherData.insideHumidity)
-        json.putOpt("rain", currentWeatherData.rainLastHour)
-        json.putOpt("rain_today", currentWeatherData.rainToday)
-
-        json.putOpt("barometer", currentWeatherData.barometer)
-        json.putOpt("solarradiation", currentWeatherData.solarradiation)
-        json.putOpt("UV", currentWeatherData.UV)
-
-        json.putOpt("powerProduction", currentWeatherData.powerProduction)
-        json.putOpt("powerFeed", currentWeatherData.powerFeed)
-
-        json.putOpt("raining", currentWeatherData.raining)
-        json.putOpt("wind", currentWeatherData.windspeed)
-        json.putOpt("windgust", currentWeatherData.windgust)
-        json.putOpt("watt", currentWeatherData.watt)
-
-        json.put("location", currentWeatherData.location)
-        json.put("location_short", currentWeatherData.locationShort)
-        json.putOpt("localtime", currentWeatherData.localTime)
-
-        json.put("id", currentWeatherData.id)
-        json.putOpt("forecast", currentWeatherData.forecast)
-
-        json.putOpt("latitude", currentWeatherData.latitude)
-        json.putOpt("longitude", currentWeatherData.longitude)
-
-        return json
-    }
 
     fun toJsonLegacy(currentWeatherData: UnformattedWeatherDTO, extended: Boolean): JSONObject {
         val json = WeatherJSONObject()
@@ -224,67 +189,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         }
         json.putOpt("kwh", set.kwh)
         return json
-    }
-
-    @Throws(JSONException::class)
-    fun decodeWeatherDTO(encodedWeatherData: String): CacheWeatherDTO {
-        val json = JSONObject(encodedWeatherData)
-        val timestamp = json.getString("timestamp")
-        return CacheWeatherDTO(
-            id = json.getString("id"),
-            time = Date(timestamp),
-            localTime = json.getString("localtime"),
-
-            location = json.getString("location"),
-            locationShort = json.getString("location_short"),
-            forecast = json.getString("forecast"),
-
-            temperature = json.getFloat("temperature"),
-            humidity = json.optFloat("humidity"),
-            insideTemperature = json.optFloat("inside_temperature"),
-            insideHumidity = json.optFloat("inside_humidity"),
-            watt = json.optFloat("watt"),
-            rainLastHour = json.optFloat("rain"),
-            rainToday = json.optFloat("rain_today"),
-            raining = json.optBoolean("raining"),
-            windspeed = json.optFloat("wind"),
-            windgust = json.optFloat("windgust"),
-            latitude = json.getFloat("latitude"),
-            longitude = json.getFloat("longitude")
-        )
-    }
-
-    @Throws(JSONException::class)
-    fun decodeWeatherDTO2(encodedWeatherData: String): CacheWeatherDTO {
-        val json = JSONObject(encodedWeatherData)
-        val timestamp = json.getLong("time")
-        return CacheWeatherDTO(
-            id = json.getString("id"),
-            time = Date(timestamp),
-            localTime = json.getString("localTime"),
-
-            location = json.getString("location"),
-            locationShort = json.getString("locationShort"),
-            forecast = json.getString("forecast"),
-
-            temperature = json.getFloat("temperature"),
-            humidity = json.optFloat("humidity"),
-            barometer = json.optFloat("barometer"),
-            solarradiation = json.optFloat("solarradiation"),
-            UV = json.optFloat("uv"),
-            powerProduction = json.optFloat("powerProduction"),
-            powerFeed = json.optFloat("powerFeed"),
-            insideTemperature = json.optFloat("insideTemperature"),
-            insideHumidity = json.optFloat("insideHumidity"),
-            watt = json.optFloat("watt"),
-            rainLastHour = json.optFloat("rainLastHour"),
-            rainToday = json.optFloat("rainToday"),
-            raining = json.optBoolean("raining"),
-            windspeed = json.optFloat("windspeed"),
-            windgust = json.optFloat("windgust"),
-            latitude = json.getFloat("latitude"),
-            longitude = json.getFloat("longitude")
-        )
     }
 }
 

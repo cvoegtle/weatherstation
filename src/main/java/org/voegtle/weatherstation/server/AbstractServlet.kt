@@ -9,7 +9,6 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
 import registerClassesForPersistence
@@ -34,10 +33,6 @@ abstract class AbstractServlet : HttpServlet() {
         registerClassesForPersistence()
 
         runInObjectifyContext {
-
-//                val location = createWeatherLocation()
-//                pm.makePersistent(location)
-//
 //                val lp = createLocationProperties()
 //                pm.makePersistent(lp)
 //
@@ -84,12 +79,6 @@ abstract class AbstractServlet : HttpServlet() {
 
         return lp
     }
-
-    private fun createWeatherLocation() = WeatherLocation(
-        location = "instantwetter",
-        host = "instantwetter.appspot.com",
-        isForwardSecret = false
-    )
 
     internal fun returnDetailedResult(
         response: HttpServletResponse, list: List<SmoothedWeatherDataSet>,

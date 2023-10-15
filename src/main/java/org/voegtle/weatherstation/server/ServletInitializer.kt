@@ -12,7 +12,6 @@ fun registerClassesForPersistence() {
         ObjectifyService.register(LocationProperties::class.java)
         ObjectifyService.register(SmoothedWeatherDataSet::class.java)
         ObjectifyService.register(WeatherDataSet::class.java)
-        ObjectifyService.register(WeatherLocation::class.java)
         classesRegistered = true
     }
 }

@@ -37,39 +37,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>cache</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.CacheServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>cache</servlet-name>
-    <url-pattern>/weatherstation/cache</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>cache2</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.Cache2Servlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>cache2</servlet-name>
-    <url-pattern>/weatherstation/cache2</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>central</servlet-name>
-    <servlet-class>org.voegtle.weatherstation.server.CentralServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>central</servlet-name>
-    <url-pattern>/weatherstation/read</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>reporting</servlet-name>
     <servlet-class>org.voegtle.weatherstation.server.ReportingServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
