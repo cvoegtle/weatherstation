@@ -11,8 +11,11 @@ import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDat
 import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
+import java.util.logging.Logger
 
 class WeatherDataFetcher(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
+    val log = Logger.getLogger(WeatherDataFetcher::class.java.simpleName)
+
     val weatherDataProvider = CachedWeatherDataProvider(pm, locationProperties.dateUtil)
     private val dateUtil: DateUtil = locationProperties.dateUtil
 
@@ -70,8 +73,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     private fun buildHistoricStatistics(stats: Statistics) {
         val yesterday = dateUtil.yesterday()
+        log.warning("buildHistoricStatistics for $yesterday")
         var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
-            dateUtil.daysEarlier(yesterday, 29), yesterday)
+            dateUtil.daysEarlier(yesterday, 29), yesterday).reversed()
         dataSets = removeDuplicates(dataSets)
         var day = 1
         for (dataSet in dataSets) {
