@@ -9,7 +9,6 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
-import org.voegtle.weatherstation.server.persistence.entities.WeatherLocation
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
 import registerClassesForPersistence
@@ -34,10 +33,6 @@ abstract class AbstractServlet : HttpServlet() {
         registerClassesForPersistence()
 
         runInObjectifyContext {
-
-//                val location = createWeatherLocation()
-//                pm.makePersistent(location)
-//
 //                val lp = createLocationProperties()
 //                pm.makePersistent(lp)
 //
@@ -76,26 +71,22 @@ abstract class AbstractServlet : HttpServlet() {
         lp.weatherForecast = ""
         lp.secretHash = "2fe3974d34634baf28c732f4793724f11e4a0813a84030f962187b3844485ae4"
         lp.readHash = "a883d58dbbb62d60da3893c9822d19e43bc371d20ccc5bfdb341f2b120eea54c"
-        lp.indexInsideTemperature = 6
-        lp.indexInsideHumidity = 14
-        lp.expectedDataSets = 1000
-        lp.expectedRequests = 1000
+        lp.indexOutsideTemperature = 6
+        lp.indexOutsideHumidity = 17
+        lp.expectedDataSets = 500
+        lp.expectedRequests = 500
         lp.timezone = "Europe/Berlin"
 
         return lp
     }
 
-    private fun createWeatherLocation() = WeatherLocation(
-        location = "instantwetter",
-        host = "instantwetter.appspot.com",
-        isForwardSecret = false
-    )
-
-  internal fun returnDetailedResult(response: HttpServletResponse, list: List<SmoothedWeatherDataSet2>,
-                                    extended: Boolean) {
-    val jsonObjects = jsonConverter!!.toJson(list, extended)
-    writeResponse(response, jsonObjects)
-  }
+    internal fun returnDetailedResult(
+        response: HttpServletResponse, list: List<SmoothedWeatherDataSet2>,
+        extended: Boolean
+    ) {
+        val jsonObjects = jsonConverter!!.toJson(list, extended)
+        writeResponse(response, jsonObjects)
+    }
 
     internal fun writeResponse(response: HttpServletResponse, jsonObject: JSONObject) {
         try {

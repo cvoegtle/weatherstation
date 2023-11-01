@@ -27,22 +27,6 @@ open class PersistenceManager {
         ObjectifyService.ofy().save().entity(lp).now()
     }
 
-    fun makePersistent(location: WeatherLocation) {
-        ObjectifyService.ofy().save().entity(location).now()
-    }
-
-    fun fetchWeatherLocations(): HashMap<String, WeatherLocation> {
-        val weatherLocations = ObjectifyService.ofy().load()
-            .type(WeatherLocation::class.java)
-            .list()
-        val map = HashMap<String, WeatherLocation>()
-        weatherLocations.forEach { map[it.location] = it }
-
-        log.warning("fetchWeatherLocations() map.size: " + map.size)
-
-        return map
-    }
-
     fun updateDataset(ds: SmoothedWeatherDataSet2) {
         val managedDS = ObjectifyService.ofy().load().type(SmoothedWeatherDataSet2::class.java).id(ds.id!!).now()
 
