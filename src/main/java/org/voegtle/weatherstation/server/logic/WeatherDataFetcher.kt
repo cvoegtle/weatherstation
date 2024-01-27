@@ -5,10 +5,7 @@ import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 import java.util.logging.Logger
@@ -37,6 +34,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
         val today = weatherDataProvider.getFirstSmoothedWeatherDataSetOfToday()
         val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+        val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
+
         val twentyMinutesBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(20)
         val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
 
@@ -44,7 +43,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
             isRaining = isRaining(latest, twentyMinutesBefore),
             windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
-            watt = latest.watt,
             insideTemperature = if (authorized) latest.insideTemperature else null,
             insideHumidity = if (authorized) latest.insideHumidity else null,
             rainLastHour = if (oneHourBefore != null)
@@ -52,7 +50,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             else null,
             rainToday = if (today != null)
                 calculateRain(latest.rainCounter, today.rainCounter)
-            else null)
+            else null,
+            powerFeed = latestSolarData?.powerFeed,
+            powerProduction = latestSolarData?.powerProduction)
     }
 
     private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {

@@ -27,7 +27,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
         json.putOpt("raining", currentWeatherData.isRaining)
         json.putOpt("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-        json.putOpt("watt", currentWeatherData.watt)
+
+        json.putOpt("powerProduction", currentWeatherData.powerProduction)
+        json.putOpt("powerFeed", currentWeatherData.powerFeed)
 
         json.put("location", locationProperties.city)
         json.put("location_short", locationProperties.cityShortcut)
@@ -41,38 +43,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
         return json
     }
-
-
-    fun toJsonLegacy(currentWeatherData: UnformattedWeatherDTO, extended: Boolean): JSONObject {
-        val json = WeatherJSONObject()
-        json.put("timestamp", currentWeatherData.time)
-        json.put("temperature", currentWeatherData.temperature)
-        if (currentWeatherData.insideTemperature != null) {
-            json.put("inside_temperature", currentWeatherData.insideTemperature)
-        }
-        json.put("humidity", currentWeatherData.humidity)
-        if (currentWeatherData.insideHumidity != null) {
-            json.put("inside_humidity", currentWeatherData.insideHumidity)
-        }
-        json.put("rain", currentWeatherData.rainLastHour)
-        json.put("rain_today", currentWeatherData.rainToday)
-        json.put("raining", currentWeatherData.isRaining)
-        json.put("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-        if (currentWeatherData.watt != null) {
-            json.put("watt", currentWeatherData.watt)
-        }
-
-        json.put("location", locationProperties.city)
-        json.put("location_short", locationProperties.cityShortcut)
-
-        json.put("id", locationProperties.location)
-        if (extended) {
-            json.put("forecast", locationProperties.weatherForecast)
-        }
-
-        return json
-    }
-
 
     fun toJson(rain: RainDTO): JSONObject {
         val json = WeatherJSONObject()

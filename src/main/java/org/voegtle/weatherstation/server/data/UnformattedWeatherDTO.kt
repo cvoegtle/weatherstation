@@ -1,7 +1,7 @@
 package org.voegtle.weatherstation.server.data
 
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 
 class UnformattedWeatherDTO(val time: Date,
                             val localTime: String,
@@ -13,4 +13,6 @@ class UnformattedWeatherDTO(val time: Date,
                             val rainToday: Float?,
                             val windspeed: Float?,
                             val insideHumidity: Float?,
-                            val watt: Float?) : Serializable
+                            val powerProduction: Float?,
+                            val powerFeed: Float?
+) : Serializable

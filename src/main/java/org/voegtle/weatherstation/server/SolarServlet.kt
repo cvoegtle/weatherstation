@@ -19,14 +19,14 @@ class SolarServlet : AbstractServlet() {
         val param = SolarUrlParameter(request, locationProperties!!.dateUtil)
 
         try {
-            log.warning("date: ${param.date} powerFeed: ${param.powerFeed} powerProduction: ${param.powerProduction} totalPowerProduction: ${param.totalPowerProduction}")
+            log.warning("date: ${param.date} powerFeed: <ignored> powerProduction: ${param.powerProduction} totalPowerProduction: ${param.totalPowerProduction}")
             assertRequestParamComplete(param)
             assertSecretValid(param.password)
             assertCorrectLocation(param.id)
 
             val dataset = SolarDataSet(
                 time = param.date!!,
-                powerFeed = param.powerFeed!!.toFloat(),
+                powerFeed = 0.0f,
                 powerProduction = param.powerProduction!!.toFloat(),
                 totalPowerProduction = param.totalPowerProduction!!.toFloat()
             )
@@ -41,7 +41,7 @@ class SolarServlet : AbstractServlet() {
     }
 
     private fun assertRequestParamComplete(param: SolarUrlParameter) {
-        if (param.date == null || param.powerFeed == null || param.powerProduction == null || param.totalPowerProduction == null) {
+        if (param.date == null || param.powerProduction == null || param.totalPowerProduction == null) {
             throw ValidationException(ResponseCode.PARSE_ERROR)
         }
     }

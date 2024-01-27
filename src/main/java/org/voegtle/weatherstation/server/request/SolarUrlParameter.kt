@@ -15,7 +15,7 @@ class SolarUrlParameter(request: HttpServletRequest, dateUtil: DateUtil): Abstra
     val id: String? = getUrlParameter(PARAM_ID)
     val password: String? = getUrlParameter(PARAM_PASSWORD)
     val date: Date? = getUrlParameterDate(PARAM_DATE, true)
-    val powerFeed = getUrlParameterInteger(PARAM_POWERFEED)
+//    val powerFeed = getUrlParameterInteger(PARAM_POWERFEED)
     val powerProduction = getUrlParameterInteger(PARAM_POWERPRODUCTION)
     val totalPowerProduction = getUrlParameterInteger(PARAM_TOTALPOWERPRODUCTION)
 }
