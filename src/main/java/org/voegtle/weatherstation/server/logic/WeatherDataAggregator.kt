@@ -42,6 +42,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.addOutsideHumidity(wds.outsideHumidity)
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
+          aggregation.updatePowerProductionMax(wds.powerProductionMax, wds.timestamp)
           if (rainCountStart == null) {
             rainCountStart = wds.rainCounter
           }
@@ -52,6 +53,8 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           kwhLast = wds.kwh
         }
       }
+
+      aggregation.totalPowerProduction = calculateDailyPowerProduction(weatherDataSets)
 
       rainCountStart?.let {
         val lastCount = (rainCountLast ?: 0)
@@ -68,6 +71,16 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
     }
     aggregation.isFinished = true
   }
+
+  private fun calculateDailyPowerProduction(weatherDataSets: List<SmoothedWeatherDataSet>): Float? {
+    var totalPowerProductionInitial = weatherDataSets.first().totalPowerProduction
+    var totalPowerProductionFinal = weatherDataSets.last().totalPowerProduction
+    if (totalPowerProductionInitial != null && totalPowerProductionFinal != null) {
+      return (totalPowerProductionFinal - totalPowerProductionInitial).coerceAtLeast(0.0f)
+    }
+    return null
+  }
+
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()

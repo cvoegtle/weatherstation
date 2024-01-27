@@ -7,8 +7,13 @@ class StatisticsSet {
     internal set
   var minTemperature: Float? = null
     internal set
+
+  var solarRadiationMax: Float? = null
+    internal set
+
   var kwh: Float? = null
     internal set
+
 
   fun addRain(rain: Float?) {
     if (rain == null) {
@@ -46,4 +51,11 @@ class StatisticsSet {
       this.kwh = this.kwh!! + kwh
     }
   }
+
+  fun updateSolarRadiation(solarRadiation: Float) {
+    if (solarRadiationMax == null || solarRadiationMax!! < solarRadiation) {
+      solarRadiationMax = solarRadiation
+    }
+  }
+
 }

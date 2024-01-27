@@ -29,7 +29,7 @@ class OutgoingServlet : AbstractServlet() {
       }
       param.type == DataType.CURRENT -> {
         val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
-        returnCurrentWeatherData(response, currentWeatherData, param.isExtended, param.isNewFormat)
+        returnCurrentWeatherData(response, currentWeatherData)
       }
       param.type == DataType.RAIN -> {
         val rainData = weatherDataFetcher.fetchRainData()
@@ -37,7 +37,7 @@ class OutgoingServlet : AbstractServlet() {
       }
       param.type == DataType.STATS -> {
         val stats = weatherDataFetcher.fetchStatistics()
-        writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
+        writeResponse(response, jsonConverter!!.toJson(stats))
       }
       param.begin != null -> {
         val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end!!)
@@ -50,10 +50,8 @@ class OutgoingServlet : AbstractServlet() {
 
   }
 
-  private fun returnCurrentWeatherData(response: HttpServletResponse, currentWeatherData: UnformattedWeatherDTO,
-                                       extended: Boolean, newFormat: Boolean) {
-    val json = if (newFormat) jsonConverter!!.toJson(currentWeatherData) else jsonConverter!!.toJsonLegacy(
-        currentWeatherData, extended)
+  private fun returnCurrentWeatherData(response: HttpServletResponse, currentWeatherData: UnformattedWeatherDTO) {
+    val json = jsonConverter!!.toJson(currentWeatherData)
     writeResponse(response, json)
   }
 

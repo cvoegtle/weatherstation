@@ -16,12 +16,15 @@ internal class WeatherDataSmoother(private val pm: PersistenceManager, private v
     while (currentTime.before(endTime)) {
       val range = dateUtil.getRangeAround(currentTime, 7 * 60 + 30)
       val weatherData = pm.fetchWeatherDataInRange(range.begin, range.end)
+      val solarData = pm.fetchSolarDataInRange(range.begin, range.end)
 
       val smoothed = SmoothedWeatherDataSet(currentTime)
       weatherData.forEach { wds -> smoothed.add(wds) }
+      solarData.forEach { sds -> smoothed.add(sds)}
       smoothed.normalize()
       weatherDataProvider.write(smoothed)
       pm.removeWeatherDataInRange(range.begin, range.end)
+      pm.removeSolarDataInRange(range.begin, range.end)
 
       currentTime = dateUtil.incrementDateBy15min(currentTime)
     }

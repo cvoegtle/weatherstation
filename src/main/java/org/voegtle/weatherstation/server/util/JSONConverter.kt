@@ -153,7 +153,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         return jsonObjects
     }
 
-    fun toJson(stats: Statistics, newFormat: Boolean): JSONObject {
+    fun toJson(stats: Statistics): JSONObject {
         val json = WeatherJSONObject()
         json.put("id", locationProperties.location)
         json.put("kind", stats.kind)
@@ -162,31 +162,26 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         if (stats.rainLastHour != null) {
             val lastHour = StatisticsSet()
             lastHour.addRain(stats.rainLastHour)
-            jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour, newFormat))
+            jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour))
         }
 
-        jsonObjects.add(toJson(Statistics.TimeRange.today, stats.today, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.yesterday, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.last7days, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.last30days, newFormat))
+        jsonObjects.add(toJson(Statistics.TimeRange.today, stats.today))
+        jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.yesterday))
+        jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.last7days))
+        jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.last30days))
         json.put("stats", jsonObjects)
 
         return json
     }
 
     @Throws(JSONException::class)
-    private fun toJson(range: Statistics.TimeRange, set: StatisticsSet, newFormat: Boolean): JSONObject {
+    private fun toJson(range: Statistics.TimeRange, set: StatisticsSet): JSONObject {
         val json = WeatherJSONObject()
         json.put("range", range)
-        if (newFormat) {
-            json.putOpt("rain", set.rain)
-            json.putOpt("minTemperature", set.minTemperature)
-            json.putOpt("maxTemperature", set.maxTemperature)
-        } else {
-            json.put("rain", set.rain)
-            json.put("minTemperature", set.minTemperature)
-            json.put("maxTemperature", set.maxTemperature)
-        }
+        json.putOpt("rain", set.rain)
+        json.putOpt("minTemperature", set.minTemperature)
+        json.putOpt("maxTemperature", set.maxTemperature)
+        json.putOpt("solarRadiationMax", set.solarRadiationMax)
         json.putOpt("kwh", set.kwh)
         return json
     }
