@@ -26,6 +26,14 @@ class SmoothedWeatherDataSet : Serializable {
     var kwh: Double? = null
     var repaired: Boolean? = null
 
+    var powerFeed: Float? = null
+    @Ignore private var countPowerFeed: Int = 0
+
+    var powerProduction: Float? = null
+    var powerProductionMax: Float? = null
+    var totalPowerProduction: Float? = null
+    @Ignore private var countPowerProduction: Int = 0
+
     @Ignore
     private var countOutsideTemperature = 0
 
@@ -65,6 +73,13 @@ class SmoothedWeatherDataSet : Serializable {
         addKwh(wds.kwh)
     }
 
+    fun add(sds: SolarDataSet) {
+        addPowerFeed(sds.powerFeed)
+        addPowerProduction(sds.powerProduction)
+        setPowerProductionIfMax(sds.powerProduction)
+        this.totalPowerProduction = sds.totalPowerProduction
+    }
+
     fun normalize() {
         if (countOutsideTemperature > 1) {
             outsideTemperature = outsideTemperature!! / countOutsideTemperature
@@ -84,6 +99,13 @@ class SmoothedWeatherDataSet : Serializable {
         if (countWatt > 0) {
             watt = watt!! / countWatt
         }
+        if (countPowerFeed > 0) {
+            powerFeed = powerFeed!! / countPowerFeed
+        }
+        if (countPowerProduction > 0) {
+            powerProduction = powerProduction!! / countPowerProduction
+        }
+
     }
 
     private fun addOutsideTemperature(value: Float?) {
@@ -161,6 +183,26 @@ class SmoothedWeatherDataSet : Serializable {
             if (kwh == null || it > kwh!!) {
                 kwh = value
             }
+        }
+    }
+
+    private fun addPowerFeed(value: Float) {
+        countPowerFeed++
+        var newPowerFeed = powerFeed ?: 0.0f
+        newPowerFeed += value
+        powerFeed = newPowerFeed
+    }
+
+    private fun addPowerProduction(value: Float) {
+        countPowerProduction++
+        var newPowerProduction = powerProduction ?: 0.0f
+        newPowerProduction += value
+        powerProduction = newPowerProduction
+    }
+
+    private fun setPowerProductionIfMax(powerProduction: Float) {
+        if (powerProductionMax == null || powerProductionMax!! < powerProduction) {
+            powerProductionMax = powerProduction
         }
     }
 

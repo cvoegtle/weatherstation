@@ -12,6 +12,7 @@ fun registerClassesForPersistence() {
         ObjectifyService.register(LocationProperties::class.java)
         ObjectifyService.register(SmoothedWeatherDataSet::class.java)
         ObjectifyService.register(WeatherDataSet::class.java)
+        ObjectifyService.register(SolarDataSet::class.java)
         classesRegistered = true
     }
 }

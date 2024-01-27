@@ -9,6 +9,8 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.Contact
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.request.ResponseCode
+import org.voegtle.weatherstation.server.request.ValidationException
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.util.JSONConverter
 import registerClassesForPersistence
@@ -139,9 +141,21 @@ abstract class AbstractServlet : HttpServlet() {
         return location == locationProperties!!.location
     }
 
+    internal fun assertCorrectLocation(location: String?) {
+        if (!isCorrectLocation(location)) {
+            throw ValidationException(ResponseCode.WRONG_LOCATION)
+        }
+    }
+
     internal fun isSecretValid(secret: String?): Boolean {
         val secretHash = locationProperties!!.secretHash
         return secretHash == HashService.calculateHash(secret)
+    }
+
+    internal fun assertSecretValid(password: String?) {
+        if (!isSecretValid(password)) {
+            throw ValidationException(ResponseCode.NOT_AUTHORIZED)
+        }
     }
 
 

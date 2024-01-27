@@ -69,8 +69,8 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter
         // oxenwetter shenzhenwetter
-        version = '112'
-        projectId = 'oxenwetter'
+        version = '116'
+        projectId = 'baliwetter'
         stopPreviousVersion = true
         promote = true
     }

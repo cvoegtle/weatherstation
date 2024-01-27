@@ -208,4 +208,37 @@ open class PersistenceManager {
 
     fun fetchContacts(): List<Contact> = ObjectifyService.ofy().load().type(Contact::class.java).list()
 
+    fun makePersistent(dataSet: SolarDataSet) {
+        ObjectifyService.ofy().save().entity(dataSet).now()
+    }
+
+    fun fetchCorrespondingSolarDataSet(time: Date): SolarDataSet? = ObjectifyService.ofy()
+        .load()
+        .type(SolarDataSet::class.java)
+        .filter("time <=", time)
+        .filter("time >=", DateUtil.minutesBefore(time, 15))
+        .order("-time")
+        .first()
+        .now()
+
+    fun fetchSolarDataInRange(begin: Date, end: Date): List<SolarDataSet> = ObjectifyService.ofy().load()
+        .type(SolarDataSet::class.java)
+        .filter("time >=", begin)
+        .filter("time <=", end)
+        .order("time")
+        .list()
+
+    fun removeSolarDataInRange(begin: Date, end: Date) {
+        val ids = ObjectifyService.ofy().load()
+            .type(SolarDataSet::class.java)
+            .filter("time >=", begin)
+            .filter("time <=", end)
+            .list()
+            .map { it.id }
+
+        ObjectifyService.ofy().delete().type(SolarDataSet::class.java).ids(ids).now()
+    }
+
+
+
 }

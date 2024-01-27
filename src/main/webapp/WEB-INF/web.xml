@@ -47,6 +47,17 @@
     <url-pattern>/weatherstation/report</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>solar</servlet-name>
+    <servlet-class>org.voegtle.weatherstation.server.SolarServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>solar</servlet-name>
+    <url-pattern>/weatherstation/solar</url-pattern>
+  </servlet-mapping>
+
   <filter>
     <filter-name>ObjectifyWebFilter</filter-name>
     <filter-class>org.voegtle.weatherstation.server.persistence.ObjectifyWebFilter</filter-class>
