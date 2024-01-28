@@ -89,6 +89,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             dataSet.totalPowerProduction?.let {
                 stats.addKwh(range, it / 1000)
             }
+            dataSet.powerProductionMax?.let {
+                stats.updateSolarRadiation(range, it)
+            }
 
             stats.setTemperature(range, dataSet.outsideTemperatureMax)
             stats.setTemperature(range, dataSet.outsideTemperatureMin)
@@ -124,6 +127,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             if (firstSet?.totalPowerProduction != null && latestSolarData != null) {
                 stats.addKwh(Statistics.TimeRange.today, (latestSolarData.totalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
             }
+            updateSolarRadiation(latestSolarData?.powerProduction, stats)
         }
     }
 
@@ -149,12 +153,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
     }
 
-    private fun calculateKwh(youngerKwh: Double?, olderKwh: Double?): Double? {
-        if (youngerKwh != null && olderKwh != null) {
-            val kwh = youngerKwh - olderKwh
-            return if (kwh > 0) kwh else null
+    private fun updateSolarRadiation(solarRadiation: Float?, stats: Statistics) {
+        solarRadiation?.let {
+            stats.updateSolarRadiation(Statistics.TimeRange.today, it)
         }
-        return null
     }
 
 
