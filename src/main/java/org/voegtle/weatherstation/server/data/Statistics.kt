@@ -67,7 +67,7 @@ class Statistics {
     last30days.addRain(rain)
   }
 
-  fun addKwh(range: TimeRange, doubleKwh: Double?) {
+  fun addKwh(range: TimeRange, doubleKwh: Float?) {
     if (doubleKwh != null) {
       val kwh = doubleKwh.toFloat()
       when (range) {

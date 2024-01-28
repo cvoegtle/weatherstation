@@ -71,7 +71,6 @@ class AggregatedWeatherDataSet {
     var rainCounter = 0
     var rainDays = 0
     var dailyRain: Float? = null
-    var kwh: Double? = null
 
     constructor()
     constructor(date: Date) {
@@ -194,7 +193,7 @@ class AggregatedWeatherDataSet {
     }
 
     override fun toString(): String {
-        return "AggregatedWeatherDataSet(id=$id, date=$date, period=$period, isFinished=$isFinished, timeOfMinimum=$timeOfMinimum, timeOfMaximum=$timeOfMaximum, outsideTemperatureMin=$outsideTemperatureMin, outsideTemperatureMax=$outsideTemperatureMax, outsideTemperatureAverage=$outsideTemperatureAverage, outsideTemperatureCounter=$outsideTemperatureCounter, outsideHumidityMin=$outsideHumidityMin, outsideHumidityMax=$outsideHumidityMax, outsideHumidityAverage=$outsideHumidityAverage, outsideHumidityCounter=$outsideHumidityCounter, insideTemperatureMin=$insideTemperatureMin, insideTemperatureMax=$insideTemperatureMax, insideTemperatureAverage=$insideTemperatureAverage, insideTemperatureCounter=$insideTemperatureCounter, insideHumidityMin=$insideHumidityMin, insideHumidityMax=$insideHumidityMax, insideHumidityAverage=$insideHumidityAverage, insideHumidityCounter=$insideHumidityCounter, windspeedMin=$windspeedMin, windspeedMax=$windspeedMax, windspeedAverage=$windspeedAverage, windspeedCounter=$windspeedCounter, totalPowerProduction=$totalPowerProduction, powerProductionMax=$powerProductionMax, powerProductionMaxTime=$powerProductionMaxTime, rainCounter=$rainCounter, rainDays=$rainDays, dailyRain=$dailyRain, kwh=$kwh)"
+        return "AggregatedWeatherDataSet(id=$id, date=$date, period=$period, isFinished=$isFinished, timeOfMinimum=$timeOfMinimum, timeOfMaximum=$timeOfMaximum, outsideTemperatureMin=$outsideTemperatureMin, outsideTemperatureMax=$outsideTemperatureMax, outsideTemperatureAverage=$outsideTemperatureAverage, outsideTemperatureCounter=$outsideTemperatureCounter, outsideHumidityMin=$outsideHumidityMin, outsideHumidityMax=$outsideHumidityMax, outsideHumidityAverage=$outsideHumidityAverage, outsideHumidityCounter=$outsideHumidityCounter, insideTemperatureMin=$insideTemperatureMin, insideTemperatureMax=$insideTemperatureMax, insideTemperatureAverage=$insideTemperatureAverage, insideTemperatureCounter=$insideTemperatureCounter, insideHumidityMin=$insideHumidityMin, insideHumidityMax=$insideHumidityMax, insideHumidityAverage=$insideHumidityAverage, insideHumidityCounter=$insideHumidityCounter, windspeedMin=$windspeedMin, windspeedMax=$windspeedMax, windspeedAverage=$windspeedAverage, windspeedCounter=$windspeedCounter, totalPowerProduction=$totalPowerProduction, powerProductionMax=$powerProductionMax, powerProductionMaxTime=$powerProductionMaxTime, rainCounter=$rainCounter, rainDays=$rainDays, dailyRain=$dailyRain)"
     }
 
 

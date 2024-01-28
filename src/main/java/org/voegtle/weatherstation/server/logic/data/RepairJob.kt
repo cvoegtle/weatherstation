@@ -2,8 +2,6 @@ package org.voegtle.weatherstation.server.logic.data
 
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 
-import java.util.ArrayList
-
 class RepairJob {
 
   var first: SmoothedWeatherDataSet? = null
@@ -17,7 +15,7 @@ class RepairJob {
     var rain = 0.0
     var insideTemperature: Double? = null
     var insideHumidity: Double? = null
-    var kwh: Double? = null
+    var totalPowerProduction: Double? = null
   }
 
   fun addDefectDataSet(dataset: SmoothedWeatherDataSet) {
@@ -46,7 +44,7 @@ class RepairJob {
 
     step.insideHumidity = spreadEqually(first!!.insideHumidity, last!!.insideHumidity, defectDataSets.size)
     step.insideTemperature = spreadEqually(first!!.insideTemperature, last!!.insideTemperature, defectDataSets.size)
-    step.kwh = spreadEqually(first!!.kwh, last!!.kwh, defectDataSets.size)
+    step.totalPowerProduction = spreadEqually(first!!.totalPowerProduction, last!!.totalPowerProduction, defectDataSets.size)
   }
 
   private fun spreadEqually(firstValue: Double?, lastValue: Double?, numberOfSets: Int): Double? {

@@ -86,7 +86,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                 stats.addRain(range, rain)
             }
 
-            stats.addKwh(range, calculateKwh(dataSet.kwh, 0.0))
+            dataSet.totalPowerProduction?.let {
+                stats.addKwh(range, it / 1000)
+            }
 
             stats.setTemperature(range, dataSet.outsideTemperatureMax)
             stats.setTemperature(range, dataSet.outsideTemperatureMin)
@@ -104,18 +106,23 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     private fun buildTodaysStatistics(stats: Statistics) {
         val todaysDataSets = fetchTodaysDataSets()
 
-        if (todaysDataSets.size > 0) {
+        if (todaysDataSets.isNotEmpty()) {
             val firstSet = todaysDataSets[0]
             val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+            val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
+
             val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
             stats.rainLastHour = calculateRain(latest, oneHourBefore)
 
             stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
-            stats.addKwh(Statistics.TimeRange.today, calculateKwh(latest, firstSet))
             stats.setTemperature(Statistics.TimeRange.today, latest.outsideTemperature)
 
             for (dataSet in todaysDataSets) {
                 stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
+            }
+
+            if (firstSet?.totalPowerProduction != null && latestSolarData != null) {
+                stats.addKwh(Statistics.TimeRange.today, (latestSolarData.totalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
             }
         }
     }
@@ -140,12 +147,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         val referenceCount = makeOverflowCorrection(olderCount, youngerCount)
         val rainCount = youngerCount - referenceCount
         return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
-    }
-
-    private fun calculateKwh(latest: WeatherDataSet?, previous: SmoothedWeatherDataSet?): Double? {
-        return if (latest == null || previous == null || latest.kwh == null || previous.kwh == null) {
-            null
-        } else calculateKwh(latest.kwh, previous.kwh)
     }
 
     private fun calculateKwh(youngerKwh: Double?, olderKwh: Double?): Double? {

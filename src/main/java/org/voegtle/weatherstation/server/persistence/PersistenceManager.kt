@@ -36,7 +36,7 @@ open class PersistenceManager {
         managedDS.isRaining = ds.isRaining
         managedDS.insideTemperature = ds.insideTemperature
         managedDS.insideHumidity = ds.insideHumidity
-        managedDS.kwh = ds.kwh
+        managedDS.totalPowerProduction = ds.totalPowerProduction
         managedDS.repaired = ds.repaired
 
         makePersistent(managedDS)

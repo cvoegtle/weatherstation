@@ -82,7 +82,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
             json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
             json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
 
-            json.put("watt", wds.watt)
             jsonObjects.add(json)
         }
 
@@ -115,9 +114,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
             json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
             val rain = 0.295 * wds.rainCounter
             json.put("rain", Math.max(rain, 0.0))
-            if (extended) {
-                json.put("kwh", wds.kwh)
-            }
             jsonObjects.add(json)
         }
         return jsonObjects

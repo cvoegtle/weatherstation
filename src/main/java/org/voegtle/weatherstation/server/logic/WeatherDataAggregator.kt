@@ -34,8 +34,6 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
       var rainCountStart: Int? = null
       var rainCountLast: Int? = null
 
-      var kwhStart: Double? = null
-      var kwhLast: Double? = null
       for (wds in weatherDataSets) {
         if (wds.isValid) {
           aggregation.addOutsideTemperature(wds.outsideTemperature, wds.timestamp)
@@ -47,10 +45,6 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
             rainCountStart = wds.rainCounter
           }
           rainCountLast = wds.rainCounter
-          if (kwhStart == null) {
-            kwhStart = wds.kwh
-          }
-          kwhLast = wds.kwh
         }
       }
 
@@ -61,10 +55,6 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
         val referenceCount = makeOverflowCorrection(it, lastCount)
         aggregation.rainCounter = Math.max(lastCount - referenceCount, 0)
         aggregation.rainDays = if (lastCount > referenceCount) 1 else 0
-      }
-
-      if (kwhStart != null && kwhLast != null) {
-        aggregation.kwh = Math.max(kwhLast - kwhStart, 0.0)
       }
 
       aggregation.normalize()

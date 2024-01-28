@@ -22,8 +22,6 @@ class SmoothedWeatherDataSet : Serializable {
     var isRaining: Boolean? = null
     var windspeed: Float? = null
     var windspeedMax: Float? = null
-    var watt: Float? = null
-    var kwh: Double? = null
     var repaired: Boolean? = null
 
     var powerFeed: Float? = null
@@ -49,8 +47,6 @@ class SmoothedWeatherDataSet : Serializable {
     @Ignore
     private var countWindspeed = 0
 
-    @Ignore
-    private var countWatt = 0
 
     constructor() {
         timestamp = Date()
@@ -69,8 +65,6 @@ class SmoothedWeatherDataSet : Serializable {
         addRaining(wds.isRaining)
         addWindspeed(wds.windspeed)
         setWindspeedMaxIfMax(wds.windspeed)
-        addWatt(wds.watt)
-        addKwh(wds.kwh)
     }
 
     fun add(sds: SolarDataSet) {
@@ -95,9 +89,6 @@ class SmoothedWeatherDataSet : Serializable {
         }
         if (countWindspeed > 1) {
             windspeed = windspeed!! / countWindspeed
-        }
-        if (countWatt > 0) {
-            watt = watt!! / countWatt
         }
         if (countPowerFeed > 0) {
             powerFeed = powerFeed!! / countPowerFeed
@@ -167,21 +158,6 @@ class SmoothedWeatherDataSet : Serializable {
         value?.let {
             if (windspeedMax == null || windspeedMax!!.compareTo(it) < 0) {
                 windspeedMax = it
-            }
-        }
-    }
-
-    private fun addWatt(value: Float?) {
-        value?.let {
-            countWatt++
-            watt = (watt ?: 0.0f) + it
-        }
-    }
-
-    private fun addKwh(value: Double?) {
-        value?.let {
-            if (kwh == null || it > kwh!!) {
-                kwh = value
             }
         }
     }
