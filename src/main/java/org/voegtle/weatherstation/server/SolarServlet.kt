@@ -19,7 +19,7 @@ class SolarServlet : AbstractServlet() {
         val param = SolarUrlParameter(request, locationProperties!!.dateUtil)
 
         try {
-            log.warning("date: ${param.date} powerFeed: <ignored> powerProduction: ${param.powerProduction} totalPowerProduction: ${param.totalPowerProduction}")
+            log.info("date: ${param.date} powerFeed: ${param.powerFeed} powerProduction: ${param.powerProduction} totalPowerProduction: ${param.totalPowerProduction}")
             assertRequestParamComplete(param)
             assertSecretValid(param.password)
             assertCorrectLocation(param.id)
