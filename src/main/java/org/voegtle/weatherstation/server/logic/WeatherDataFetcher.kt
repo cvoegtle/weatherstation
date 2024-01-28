@@ -122,9 +122,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
             for (dataSet in todaysDataSets) {
                 stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
+                updateSolarRadiation(dataSet.powerProductionMax, stats)
             }
 
-            if (firstSet?.totalPowerProduction != null && latestSolarData != null) {
+            if (firstSet.totalPowerProduction != null && latestSolarData != null) {
                 stats.addKwh(Statistics.TimeRange.today, (latestSolarData.totalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
             }
             updateSolarRadiation(latestSolarData?.powerProduction, stats)
