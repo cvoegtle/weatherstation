@@ -33,6 +33,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
         val today = weatherDataProvider.getFirstSmoothedWeatherDataSetOfToday()
+        val latestSmoothedWeatherDataSet = weatherDataProvider.getYoungestSmoothedWeatherDataSet()
         val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
         val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
 
@@ -51,8 +52,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             rainToday = if (today != null)
                 calculateRain(latest.rainCounter, today.rainCounter)
             else null,
-            powerFeed = latestSolarData?.powerFeed,
-            powerProduction = latestSolarData?.powerProduction)
+            powerFeed = latestSolarData?.powerFeed ?: latestSmoothedWeatherDataSet?.powerFeed,
+            powerProduction = latestSolarData?.powerProduction ?: latestSmoothedWeatherDataSet?.powerProduction)
     }
 
     private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet?): Boolean {
@@ -110,7 +111,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         val todaysDataSets = fetchTodaysDataSets()
 
         if (todaysDataSets.isNotEmpty()) {
-            val firstSet = todaysDataSets[0]
+            val firstSet = todaysDataSets.first()
+            val lastSet = todaysDataSets.last()
             val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
             val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
 
@@ -125,10 +127,13 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                 updateSolarRadiation(dataSet.powerProductionMax, stats)
             }
 
-            if (firstSet.totalPowerProduction != null && latestSolarData != null) {
-                stats.addKwh(Statistics.TimeRange.today, (latestSolarData.totalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
+            val latestTotalPowerProduction = latestSolarData?.totalPowerProduction ?: lastSet.totalPowerProduction
+            if (firstSet.totalPowerProduction != null && latestTotalPowerProduction != null) {
+                stats.addKwh(Statistics.TimeRange.today, (latestTotalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
             }
-            updateSolarRadiation(latestSolarData?.powerProduction, stats)
+
+            val latestPowerProduction = latestSolarData?.powerProduction ?: lastSet.powerProduction
+            updateSolarRadiation(latestPowerProduction, stats)
         }
     }
 
