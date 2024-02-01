@@ -78,6 +78,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
             dateUtil.daysEarlier(yesterday, 29), yesterday).reversed()
         dataSets = removeDuplicates(dataSets)
+
+        determineKindOfStatistics(stats, dataSets)
+
         var day = 1
         for (dataSet in dataSets) {
             val range = Statistics.TimeRange.byDay(day++)
@@ -137,6 +140,13 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         }
     }
 
+    private fun determineKindOfStatistics(stats: Statistics, dataSets: Collection<AggregatedWeatherDataSet>) {
+        if (!dataSets.isEmpty()) {
+            if (dataSets.first().powerProductionMax != null) {
+                stats.kind = Statistics.Kind.withSolarPower
+            }
+        }
+    }
 
     fun fetchRainData(): RainDTO {
         val statistics = fetchStatistics()
