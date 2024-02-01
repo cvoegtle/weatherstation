@@ -20,17 +20,17 @@ class SolarServlet : AbstractServlet() {
 
         try {
             log.info("date: ${param.date} powerFeed: ${param.powerFeed} powerProduction: ${param.powerProduction} totalPowerProduction: ${param.totalPowerProduction}")
-            assertRequestParamComplete(param)
             assertSecretValid(param.password)
             assertCorrectLocation(param.id)
 
             val dataset = SolarDataSet(
                 time = param.date!!,
-                powerFeed = 0.0f,
-                powerProduction = param.powerProduction!!.toFloat(),
-                totalPowerProduction = param.totalPowerProduction!!.toFloat()
+                powerFeed = toFloatOrNull(param.powerFeed),
+                powerProduction = toFloatOrNull(param.powerProduction),
+                totalPowerProduction = toFloatOrNull(param.totalPowerProduction)
             )
 
+            assertDataSetNotEmpty(dataset)
             assertEnoughTimeElapsedSinceLastRequest(dataset.time)
 
             pm.makePersistent(dataset)
@@ -40,8 +40,16 @@ class SolarServlet : AbstractServlet() {
         }
     }
 
-    private fun assertRequestParamComplete(param: SolarUrlParameter) {
-        if (param.date == null || param.powerProduction == null || param.totalPowerProduction == null) {
+    private fun toFloatOrNull(value: String?): Float? {
+        return try {
+            value?.toFloat()
+        } catch (ex: Exception) {
+            null
+        }
+    }
+
+    private fun assertDataSetNotEmpty(dataSet: SolarDataSet) {
+        if (dataSet.powerProduction == null && dataSet.totalPowerProduction == null && dataSet.powerFeed == null) {
             throw ValidationException(ResponseCode.PARSE_ERROR)
         }
     }

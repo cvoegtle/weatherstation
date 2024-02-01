@@ -8,7 +8,7 @@ import java.util.*
 @Entity data class SolarDataSet(
   @Id var id: Long? = null,
   @Index var time: Date = Date(),
-  var powerProduction: Float = 0.0f,
-  var totalPowerProduction: Float = 0.0f,
-  var powerFeed: Float = 0.0f
+  var powerProduction: Float? = null,
+  var totalPowerProduction: Float? = null,
+  var powerFeed: Float? = null
 )

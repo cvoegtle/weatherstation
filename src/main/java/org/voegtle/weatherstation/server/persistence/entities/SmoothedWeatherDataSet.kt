@@ -68,10 +68,10 @@ class SmoothedWeatherDataSet : Serializable {
     }
 
     fun add(sds: SolarDataSet) {
-        addPowerFeed(sds.powerFeed)
-        addPowerProduction(sds.powerProduction)
-        setPowerProductionIfMax(sds.powerProduction)
-        this.totalPowerProduction = sds.totalPowerProduction
+        sds.powerFeed?.let { addPowerFeed(it) }
+        sds.powerProduction?.let { addPowerProduction(it) }
+        sds.powerProduction?.let { setPowerProductionIfMax(it) }
+        sds.totalPowerProduction?.let { this.totalPowerProduction = it }
     }
 
     fun normalize() {
