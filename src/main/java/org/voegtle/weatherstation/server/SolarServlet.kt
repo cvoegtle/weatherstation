@@ -27,7 +27,7 @@ class SolarServlet : AbstractServlet() {
                 time = param.date!!,
                 powerFeed = toFloatOrNull(param.powerFeed),
                 powerProduction = toFloatOrNull(param.powerProduction),
-                totalPowerProduction = toFloatOrNull(param.totalPowerProduction)
+                totalPowerProduction = toFloatIfGreaterZeroElseNull(param.totalPowerProduction)
             )
 
             assertDataSetNotEmpty(dataset)
@@ -45,6 +45,14 @@ class SolarServlet : AbstractServlet() {
             value?.toFloat()
         } catch (ex: Exception) {
             null
+        }
+    }
+    private fun toFloatIfGreaterZeroElseNull(value: String?): Float? {
+        try {
+            val intValue = value?.toInt()
+            return if (intValue != null && intValue > 0) intValue.toFloat() else null
+        } catch (ex: Exception) {
+            return null
         }
     }
 
