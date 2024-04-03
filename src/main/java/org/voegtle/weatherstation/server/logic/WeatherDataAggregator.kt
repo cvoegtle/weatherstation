@@ -62,7 +62,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
     aggregation.isFinished = true
   }
 
-  private fun calculateDailyPowerProduction(weatherDataSets: List<SmoothedWeatherDataSet>): Float? {
+  private fun calculateDailyPowerProduction(weatherDataSets: List<SmoothedWeatherDataSet2>): Float? {
     var totalPowerProductionInitial = weatherDataSets.first().totalPowerProduction
     var totalPowerProductionFinal = weatherDataSets.last().totalPowerProduction
     if (totalPowerProductionInitial != null && totalPowerProductionFinal != null) {
