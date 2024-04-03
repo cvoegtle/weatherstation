@@ -92,8 +92,8 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
 
         it.rainCounter?.let { rainCounter -> ds.rainCounter = getNewValue(rainCounter, index, step.rain) }
 
-        it.kwh?.let {
-          ds.kwh = getNewValue(it, index, step.kwh)
+        it.totalPowerProduction?.let {
+          ds.totalPowerProduction = getNewValue(it, index, step.totalPowerProduction)
         }
 
         setDefaults(ds)

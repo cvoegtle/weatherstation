@@ -27,7 +27,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
         json.putOpt("raining", currentWeatherData.isRaining)
         json.putOpt("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-        json.putOpt("watt", currentWeatherData.watt)
+
+        json.putOpt("powerProduction", currentWeatherData.powerProduction)
+        json.putOpt("powerFeed", currentWeatherData.powerFeed)
 
         json.put("location", locationProperties.city)
         json.put("location_short", locationProperties.cityShortcut)
@@ -41,38 +43,6 @@ class JSONConverter(private val locationProperties: LocationProperties) {
 
         return json
     }
-
-
-    fun toJsonLegacy(currentWeatherData: UnformattedWeatherDTO, extended: Boolean): JSONObject {
-        val json = WeatherJSONObject()
-        json.put("timestamp", currentWeatherData.time)
-        json.put("temperature", currentWeatherData.temperature)
-        if (currentWeatherData.insideTemperature != null) {
-            json.put("inside_temperature", currentWeatherData.insideTemperature)
-        }
-        json.put("humidity", currentWeatherData.humidity)
-        if (currentWeatherData.insideHumidity != null) {
-            json.put("inside_humidity", currentWeatherData.insideHumidity)
-        }
-        json.put("rain", currentWeatherData.rainLastHour)
-        json.put("rain_today", currentWeatherData.rainToday)
-        json.put("raining", currentWeatherData.isRaining)
-        json.put("wind", multiply(currentWeatherData.windspeed, locationProperties.windMultiplier))
-        if (currentWeatherData.watt != null) {
-            json.put("watt", currentWeatherData.watt)
-        }
-
-        json.put("location", locationProperties.city)
-        json.put("location_short", locationProperties.cityShortcut)
-
-        json.put("id", locationProperties.location)
-        if (extended) {
-            json.put("forecast", locationProperties.weatherForecast)
-        }
-
-        return json
-    }
-
 
     fun toJson(rain: RainDTO): JSONObject {
         val json = WeatherJSONObject()
@@ -112,7 +82,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
             json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
             json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
 
-            json.put("watt", wds.watt)
+            json.put("powerFeed", wds.powerFeed)
+            json.put("powerProduction", wds.powerProduction)
+
             jsonObjects.add(json)
         }
 
@@ -128,7 +100,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     }
 
 
-    fun toJsonAggregated(list: List<AggregatedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
+    fun toJsonAggregated(list: List<AggregatedWeatherDataSet>): ArrayList<JSONObject> {
         val sdf = SimpleDateFormat(FORMAT_DATE)
 
         val jsonObjects = ArrayList<JSONObject>()
@@ -145,15 +117,15 @@ class JSONConverter(private val locationProperties: LocationProperties) {
             json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
             val rain = 0.295 * wds.rainCounter
             json.put("rain", Math.max(rain, 0.0))
-            if (extended) {
-                json.put("kwh", wds.kwh)
-            }
+            json.put("totalPowerProduction", wds.totalPowerProduction)
+            json.put("powerProductionMax", wds.powerProductionMax)
+
             jsonObjects.add(json)
         }
         return jsonObjects
     }
 
-    fun toJson(stats: Statistics, newFormat: Boolean): JSONObject {
+    fun toJson(stats: Statistics): JSONObject {
         val json = WeatherJSONObject()
         json.put("id", locationProperties.location)
         json.put("kind", stats.kind)
@@ -162,31 +134,26 @@ class JSONConverter(private val locationProperties: LocationProperties) {
         if (stats.rainLastHour != null) {
             val lastHour = StatisticsSet()
             lastHour.addRain(stats.rainLastHour)
-            jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour, newFormat))
+            jsonObjects.add(toJson(Statistics.TimeRange.lastHour, lastHour))
         }
 
-        jsonObjects.add(toJson(Statistics.TimeRange.today, stats.today, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.yesterday, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.last7days, newFormat))
-        jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.last30days, newFormat))
+        jsonObjects.add(toJson(Statistics.TimeRange.today, stats.today))
+        jsonObjects.add(toJson(Statistics.TimeRange.yesterday, stats.yesterday))
+        jsonObjects.add(toJson(Statistics.TimeRange.last7days, stats.last7days))
+        jsonObjects.add(toJson(Statistics.TimeRange.last30days, stats.last30days))
         json.put("stats", jsonObjects)
 
         return json
     }
 
     @Throws(JSONException::class)
-    private fun toJson(range: Statistics.TimeRange, set: StatisticsSet, newFormat: Boolean): JSONObject {
+    private fun toJson(range: Statistics.TimeRange, set: StatisticsSet): JSONObject {
         val json = WeatherJSONObject()
         json.put("range", range)
-        if (newFormat) {
-            json.putOpt("rain", set.rain)
-            json.putOpt("minTemperature", set.minTemperature)
-            json.putOpt("maxTemperature", set.maxTemperature)
-        } else {
-            json.put("rain", set.rain)
-            json.put("minTemperature", set.minTemperature)
-            json.put("maxTemperature", set.maxTemperature)
-        }
+        json.putOpt("rain", set.rain)
+        json.putOpt("minTemperature", set.minTemperature)
+        json.putOpt("maxTemperature", set.maxTemperature)
+        json.putOpt("solarRadiationMax", set.solarRadiationMax)
         json.putOpt("kwh", set.kwh)
         return json
     }

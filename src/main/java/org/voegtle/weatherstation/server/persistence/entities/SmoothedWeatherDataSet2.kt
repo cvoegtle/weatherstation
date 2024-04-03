@@ -22,9 +22,15 @@ class SmoothedWeatherDataSet2 : Serializable {
     var isRaining: Boolean? = null
     var windspeed: Float? = null
     var windspeedMax: Float? = null
-    var watt: Float? = null
-    var kwh: Double? = null
     var repaired: Boolean? = null
+
+    var powerFeed: Float? = null
+    @Ignore private var countPowerFeed: Int = 0
+
+    var powerProduction: Float? = null
+    var powerProductionMax: Float? = null
+    var totalPowerProduction: Float? = null
+    @Ignore private var countPowerProduction: Int = 0
 
     @Ignore
     private var countOutsideTemperature = 0
@@ -41,8 +47,6 @@ class SmoothedWeatherDataSet2 : Serializable {
     @Ignore
     private var countWindspeed = 0
 
-    @Ignore
-    private var countWatt = 0
 
     constructor() {
         timestamp = Date()
@@ -61,8 +65,13 @@ class SmoothedWeatherDataSet2 : Serializable {
         addRaining(wds.isRaining)
         addWindspeed(wds.windspeed)
         setWindspeedMaxIfMax(wds.windspeed)
-        addWatt(wds.watt)
-        addKwh(wds.kwh)
+    }
+
+    fun add(sds: SolarDataSet) {
+        sds.powerFeed?.let { addPowerFeed(it) }
+        sds.powerProduction?.let { addPowerProduction(it) }
+        sds.powerProduction?.let { setPowerProductionIfMax(it) }
+        sds.totalPowerProduction?.let { this.totalPowerProduction = it }
     }
 
     fun normalize() {
@@ -81,9 +90,13 @@ class SmoothedWeatherDataSet2 : Serializable {
         if (countWindspeed > 1) {
             windspeed = windspeed!! / countWindspeed
         }
-        if (countWatt > 0) {
-            watt = watt!! / countWatt
+        if (countPowerFeed > 0) {
+            powerFeed = powerFeed!! / countPowerFeed
         }
+        if (countPowerProduction > 0) {
+            powerProduction = powerProduction!! / countPowerProduction
+        }
+
     }
 
     private fun addOutsideTemperature(value: Float?) {
@@ -149,18 +162,23 @@ class SmoothedWeatherDataSet2 : Serializable {
         }
     }
 
-    private fun addWatt(value: Float?) {
-        value?.let {
-            countWatt++
-            watt = (watt ?: 0.0f) + it
-        }
+    private fun addPowerFeed(value: Float) {
+        countPowerFeed++
+        var newPowerFeed = powerFeed ?: 0.0f
+        newPowerFeed += value
+        powerFeed = newPowerFeed
     }
 
-    private fun addKwh(value: Double?) {
-        value?.let {
-            if (kwh == null || it > kwh!!) {
-                kwh = value
-            }
+    private fun addPowerProduction(value: Float) {
+        countPowerProduction++
+        var newPowerProduction = powerProduction ?: 0.0f
+        newPowerProduction += value
+        powerProduction = newPowerProduction
+    }
+
+    private fun setPowerProductionIfMax(powerProduction: Float) {
+        if (powerProductionMax == null || powerProductionMax!! < powerProduction) {
+            powerProductionMax = powerProduction
         }
     }
 

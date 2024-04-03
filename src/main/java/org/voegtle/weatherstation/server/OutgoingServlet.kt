@@ -25,11 +25,11 @@ class OutgoingServlet : AbstractServlet() {
     when {
       param.type == DataType.AGGREGATED -> {
         val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end ?: Date())
-        returnAggregatedResult(response, result, param.isExtended)
+        returnAggregatedResult(response, result)
       }
       param.type == DataType.CURRENT -> {
         val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
-        returnCurrentWeatherData(response, currentWeatherData, param.isExtended, param.isNewFormat)
+        returnCurrentWeatherData(response, currentWeatherData)
       }
       param.type == DataType.RAIN -> {
         val rainData = weatherDataFetcher.fetchRainData()
@@ -37,7 +37,7 @@ class OutgoingServlet : AbstractServlet() {
       }
       param.type == DataType.STATS -> {
         val stats = weatherDataFetcher.fetchStatistics()
-        writeResponse(response, jsonConverter!!.toJson(stats, param.isNewFormat))
+        writeResponse(response, jsonConverter!!.toJson(stats))
       }
       param.begin != null -> {
         val result = weatherDataFetcher.fetchSmoothedWeatherData(param.begin, param.end!!)
@@ -50,16 +50,13 @@ class OutgoingServlet : AbstractServlet() {
 
   }
 
-  private fun returnCurrentWeatherData(response: HttpServletResponse, currentWeatherData: UnformattedWeatherDTO,
-                                       extended: Boolean, newFormat: Boolean) {
-    val json = if (newFormat) jsonConverter!!.toJson(currentWeatherData) else jsonConverter!!.toJsonLegacy(
-        currentWeatherData, extended)
+  private fun returnCurrentWeatherData(response: HttpServletResponse, currentWeatherData: UnformattedWeatherDTO) {
+    val json = jsonConverter!!.toJson(currentWeatherData)
     writeResponse(response, json)
   }
 
-  private fun returnAggregatedResult(response: HttpServletResponse, list: List<AggregatedWeatherDataSet>,
-                                     extended: Boolean) {
-    val jsonObjects = jsonConverter!!.toJsonAggregated(list, extended)
+  private fun returnAggregatedResult(response: HttpServletResponse, list: List<AggregatedWeatherDataSet>) {
+    val jsonObjects = jsonConverter!!.toJsonAggregated(list)
     writeResponse(response, jsonObjects)
   }
 

@@ -67,7 +67,7 @@ class Statistics {
     last30days.addRain(rain)
   }
 
-  fun addKwh(range: TimeRange, doubleKwh: Double?) {
+  fun addKwh(range: TimeRange, doubleKwh: Float?) {
     if (doubleKwh != null) {
       val kwh = doubleKwh.toFloat()
       when (range) {
@@ -87,6 +87,25 @@ class Statistics {
       last30days.addKwh(kwh)
     }
   }
+
+  fun updateSolarRadiation(range: TimeRange, solarRadiation: Float) {
+    when (range) {
+      TimeRange.today -> {
+        today.updateSolarRadiation(solarRadiation)
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      TimeRange.yesterday -> {
+        yesterday.updateSolarRadiation(solarRadiation)
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      TimeRange.last7days -> {
+        last7days.updateSolarRadiation(solarRadiation)
+      }
+      else -> {}
+    }
+    last30days.updateSolarRadiation(solarRadiation)
+  }
+
 
   fun toRainDTO(): RainDTO {
     return RainDTO(lastHour = rainLastHour, today = today.rain, yesterday = yesterday.rain,

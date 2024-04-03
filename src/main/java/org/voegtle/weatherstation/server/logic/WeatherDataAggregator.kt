@@ -34,24 +34,21 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
       var rainCountStart: Int? = null
       var rainCountLast: Int? = null
 
-      var kwhStart: Double? = null
-      var kwhLast: Double? = null
       for (wds in weatherDataSets) {
         if (wds.isValid) {
           aggregation.addOutsideTemperature(wds.outsideTemperature, wds.timestamp)
           aggregation.addOutsideHumidity(wds.outsideHumidity)
           aggregation.addInsideTemperature(wds.insideTemperature)
           aggregation.addInsideHumidity(wds.insideHumidity)
+          aggregation.updatePowerProductionMax(wds.powerProductionMax, wds.timestamp)
           if (rainCountStart == null) {
             rainCountStart = wds.rainCounter
           }
           rainCountLast = wds.rainCounter
-          if (kwhStart == null) {
-            kwhStart = wds.kwh
-          }
-          kwhLast = wds.kwh
         }
       }
+
+      aggregation.totalPowerProduction = calculateDailyPowerProduction(weatherDataSets)
 
       rainCountStart?.let {
         val lastCount = (rainCountLast ?: 0)
@@ -60,14 +57,20 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
         aggregation.rainDays = if (lastCount > referenceCount) 1 else 0
       }
 
-      if (kwhStart != null && kwhLast != null) {
-        aggregation.kwh = Math.max(kwhLast - kwhStart, 0.0)
-      }
-
       aggregation.normalize()
     }
     aggregation.isFinished = true
   }
+
+  private fun calculateDailyPowerProduction(weatherDataSets: List<SmoothedWeatherDataSet>): Float? {
+    var totalPowerProductionInitial = weatherDataSets.first().totalPowerProduction
+    var totalPowerProductionFinal = weatherDataSets.last().totalPowerProduction
+    if (totalPowerProductionInitial != null && totalPowerProductionFinal != null) {
+      return (totalPowerProductionFinal - totalPowerProductionInitial).coerceAtLeast(0.0f)
+    }
+    return null
+  }
+
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()

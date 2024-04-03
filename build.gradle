@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {    // Configuration for building
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '1.9.22'
     ext.spring_boot_version = '3.1.2'
 
     repositories {
@@ -45,8 +45,8 @@ dependencies {
     implementation 'com.google.appengine:appengine-jsr107cache:1.9.94'
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'com.googlecode.objectify:objectify:6.0.9'
+    implementation 'com.google.guava:guava:33.0.0-jre'
+    implementation 'com.googlecode.objectify:objectify:6.1.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'

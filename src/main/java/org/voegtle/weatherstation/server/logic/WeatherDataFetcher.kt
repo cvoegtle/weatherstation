@@ -5,10 +5,7 @@ import org.voegtle.weatherstation.server.data.Statistics
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.logic.caching.CachedWeatherDataProvider
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet2
-import org.voegtle.weatherstation.server.persistence.entities.WeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
 import java.util.logging.Logger
@@ -36,7 +33,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
 
     fun getLatestWeatherDataUnformatted(authorized: Boolean): UnformattedWeatherDTO {
         val today = weatherDataProvider.getFirstSmoothedWeatherDataSetOfToday()
+        val latestSmoothedWeatherDataSet = weatherDataProvider.getYoungestSmoothedWeatherDataSet()
         val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+        val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
+
         val twentyMinutesBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(20)
         val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
 
@@ -44,7 +44,6 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
             isRaining = isRaining(latest, twentyMinutesBefore),
             windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
-            watt = latest.watt,
             insideTemperature = if (authorized) latest.insideTemperature else null,
             insideHumidity = if (authorized) latest.insideHumidity else null,
             rainLastHour = if (oneHourBefore != null)
@@ -52,7 +51,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
             else null,
             rainToday = if (today != null)
                 calculateRain(latest.rainCounter, today.rainCounter)
-            else null)
+            else null,
+            powerFeed = latestSolarData?.powerFeed ?: latestSmoothedWeatherDataSet?.powerFeed,
+            powerProduction = latestSolarData?.powerProduction ?: latestSmoothedWeatherDataSet?.powerProduction)
     }
 
     private fun isRaining(latest: WeatherDataSet, fifteenMinutesBefore: SmoothedWeatherDataSet2?): Boolean {
@@ -77,6 +78,9 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRange(
             dateUtil.daysEarlier(yesterday, 29), yesterday).reversed()
         dataSets = removeDuplicates(dataSets)
+
+        determineKindOfStatistics(stats, dataSets)
+
         var day = 1
         for (dataSet in dataSets) {
             val range = Statistics.TimeRange.byDay(day++)
@@ -86,7 +90,12 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
                 stats.addRain(range, rain)
             }
 
-            stats.addKwh(range, calculateKwh(dataSet.kwh, 0.0))
+            dataSet.totalPowerProduction?.let {
+                stats.addKwh(range, it / 1000)
+            }
+            dataSet.powerProductionMax?.let {
+                stats.updateSolarRadiation(range, it)
+            }
 
             stats.setTemperature(range, dataSet.outsideTemperatureMax)
             stats.setTemperature(range, dataSet.outsideTemperatureMin)
@@ -104,22 +113,40 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     private fun buildTodaysStatistics(stats: Statistics) {
         val todaysDataSets = fetchTodaysDataSets()
 
-        if (todaysDataSets.size > 0) {
-            val firstSet = todaysDataSets[0]
+        if (todaysDataSets.isNotEmpty()) {
+            val firstSet = todaysDataSets.first()
+            val lastSet = todaysDataSets.last()
             val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+            val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
+
             val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
             stats.rainLastHour = calculateRain(latest, oneHourBefore)
 
             stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
-            stats.addKwh(Statistics.TimeRange.today, calculateKwh(latest, firstSet))
             stats.setTemperature(Statistics.TimeRange.today, latest.outsideTemperature)
 
             for (dataSet in todaysDataSets) {
                 stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
+                updateSolarRadiation(dataSet.powerProductionMax, stats)
             }
+
+            val latestTotalPowerProduction = latestSolarData?.totalPowerProduction ?: lastSet.totalPowerProduction
+            if (firstSet.totalPowerProduction != null && latestTotalPowerProduction != null) {
+                stats.addKwh(Statistics.TimeRange.today, (latestTotalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
+            }
+
+            val latestPowerProduction = latestSolarData?.powerProduction ?: lastSet.powerProduction
+            updateSolarRadiation(latestPowerProduction, stats)
         }
     }
 
+    private fun determineKindOfStatistics(stats: Statistics, dataSets: Collection<AggregatedWeatherDataSet>) {
+        if (!dataSets.isEmpty()) {
+            if (dataSets.first().powerProductionMax != null) {
+                stats.kind = Statistics.Kind.withSolarPower
+            }
+        }
+    }
 
     fun fetchRainData(): RainDTO {
         val statistics = fetchStatistics()
@@ -142,18 +169,10 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         return if (rainCount > 0) (0.295 * rainCount).toFloat() else null
     }
 
-    private fun calculateKwh(latest: WeatherDataSet?, previous: SmoothedWeatherDataSet2?): Double? {
-        return if (latest == null || previous == null || latest.kwh == null || previous.kwh == null) {
-            null
-        } else calculateKwh(latest.kwh, previous.kwh)
-    }
-
-    private fun calculateKwh(youngerKwh: Double?, olderKwh: Double?): Double? {
-        if (youngerKwh != null && olderKwh != null) {
-            val kwh = youngerKwh - olderKwh
-            return if (kwh > 0) kwh else null
+    private fun updateSolarRadiation(solarRadiation: Float?, stats: Statistics) {
+        solarRadiation?.let {
+            stats.updateSolarRadiation(Statistics.TimeRange.today, it)
         }
-        return null
     }
 
 
