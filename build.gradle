@@ -70,7 +70,7 @@ appengine {  // App Engine tasks configuration
         // baliwetter elbwetter forstwetter herzowetter
         // oxenwetter shenzhenwetter
         version = '128'
-        projectId = 'forstwetter'
+        projectId = 'shenzhenwetter'
         stopPreviousVersion = true
         promote = true
     }
