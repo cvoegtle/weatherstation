@@ -82,6 +82,9 @@ class JSONConverter(private val locationProperties: LocationProperties) {
             json.put("wind", multiply(wds.windspeed, locationProperties.windMultiplier))
             json.put("windMax", multiply(wds.windspeedMax, locationProperties.windMultiplier))
 
+            json.put("powerFeed", wds.powerFeed)
+            json.put("powerProduction", wds.powerProduction)
+
             jsonObjects.add(json)
         }
 
@@ -97,7 +100,7 @@ class JSONConverter(private val locationProperties: LocationProperties) {
     }
 
 
-    fun toJsonAggregated(list: List<AggregatedWeatherDataSet>, extended: Boolean): ArrayList<JSONObject> {
+    fun toJsonAggregated(list: List<AggregatedWeatherDataSet>): ArrayList<JSONObject> {
         val sdf = SimpleDateFormat(FORMAT_DATE)
 
         val jsonObjects = ArrayList<JSONObject>()

@@ -25,7 +25,7 @@ class OutgoingServlet : AbstractServlet() {
     when {
       param.type == DataType.AGGREGATED -> {
         val result = weatherDataFetcher.getAggregatedWeatherData(param.begin!!, param.end ?: Date())
-        returnAggregatedResult(response, result, param.isExtended)
+        returnAggregatedResult(response, result)
       }
       param.type == DataType.CURRENT -> {
         val currentWeatherData = weatherDataFetcher.getLatestWeatherDataUnformatted(authorized)
@@ -55,9 +55,8 @@ class OutgoingServlet : AbstractServlet() {
     writeResponse(response, json)
   }
 
-  private fun returnAggregatedResult(response: HttpServletResponse, list: List<AggregatedWeatherDataSet>,
-                                     extended: Boolean) {
-    val jsonObjects = jsonConverter!!.toJsonAggregated(list, extended)
+  private fun returnAggregatedResult(response: HttpServletResponse, list: List<AggregatedWeatherDataSet>) {
+    val jsonObjects = jsonConverter!!.toJsonAggregated(list)
     writeResponse(response, jsonObjects)
   }
 
