@@ -4,7 +4,7 @@ import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Ignore
 import com.googlecode.objectify.annotation.Index
-import java.util.Date
+import java.util.*
 
 @Entity
 class AggregatedWeatherDataSet(@Id private var id: Long? = null,
@@ -48,11 +48,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var powerProductionMax: Float? = null,
                                var powerProductionMaxTime: Date? = null,
 
-                               var dailyRain: Float? = null,
-
-                               // zur schleichenden Migration der alten Werte von der ELV Wetterstation
-                               var rainCounter: Int? = null,
-                               var kwh: Float? = null) {
+                               var dailyRain: Float? = null) {
 
   fun addOutsideTemperature(value: Float?, time: Date) {
     value?.let {
