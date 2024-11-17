@@ -20,7 +20,7 @@ class LocationProperties : Serializable {
     var secretHash: String? = null
     var readHash: String? = null
     var weatherForecast: String? = null
-    var isWindRelevant: Boolean = false
+    var windRelevant: Boolean = false
     var windMultiplier: Float? = null
         get() {
             if (field == null) {

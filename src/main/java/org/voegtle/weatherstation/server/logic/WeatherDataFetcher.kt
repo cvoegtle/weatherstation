@@ -43,7 +43,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
             isRaining = isRaining(latest, twentyMinutesBefore),
-            windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
+            windspeed = if (locationProperties.windRelevant) latest.windspeed else null,
             insideTemperature = if (authorized) latest.insideTemperature else null,
             insideHumidity = if (authorized) latest.insideHumidity else null,
             rainLastHour = if (oneHourBefore != null)
