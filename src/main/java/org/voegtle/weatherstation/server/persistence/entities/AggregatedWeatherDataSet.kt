@@ -148,15 +148,15 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
     }
   }
 
-  fun updateSolarRadiationMax(solarRadiation: Float?, timestamp: Date) {
-    solarRadiation?.let {
+  fun updateSolarRadiationMax(wds: SmoothedWeatherDataSet) {
+    wds.solarRadiation?.let {
       if (solarRadiationMax == null || solarRadiationMax!! < it) {
         solarRadiationMax = it
-        solarRadiationMaxTime = timestamp
+        solarRadiationMaxTime = wds.solarRadiationMaxTime ?: wds.timestamp
       }
       if (it > 0) {
-        firstSolarRadiation = firstSolarRadiation ?: timestamp
-        lastSolarRadiation = timestamp
+        firstSolarRadiation = firstSolarRadiation ?: wds.firstSolarRadiation ?: wds.timestamp
+        lastSolarRadiation = wds.lastSolarRadiation ?: wds.timestamp
       }
     }
   }

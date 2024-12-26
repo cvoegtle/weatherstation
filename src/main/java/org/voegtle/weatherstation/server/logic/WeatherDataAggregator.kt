@@ -4,7 +4,7 @@ import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 import org.voegtle.weatherstation.server.util.DateUtil
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataAggregator(private val pm: PersistenceManager, private val dateUtil: DateUtil) {
@@ -38,7 +38,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
           aggregation.addWindspeed(wds.windspeed)
           aggregation.updateWindspeedMax(wds.windspeedMax)
           aggregation.addSolarRadiation(wds.solarRadiation)
-          aggregation.updateSolarRadiationMax(wds.solarRadiationMax, wds.timestamp)
+          aggregation.updateSolarRadiationMax(wds)
           aggregation.totalPowerProduction = wds.totalPowerProduction
           aggregation.updatePowerProductionMax(wds.powerProductionMax, wds.timestamp)
           aggregation.dailyRain = wds.dailyRain

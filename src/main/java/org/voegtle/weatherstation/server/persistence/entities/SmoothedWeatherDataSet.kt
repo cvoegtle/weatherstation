@@ -6,8 +6,7 @@ import com.googlecode.objectify.annotation.Ignore
 import com.googlecode.objectify.annotation.Index
 import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
-
-import java.util.Date
+import java.util.*
 
 @Entity class SmoothedWeatherDataSet(
   @Id var id: Long? = null,
@@ -34,6 +33,9 @@ import java.util.Date
   var solarRadiation: Float? = null,
   var solarRadiationMax: Float? = null,
   @Ignore private var countSolarRadiation: Int = 0,
+  var solarRadiationMaxTime: Date? = null,
+  var firstSolarRadiation: Date? = null,
+  var lastSolarRadiation: Date? = null,
 
   var UV: Float? = null,
   @Ignore private var countUV: Int = 0,
@@ -64,8 +66,8 @@ import java.util.Date
     addDailyRain(wds.dailyRain)
     addWindspeed(wds.windSpeed)
     setWindspeedMaxIfMax(wds.windGust)
-    addSolarRadiation(wds.solarRadiation)
-    setSolarRadiationIfMax(wds.solarRadiation)
+    addSolarRadiation(wds.solarRadiation, wds.time)
+    setSolarRadiationIfMax(wds.solarRadiation, wds.time)
     addUV(wds.UV)
     addBarometer(wds.barometer)
   }
@@ -183,19 +185,27 @@ import java.util.Date
     }
   }
 
-  private fun addSolarRadiation(value: Float?) {
+  private fun addSolarRadiation(value: Float?, time: Date) {
     value?.let {
       countSolarRadiation++
       var newSolarRadiation = solarRadiation ?: 0.0f
       newSolarRadiation += it
       solarRadiation = newSolarRadiation
+
+      if (it > 0.0f) {
+        lastSolarRadiation = time
+        if (firstSolarRadiation == null) {
+          firstSolarRadiation = time
+        }
+      }
     }
   }
 
-  private fun setSolarRadiationIfMax(value: Float?) {
+  private fun setSolarRadiationIfMax(value: Float?, time: Date ) {
     value?.let {
       if (solarRadiationMax == null || solarRadiationMax!! < it) {
         solarRadiationMax = it
+        solarRadiationMaxTime = time
       }
     }
   }
