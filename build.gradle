@@ -67,7 +67,7 @@ appengine {  // App Engine tasks configuration
 
     deploy {   // deploy configuration
         // leo-wetter, tegelwetter
-        version = '101'
+        version = '105'
         projectId = 'testwetter-445319'
         stopPreviousVersion = true
         promote = true
