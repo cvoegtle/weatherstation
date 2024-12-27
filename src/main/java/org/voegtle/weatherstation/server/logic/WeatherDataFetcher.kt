@@ -17,8 +17,11 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private val dateUtil: DateUtil = locationProperties.dateUtil
   private var solarRadiationTotal: Float? = null
 
-  fun fetchAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> =
-    if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
+  fun fetchAggregatedWeatherData(begin: Date, end: Date?): List<AggregatedWeatherDataSet> {
+    val aggregatedWeatherDataSets = if (end != null) pm.fetchAggregatedWeatherDataInRange(begin, end) else pm.fetchAggregatedWeatherDataInRange(begin)
+    aggregatedWeatherDataSets.forEach { wds -> wds.migrateRainCounter2DailyRain() }
+    return aggregatedWeatherDataSets
+  }
 
   fun fetchSmoothedWeatherData(begin: Date, end: Date): MutableList<SmoothedWeatherDataSet> {
     val gmtBegin = dateUtil.fromCESTtoGMT(begin)
@@ -31,7 +34,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private fun calculateRainPerPeriod(datasets: MutableList<SmoothedWeatherDataSet>) {
     var previousRain: Float? = null
     datasets.forEach {
-      val currentRain = it.dailyRain ?: ((it.rainCounter ?: 0) * 0.295f)
+      val currentRain = it.dailyRain ?: 0.0f
       if (previousRain != null && currentRain > previousRain!!) {
         it.dailyRain = currentRain - previousRain!!
       } else {
@@ -83,6 +86,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
   private fun buildHistoricStatistics(stats: Statistics) {
     val yesterday = dateUtil.yesterday()
     var dataSets: Collection<AggregatedWeatherDataSet> = pm.fetchAggregatedWeatherDataInRangeDesc(dateUtil.daysEarlier(yesterday, 29), yesterday)
+    dataSets.forEach { wds -> wds.migrateRainCounter2DailyRain() }
     dataSets = removeDuplicates(dataSets)
 
     determineKindOfStatistics(stats, dataSets)

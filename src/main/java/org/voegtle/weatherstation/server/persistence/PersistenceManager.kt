@@ -1,15 +1,11 @@
 package org.voegtle.weatherstation.server.persistence
 
 import com.googlecode.objectify.ObjectifyService
-import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
-import org.voegtle.weatherstation.server.persistence.entities.Contact
-import org.voegtle.weatherstation.server.persistence.entities.Health
-import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
-import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
+import org.voegtle.weatherstation.server.persistence.entities.*
 import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.weewx.SolarDataSet
 import org.voegtle.weatherstation.server.weewx.WeewxDataSet
-import java.util.Date
+import java.util.*
 import java.util.logging.Logger
 
 open class PersistenceManager {
@@ -120,15 +116,6 @@ open class PersistenceManager {
     .filter("date <=", end)
     .order("-date")
     .list()
-
-  fun fetchOldestSmoothedDataSetInRange(begin: Date, end: Date): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
-    .type(SmoothedWeatherDataSet::class.java)
-    .filter("timestamp >=", begin)
-    .filter("timestamp <=", end)
-    .order("timestamp")
-    .limit(1)
-    .list()
-    .firstOrNull()
 
   fun fetchYoungestSmoothedDataSet(): SmoothedWeatherDataSet? = ObjectifyService.ofy().load()
     .type(SmoothedWeatherDataSet::class.java)

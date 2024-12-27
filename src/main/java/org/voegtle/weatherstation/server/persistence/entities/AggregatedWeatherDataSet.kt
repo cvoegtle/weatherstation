@@ -1,5 +1,6 @@
 package org.voegtle.weatherstation.server.persistence.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.googlecode.objectify.annotation.Entity
 import com.googlecode.objectify.annotation.Id
 import com.googlecode.objectify.annotation.Ignore
@@ -48,7 +49,9 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
                                var powerProductionMax: Float? = null,
                                var powerProductionMaxTime: Date? = null,
 
-                               var dailyRain: Float? = null) {
+                               var dailyRain: Float? = null,
+                               @JsonIgnore var rainCounter: Int? = null
+) {
 
   fun addOutsideTemperature(value: Float?, time: Date) {
     value?.let {
@@ -169,4 +172,9 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
       }
     }
   }
+    fun migrateRainCounter2DailyRain() {
+        if (dailyRain == null && rainCounter != null) {
+            dailyRain = 0.295f * (rainCounter?: 0)
+        }
+    }
 }
