@@ -44,7 +44,7 @@ dependencies {
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
     implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'com.googlecode.objectify:objectify:6.1.1'
+    implementation 'com.googlecode.objectify:objectify:6.1.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -66,8 +66,8 @@ appengine {  // App Engine tasks configuration
 
 
     deploy {   // deploy configuration
-        // leo-wetter, tegelwetter
-        version = '105'
+        // leo-wetter, tegelwetter, testwetter-445319
+        version = '107'
         projectId = 'testwetter-445319'
         stopPreviousVersion = true
         promote = true
