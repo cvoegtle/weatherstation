@@ -60,7 +60,7 @@ class WeatherDataAggregator(private val pm: PersistenceManager, private val date
 
   private fun fetchDateOfLastAggregation(): Date {
     val lastAggregatedDay = pm.fetchYoungestAggregatedDataSet()
-    return lastAggregatedDay?.date ?: dateUtil.getDate(2021, 1, 1)
+    return lastAggregatedDay?.date ?: dateUtil.getDate(2025, 1, 1)
   }
 
   private fun fetchLastDateWithCompleteWeatherDataSets(): Date {
