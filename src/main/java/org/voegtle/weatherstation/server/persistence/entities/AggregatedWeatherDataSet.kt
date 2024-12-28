@@ -152,7 +152,7 @@ class AggregatedWeatherDataSet(@Id private var id: Long? = null,
   }
 
   fun updateSolarRadiationMax(wds: SmoothedWeatherDataSet) {
-    wds.solarRadiation?.let {
+    wds.solarRadiationMax?.let {
       if (solarRadiationMax == null || solarRadiationMax!! < it) {
         solarRadiationMax = it
         solarRadiationMaxTime = wds.solarRadiationMaxTime ?: wds.timestamp
