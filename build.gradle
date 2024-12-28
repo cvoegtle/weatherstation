@@ -46,7 +46,7 @@ dependencies {
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
     implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'com.googlecode.objectify:objectify:6.1.1'
+    implementation 'com.googlecode.objectify:objectify:6.1.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -69,7 +69,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter
         // shenzhenwetter
-        version = '131'
+        version = '132'
         projectId = 'forstwetter'
         stopPreviousVersion = true
         promote = true
