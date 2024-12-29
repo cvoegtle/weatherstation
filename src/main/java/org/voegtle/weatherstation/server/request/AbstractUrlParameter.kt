@@ -1,11 +1,11 @@
 package org.voegtle.weatherstation.server.request
 
+import jakarta.servlet.http.HttpServletRequest
 import org.voegtle.weatherstation.server.util.DateUtil
 import org.voegtle.weatherstation.server.util.StringUtil
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
-import javax.servlet.http.HttpServletRequest
+import java.util.*
 
 abstract class AbstractUrlParameter protected constructor(private val request: HttpServletRequest,
                                                                private val dateUtil: DateUtil) {

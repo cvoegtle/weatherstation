@@ -1,8 +1,8 @@
 package org.voegtle.weatherstation.server.request
 
+import jakarta.servlet.http.HttpServletRequest
 import org.voegtle.weatherstation.server.util.DateUtil
 import java.util.*
-import javax.servlet.http.HttpServletRequest
 
 open class UrlParameter(request: HttpServletRequest, dateUtil: DateUtil,
                         defaultDataType: DataType) : AbstractUrlParameter(request, dateUtil) {
