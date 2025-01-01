@@ -1,9 +1,9 @@
 package org.voegtle.weatherstation.server
 
+import jakarta.servlet.http.HttpServletRequest
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.StringReader
-import javax.servlet.http.HttpServletRequest
 
 abstract class AbstractInputServlet : AbstractServlet() {
 

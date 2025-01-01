@@ -1,14 +1,14 @@
 package org.voegtle.weatherstation.server
 
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.voegtle.weatherstation.server.persistence.entities.SolarDataSet
 import org.voegtle.weatherstation.server.request.ResponseCode
 import org.voegtle.weatherstation.server.request.SolarUrlParameter
 import org.voegtle.weatherstation.server.request.ValidationException
 import java.io.IOException
 import java.util.*
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class SolarServlet : AbstractServlet() {
     val intervalChecker = TimeBetweenRequestsChecker("solar_request")

@@ -43,7 +43,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         return UnformattedWeatherDTO(time = latest.timestamp, localTime = dateUtil.toLocalTime(latest.timestamp),
             temperature = latest.outsideTemperature!!, humidity = latest.outsideHumidity,
             isRaining = isRaining(latest, twentyMinutesBefore),
-            windspeed = if (locationProperties.isWindRelevant) latest.windspeed else null,
+            windspeed = if (locationProperties.windRelevant) latest.windspeed else null,
             insideTemperature = if (authorized) latest.insideTemperature else null,
             insideHumidity = if (authorized) latest.insideHumidity else null,
             rainLastHour = if (oneHourBefore != null)
@@ -114,30 +114,41 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
         val todaysDataSets = fetchTodaysDataSets()
 
         if (todaysDataSets.isNotEmpty()) {
-            val firstSet = todaysDataSets.first()
-            val lastSet = todaysDataSets.last()
-            val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
-            val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
-
-            val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
-            stats.rainLastHour = calculateRain(latest, oneHourBefore)
-
-            stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
-            stats.setTemperature(Statistics.TimeRange.today, latest.outsideTemperature)
-
-            for (dataSet in todaysDataSets) {
-                stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
-                updateSolarRadiation(dataSet.powerProductionMax, stats)
+            try {
+                fillTodaysStaticsWithData(todaysDataSets, stats)
+            } catch (e: Exception) {
+                log.severe("Error fetching todaysDataSets: ${e.message}")
             }
-
-            val latestTotalPowerProduction = latestSolarData?.totalPowerProduction ?: lastSet.totalPowerProduction
-            if (firstSet.totalPowerProduction != null && latestTotalPowerProduction != null) {
-                stats.addKwh(Statistics.TimeRange.today, (latestTotalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
-            }
-
-            val latestPowerProduction = latestSolarData?.powerProduction ?: lastSet.powerProduction
-            updateSolarRadiation(latestPowerProduction, stats)
         }
+    }
+
+    private fun fillTodaysStaticsWithData(
+        todaysDataSets: List<SmoothedWeatherDataSet>,
+        stats: Statistics
+    ) {
+        val firstSet = todaysDataSets.first()
+        val lastSet = todaysDataSets.last()
+        val latest: WeatherDataSet = weatherDataProvider.getYoungestWeatherDataSet()
+        val latestSolarData: SolarDataSet? = pm.fetchCorrespondingSolarDataSet(latest.timestamp)
+
+        val oneHourBefore = weatherDataProvider.getSmoothedWeatherDataSetMinutesBefore(60)
+        stats.rainLastHour = calculateRain(latest, oneHourBefore)
+
+        stats.addRain(Statistics.TimeRange.today, calculateRain(latest, firstSet))
+        stats.setTemperature(Statistics.TimeRange.today, latest.outsideTemperature)
+
+        for (dataSet in todaysDataSets) {
+            stats.setTemperature(Statistics.TimeRange.today, dataSet.outsideTemperature)
+            updateSolarRadiation(dataSet.powerProductionMax, stats)
+        }
+
+        val latestTotalPowerProduction = latestSolarData?.totalPowerProduction ?: lastSet.totalPowerProduction
+        if (firstSet.totalPowerProduction != null && latestTotalPowerProduction != null) {
+            stats.addKwh(Statistics.TimeRange.today, (latestTotalPowerProduction - firstSet.totalPowerProduction!!) / 1000)
+        }
+
+        val latestPowerProduction = latestSolarData?.powerProduction ?: lastSet.powerProduction
+        updateSolarRadiation(latestPowerProduction, stats)
     }
 
     private fun determineKindOfStatistics(stats: Statistics, dataSets: Collection<AggregatedWeatherDataSet>) {

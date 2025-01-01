@@ -1,5 +1,8 @@
 package org.voegtle.weatherstation.server
 
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.voegtle.weatherstation.server.data.UnformattedWeatherDTO
 import org.voegtle.weatherstation.server.logic.WeatherDataFetcher
 import org.voegtle.weatherstation.server.persistence.entities.AggregatedWeatherDataSet
@@ -7,9 +10,6 @@ import org.voegtle.weatherstation.server.request.DataType
 import org.voegtle.weatherstation.server.request.OutgoingUrlParameter
 import java.io.IOException
 import java.util.*
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class OutgoingServlet : AbstractServlet() {
 

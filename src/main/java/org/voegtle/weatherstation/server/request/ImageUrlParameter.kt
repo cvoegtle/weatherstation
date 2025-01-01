@@ -1,8 +1,7 @@
 package org.voegtle.weatherstation.server.request
 
+import jakarta.servlet.http.HttpServletRequest
 import org.voegtle.weatherstation.server.util.DateUtil
-
-import javax.servlet.http.HttpServletRequest
 
 class ImageUrlParameter(request: HttpServletRequest, dateUtil: DateUtil) : AbstractUrlParameter(request, dateUtil) {
   private val PARAM_OID = "oid"

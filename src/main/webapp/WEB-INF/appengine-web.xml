@@ -3,7 +3,7 @@
   <!--
     Allows App Engine to send multiple requests to one instance in parallel:
   -->
-  <runtime>java17</runtime>
+  <runtime>java21</runtime>
   <app-engine-apis>true</app-engine-apis>
   <instance-class>F1</instance-class>
   <automatic-scaling>
