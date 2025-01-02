@@ -112,7 +112,7 @@ class WeatherDataFetcherTest {
 
   @Test fun checkGetLatestWithWind() {
     val specialLocationProperties = createLocationProperties()
-    specialLocationProperties.isWindRelevant = true
+    specialLocationProperties.windRelevant = true
 
     val mockedPersistenceManager = Mockito.mock(PersistenceManager::class.java)
     `when`(mockedPersistenceManager.fetchYoungestDataSet()).thenReturn(latestWeatherData)

@@ -123,7 +123,7 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     }
 
     private fun fillTodaysStaticsWithData(
-        todaysDataSets: List<SmoothedWeatherDataSet>,
+        todaysDataSets: List<SmoothedWeatherDataSet2>,
         stats: Statistics
     ) {
         val firstSet = todaysDataSets.first()
