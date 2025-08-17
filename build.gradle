@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {    // Configuration for building
-    ext.kotlin_version = '2.0.20'
-    ext.spring_boot_version = '3.4.1'
+    ext.kotlin_version = '2.2.10'
+    ext.spring_boot_version = '3.5.4'
 
     repositories {
         jcenter()    // Bintray's repository - a fast Maven Central mirror & more
@@ -68,7 +68,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         // baliwetter elbwetter forstwetter herzowetter
         // shenzhenwetter
-        version = '136'
+        version = '137'
         projectId = 'shenzhenwetter'
         stopPreviousVersion = true
         promote = true
