@@ -46,6 +46,9 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
             log.info("Number of parsed datasets: " + dataSets.size)
             dataSets
                 .filter { isNotOutdated(it) }
+                // immer nur 100 Datensätze verarbeiten, um einen Konflikt mit
+                // der nächsten Datenlieferung zu verhindern
+                .take(100)
                 .forEach {
                     weatherDataProvider.write(it)
                     persisted++

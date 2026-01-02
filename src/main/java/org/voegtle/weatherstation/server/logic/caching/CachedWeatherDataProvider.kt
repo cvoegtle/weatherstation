@@ -41,6 +41,15 @@ class CachedWeatherDataProvider(private val pm: PersistenceManager, val dateUtil
     }
 
     fun write(smoothedWeatherDataSet: SmoothedWeatherDataSet) {
+        // invalide SmoothedWeatherDataSet nur schreiben, wenn es noch kein SmoothedWeatherDataSet für diesen Zeitpunkt gibt
+        if (!smoothedWeatherDataSet.isValid) {
+            val youngestSmoothedDataSet = pm.fetchYoungestSmoothedDataSet()
+            if (!(youngestSmoothedDataSet == null || smoothedWeatherDataSet.timestamp.after(youngestSmoothedDataSet.timestamp))) {
+                log.warning("skip invalid smoothed dataset: " + smoothedWeatherDataSet.timestamp)
+                return
+            }
+            log.info("write invalid smoothed dataset anyway: " + smoothedWeatherDataSet.timestamp)
+        }
         pm.makePersistent(smoothedWeatherDataSet)
         cache[CacheKey.YoungestSmoothedWeatherDataSet] = smoothedWeatherDataSet
     }
