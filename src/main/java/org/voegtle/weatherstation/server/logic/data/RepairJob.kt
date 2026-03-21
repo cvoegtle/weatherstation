@@ -2,8 +2,6 @@ package org.voegtle.weatherstation.server.logic.data
 
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
 
-import java.util.ArrayList
-
 class RepairJob {
 
   var first: SmoothedWeatherDataSet? = null
@@ -28,6 +26,10 @@ class RepairJob {
     return defectDataSets.size > 0
   }
 
+  fun isComplete(): Boolean {
+    return first != null && last != null
+  }
+
   fun calculateStep() {
     if (first == null || last == null) {
       return
@@ -50,5 +52,10 @@ class RepairJob {
       null
     } else ((lastValue - firstValue) / (numberOfSets + 1)).toDouble()
   }
+
+  override fun toString(): String {
+    return "RepairJob(first=$first, last=$last, defectDataSets=${defectDataSets.size}, step=$step)"
+  }
+
 
 }

@@ -4,15 +4,12 @@ import org.voegtle.weatherstation.server.logic.data.RepairJob
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.persistence.entities.SmoothedWeatherDataSet
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.Date
-import java.util.HashMap
+import java.util.*
 import java.util.logging.Logger
 
 class WeatherDataRepair(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
   private var datasets: MutableList<SmoothedWeatherDataSet> = ArrayList()
-
+  private val log = Logger.getLogger("IntervalService")
   private fun fetchNextRepairJob(): RepairJob {
     val repairJob = RepairJob()
     var previousDataset: SmoothedWeatherDataSet? = null
@@ -32,6 +29,8 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
     }
 
     repairJob.calculateStep()
+
+
     return repairJob
   }
 
@@ -46,8 +45,13 @@ class WeatherDataRepair(private val pm: PersistenceManager, private val location
 
     var next = fetchNextRepairJob()
     while (next.containsData()) {
-      repair(next)
-      repaired.addAll(next.defectDataSets)
+      log.warning("Next repair: $next")
+      if (next.isComplete()) {
+        repair(next)
+        repaired.addAll(next.defectDataSets)
+      } else {
+        log.warning("skipped")
+      }
       next = fetchNextRepairJob()
     }
 

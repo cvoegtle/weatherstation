@@ -234,5 +234,9 @@ import java.util.*
     }
   }
 
+  override fun toString(): String {
+    return "SmoothedWeatherDataSet(outsideTemperature=$outsideTemperature, timestamp=$timestamp)"
+  }
+
 
 }
