@@ -2,13 +2,13 @@ package org.voegtle.weatherstation.server
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.appengine.api.log.InvalidRequestException
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.voegtle.weatherstation.server.persistence.PersistenceManager
 import org.voegtle.weatherstation.server.persistence.entities.LocationProperties
 import org.voegtle.weatherstation.server.util.HashService
 import org.voegtle.weatherstation.server.weewx.RapidCache
 import java.util.logging.Logger
-import javax.annotation.PostConstruct
 
 abstract class AbstractWeewxService(val log: Logger) {
   @Autowired

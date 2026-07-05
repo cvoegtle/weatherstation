@@ -1,9 +1,8 @@
 buildscript {    // Configuration for building
-    ext.kotlin_version = '2.0.20'
-    ext.spring_boot_version = '3.4.1'
+    ext.kotlin_version = '2.4.0'
+    ext.spring_boot_version = '3.5.16'
 
     repositories {
-        jcenter()    // Bintray's repository - a fast Maven Central mirror & more
         mavenCentral()
     }
     dependencies {
@@ -18,7 +17,6 @@ repositories {   // repositories for Jar's you access in your code
     maven {
         url 'https://maven-central.storage.googleapis.com'             // Google's mirror of Maven Central
     }
-    jcenter()
     mavenCentral()
 }
 
@@ -32,23 +30,24 @@ apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 
 
 dependencies {
-    compileOnly "jakarta.servlet:jakarta.servlet-api:6.0.0"
+    compileOnly "jakarta.servlet:jakarta.servlet-api:6.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.12'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.39'
     implementation 'com.google.appengine:appengine-api-labs:1.9.88'
-    implementation 'com.google.appengine:appengine-jsr107cache:1.9.94'
+    implementation 'com.google.appengine:appengine-jsr107cache:1.9.98'
     implementation 'net.sf.jsr107cache:jsr107cache:1.1'
 
-    implementation 'com.google.guava:guava:33.4.0-jre'
-    implementation 'com.googlecode.objectify:objectify:6.1.2'
+    implementation 'com.google.guava:guava:33.6.0-jre'
+    implementation 'com.googlecode.objectify:objectify:6.1.3'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('org.mockito:mockito-core:4.5.1')
+    testImplementation('org.mockito:mockito-core:5.23.0')
 }
 
 war {
@@ -65,7 +64,7 @@ appengine {  // App Engine tasks configuration
 
     deploy {   // deploy configuration
         // leo-wetter, oxenwetter, tegelwetter, testwetter-445319
-        version = '114'
+        version = '122'
         projectId = 'oxenwetter'
         stopPreviousVersion = true
         promote = true

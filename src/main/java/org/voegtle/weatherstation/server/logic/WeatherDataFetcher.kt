@@ -35,8 +35,8 @@ class WeatherDataFetcher(private val pm: PersistenceManager, private val locatio
     var previousRain: Float? = null
     datasets.forEach {
       val currentRain = it.dailyRain ?: 0.0f
-      if (previousRain != null && currentRain > previousRain!!) {
-        it.dailyRain = currentRain - previousRain!!
+      if (previousRain != null && currentRain > previousRain) {
+        it.dailyRain = currentRain - previousRain
       } else {
         it.dailyRain = 0.0f
       }
