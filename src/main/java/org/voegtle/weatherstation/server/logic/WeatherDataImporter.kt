@@ -12,6 +12,8 @@ import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
+private const val MAX_EXPECTED_TEMPERATURE = 50
+
 class WeatherDataImporter(private val pm: PersistenceManager, private val locationProperties: LocationProperties) {
     private val log = Logger.getLogger(WeatherDataImporter::class.java.name)
     private val weatherDataProvider = CachedWeatherDataProvider(pm, locationProperties.dateUtil)
@@ -46,6 +48,7 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
             log.info("Number of parsed datasets: " + dataSets.size)
             dataSets
                 .filter { isNotOutdated(it) }
+                .filter { isPlausible(it) }
                 // immer nur 100 Datensätze verarbeiten, um einen Konflikt mit
                 // der nächsten Datenlieferung zu verhindern
                 .take(100)
@@ -77,6 +80,14 @@ class WeatherDataImporter(private val pm: PersistenceManager, private val locati
             log.warning("WeatherDataSet from " + dataSet.timestamp + " is outdated. import until: " + importedUntil)
         }
         return notOutdated
+    }
+
+    private fun isPlausible(dataSet: WeatherDataSet): Boolean {
+        val plausible = dataSet.outsideTemperature != null && dataSet.outsideTemperature!! < MAX_EXPECTED_TEMPERATURE
+        if (!plausible) {
+            log.warning("WeatherDataSet from " + dataSet.timestamp + " is not plausible. temperature outside: " + dataSet.outsideTemperature)
+        }
+        return plausible
     }
 
 }
